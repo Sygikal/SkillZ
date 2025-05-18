@@ -5,6 +5,7 @@
       "id": 6,
       "type": "generic.luck",
       "base": -1,
+      "set_base_value": true,
       "operation": "ADDITION",
       "value": 0.15
     }

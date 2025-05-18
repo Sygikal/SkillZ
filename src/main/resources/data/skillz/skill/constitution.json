@@ -5,6 +5,7 @@
       "id": 0,
       "type": "generic.max_health",
       "base": 8,
+      "set_base_value": true,
       "operation": "ADDITION",
       "value": 1
     }

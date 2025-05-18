@@ -5,12 +5,14 @@
       "id": 3,
       "type": "generic.movement_speed",
       "base": 0.09,
+      "set_base_value": true,
       "operation": "ADDITION",
       "value": 0.001
     },
     {
       "type": "attribute-backport:player.sneaking_speed",
       "base": 0.2,
+      "set_base_value": true,
       "operation": "ADDITION",
       "value": 0.01
     },

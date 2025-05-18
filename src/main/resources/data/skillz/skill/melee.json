@@ -15,6 +15,7 @@
     {
       "type": "attribute-backport:player.sweeping_damage_ratio",
       "base": 0,
+      "set_base_value": true,
       "operation": "ADDITION",
       "value": 0.03
     }

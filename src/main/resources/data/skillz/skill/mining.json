@@ -4,6 +4,7 @@
     {
       "type": "attribute-backport:player.block_break_speed",
       "base": 0.5,
+      "set_base_value": true,
       "operation": "ADDITION",
       "value": 0.05
     },
@@ -11,6 +12,7 @@
       "id": 5,
       "type": "attribute-backport:player.mining_efficiency",
       "base": 0,
+      "set_base_value": true,
       "operation": "ADDITION",
       "value": 0.05
     }
