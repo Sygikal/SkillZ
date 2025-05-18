@@ -202,6 +202,9 @@ public class LevelScreen extends Screen implements Tab {
             int i = 0;
             for (WidgetButtonPage page : newLeveButtons) {
                 if (page.chopped && (i < 12)) {
+
+                    page.hovered = mouseX >= (this.x + (i % 2 == 0 ? 80 : 169)) && mouseY >= (this.y + 91 + i / 2 * 20) && mouseX < (this.x + (i % 2 == 0 ? 80 : 169)) + page.getWidth() && mouseY < (this.y + 91 + i / 2 * 20) + page.getHeight();
+
                     context.drawTexture(BACKGROUND_TEXTURE, this.x + (i % 2 == 0 ? 8 : 96), this.y + 87 + i / 2 * 20, 0, 215, 88, 20);
                     context.drawTexture(SkillZMain.identifierOf("textures/gui/sprites/" + page.skill.id() + ".png"), this.x + (i % 2 == 0 ? 11 : 99), this.y + 89 + i / 2 * 20, 0, 0, 16, 16, 16, 16);
 
@@ -540,6 +543,7 @@ public class LevelScreen extends Screen implements Tab {
         private List<Text> tooltip = new ArrayList<Text>();
         private int clickedKey = -1;
         public boolean chopped = true;
+        public boolean hovered = false;
 
         public WidgetButtonPage(Skill skill, int x, int y, int sizeX, int sizeY, int textureX, int textureY, boolean hoverOutline, boolean clickable, @Nullable Text tooltip, ButtonWidget.PressAction onPress) {
             super(x, y, sizeX, sizeY, ScreenTexts.EMPTY, onPress, DEFAULT_NARRATION_SUPPLIER);
@@ -611,6 +615,10 @@ public class LevelScreen extends Screen implements Tab {
                 i = 2;
             }
             return i;
+        }
+
+        public boolean isHovered() {
+            return hovered;
         }
     }
 }
