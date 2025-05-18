@@ -87,9 +87,13 @@ public class SkillLoader implements SimpleSynchronousResourceReloadListener {
                         if (attributeJsonObject.has("base")) {
                             baseValue = attributeJsonObject.get("base").getAsFloat();
                         }
+                        boolean useBaseValue = false;
+                        if (attributeJsonObject.has("set_base_value")) {
+                            useBaseValue = attributeJsonObject.get("set_base_value").getAsBoolean();
+                        }
                         float levelValue = attributeJsonObject.get("value").getAsFloat();
                         EntityAttributeModifier.Operation operation = EntityAttributeModifier.Operation.valueOf(attributeJsonObject.get("operation").getAsString().toUpperCase());
-                        attributes.add(new SkillAttribute(attributeId, attibute, baseValue, levelValue, operation));
+                        attributes.add(new SkillAttribute(attributeId, attibute, baseValue, useBaseValue, levelValue, operation));
                         if (attributeId != -1) {
                             attributeIds.add(attributeId);
                         }

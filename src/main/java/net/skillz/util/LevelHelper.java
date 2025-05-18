@@ -17,7 +17,7 @@ public class LevelHelper {
         for (SkillAttribute skillAttribute : skill.attributes()) {
             EntityAttributeInstance attr = serverPlayerEntity.getAttributeInstance(skillAttribute.getAttribute().value());
             if (attr != null) {
-                if (skillAttribute.getBaseValue() > -9999.0f) {
+                if (skillAttribute.useBaseValue()) {
                     attr.setBaseValue(skillAttribute.getBaseValue());
                 }
                 Identifier identifier = SkillZMain.identifierOf(skill.id());

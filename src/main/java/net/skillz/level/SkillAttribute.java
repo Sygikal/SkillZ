@@ -11,13 +11,19 @@ public class SkillAttribute {
     private final float baseValue;
     private final float levelValue;
     private final EntityAttributeModifier.Operation operation;
+    private final boolean useBaseValue;
 
     public SkillAttribute(int id, RegistryEntry<EntityAttribute> attribute, float baseValue, float levelValue, EntityAttributeModifier.Operation operation) {
+        this(id, attribute, baseValue, false, levelValue, operation);
+    }
+
+    public SkillAttribute(int id, RegistryEntry<EntityAttribute> attribute, float baseValue, boolean useBaseValue, float levelValue, EntityAttributeModifier.Operation operation) {
         this.id = id;
         this.attribute = attribute;
         this.baseValue = baseValue;
         this.levelValue = levelValue;
         this.operation = operation;
+        this.useBaseValue = useBaseValue;
     }
 
     public int getId() {
@@ -30,6 +36,10 @@ public class SkillAttribute {
 
     public float getBaseValue() {
         return baseValue;
+    }
+
+    public boolean useBaseValue() {
+        return useBaseValue;
     }
 
     public float getLevelValue() {
