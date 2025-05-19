@@ -30,8 +30,8 @@ public class RenderInit {
     public static void init() {
         EntityRendererRegistry.register(EntityInit.LEVEL_EXPERIENCE_ORB, LevelExperienceOrbEntityRenderer::new);
 
-        TabAPI.registerInventoryTab(new VanillaInventoryTab(Text.translatable("container.crafting"), BAG_TAB_ICON, 0, InventoryScreen.class));
-        TabAPI.registerInventoryTab(new SkillTab(Text.translatable("screen.skillz.skill_screen"), SKILL_TAB_ICON, 1, LevelScreen.class, SkillInfoScreen.class, SkillRestrictionScreen.class));
+        TabAPI.registerInventoryTab(new VanillaInventoryTab(SkillZMain.identifierOf("inventory_tab"), Text.translatable("container.crafting"), BAG_TAB_ICON, 0, InventoryScreen.class));
+        TabAPI.registerInventoryTab(new SkillTab(SkillZMain.identifierOf("skill_tab"), Text.translatable("screen.skillz.skill_screen"), SKILL_TAB_ICON, 1, LevelScreen.class, SkillInfoScreen.class, SkillRestrictionScreen.class));
 
         /*TabAPI.registerSideInventoryTab(new BookTab(Text.translatable("restriction.levelz.enchantments"),
                 new RestrictionBook(LevelManager.ENCHANTMENT_RESTRICTIONS, Text.translatable("restriction.levelz.enchantments"), 3),
