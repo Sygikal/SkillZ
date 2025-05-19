@@ -22,7 +22,7 @@ public class BookTab extends InventoryTab {
     private final RestrictionBook book;
 
     public BookTab(Text title, RestrictionBook book, Color color, int preferedPos, Class<?>... screenClasses) {
-        super(title, null, preferedPos, true, screenClasses);
+        super(null, title, null, preferedPos, true, screenClasses);
         this.color = color;
         this.book = book;
     }
