@@ -43,9 +43,10 @@ public class MainConfig extends Config {
         @RequiresAction(action = Action.RESTART)
         public boolean restrictions = true;
         @RequiresAction(action = Action.RESTART)
+        @Comment("This will allow any restriction within the 'skillz' namespace to load")
         public boolean defaultRestrictions = true;
         @RequiresAction(action = Action.RESTART)
-        @Comment("Remember to name your datapack json differently than default")
+        @Comment("This will allow any skill within the 'skillz' namespace to load")
         public boolean defaultSkills = true;
 
     }
