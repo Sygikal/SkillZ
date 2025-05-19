@@ -65,9 +65,6 @@ public class LevelScreen extends Screen implements Tab {
 
     private List<BookWidget> bookWidgets = new ArrayList<>();
 
-    Map<String, Skill> SORTED = new LinkedHashMap<>();
-
-
     public LevelScreen() {
         super(Text.translatable("screen.skillz.skill_screen"));
     }
@@ -106,21 +103,6 @@ public class LevelScreen extends Screen implements Tab {
         for (int i = 0; i < attributeCount; i++) {
             this.attributes.add(skillAttributes.get(i));
         }
-        /*int i = 0;
-        for (Skill skill : LevelManager.SKILLS.values()) {
-            if (i < 12) {
-                if (this.levelManager.getPlayerSkills().size() <= i) {
-                    break;
-                }
-                this.levelButtons[i] = this.addDrawableChild(new WidgetButtonPage(skill,this.x + (i % 2 == 0 ? 80 : 169), this.y + 91 + i / 2 * 20, 13, 13, 33, 42, true, true, null, button -> {
-                    ClientPlayNetworking.send(new StatPacket(skill.id(), 1));
-                }));
-                i++;
-            }
-        }*/
-        //updateLevelButtons();
-
-        //SORTED.putAll(LevelManager.SKILLS.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.comparing(Skill::index))));
 
         Map<String, Skill> asd = LevelManager.SKILLS.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.comparingInt(Skill::index))).collect(Collectors.toMap(
                 Map.Entry::getKey,
@@ -129,11 +111,6 @@ public class LevelScreen extends Screen implements Tab {
 
         int i = 0;
         for (Skill skill : asd.values()) {
-            /*this.newLeveButtons.add(
-                    this.addDrawableChild(
-                            new WidgetButtonPage(skill,this.x + (i % 2 == 0 ? 80 : 169), this.y + 91 + i / 2 * 20, 13, 13, 33, 42, true, true, null,
-                                    button -> {ClientPlayNetworking.send(new StatPacket(skill.id(), 1));
-            })));*/
             this.newLeveButtons.add(new WidgetButtonPage(skill,this.x + (i % 2 == 0 ? 80 : 169), this.y + 91 + i / 2 * 20, 13, 13, 33, 42, true, true, null, button -> {ClientPlayNetworking.send(new StatPacket(skill.id(), 1));}));
 
             i++;
