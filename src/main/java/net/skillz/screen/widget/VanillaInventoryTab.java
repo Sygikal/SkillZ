@@ -11,8 +11,8 @@ import net.minecraft.util.Identifier;
 @Environment(EnvType.CLIENT)
 public class VanillaInventoryTab extends InventoryTab {
 
-    public VanillaInventoryTab(Text title, Identifier texture, int preferedPos, Class<?>... screenClasses) {
-        super(title, texture, preferedPos, screenClasses);
+    public VanillaInventoryTab(Identifier id, Text title, Identifier texture, int preferedPos, Class<?>... screenClasses) {
+        super(id, title, texture, preferedPos, screenClasses);
     }
 
     @Override

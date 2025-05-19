@@ -14,8 +14,8 @@ import net.minecraft.util.Identifier;
 @Environment(EnvType.CLIENT)
 public class SkillTab extends InventoryTab {
 
-    public SkillTab(Text title, Identifier texture, int preferedPos, Class<?>... screenClasses) {
-        super(title, texture, preferedPos, screenClasses);
+    public SkillTab(Identifier id, Text title, Identifier texture, int preferedPos, Class<?>... screenClasses) {
+        super(id, title, texture, preferedPos, screenClasses);
     }
 
     @Override
