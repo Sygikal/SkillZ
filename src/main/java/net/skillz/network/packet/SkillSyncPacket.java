@@ -18,6 +18,7 @@ import java.util.List;
 public class SkillSyncPacket implements FabricPacket {
     public static final Identifier PACKET_ID = SkillZMain.identifierOf("skill_sync_packet");
     protected final List<String> skillIds;
+    protected final List<Integer> skillIndexes;
     protected final List<Integer> skillMaxLevels;
 
     protected final List<SkillAttributesRecord> skillAttributes;
@@ -28,11 +29,12 @@ public class SkillSyncPacket implements FabricPacket {
     );
 
     public SkillSyncPacket(PacketByteBuf buf) {
-        this(buf.readList(PacketByteBuf::readString), buf.readList(PacketByteBuf::readInt), buf.readList(SkillAttributesRecord::read), SkillBonusesRecord.read(buf));
+        this(buf.readList(PacketByteBuf::readString), buf.readList(PacketByteBuf::readInt), buf.readList(PacketByteBuf::readInt), buf.readList(SkillAttributesRecord::read), SkillBonusesRecord.read(buf));
     }
 
-    public SkillSyncPacket(List<String> skillIds, List<Integer> skillMaxLevels, List<SkillAttributesRecord> skillAttributes, SkillBonusesRecord skillBonuses) {
+    public SkillSyncPacket(List<String> skillIds, List<Integer> skillIndexes, List<Integer> skillMaxLevels, List<SkillAttributesRecord> skillAttributes, SkillBonusesRecord skillBonuses) {
         this.skillIds = skillIds;
+        this.skillIndexes = skillIndexes;
         this.skillMaxLevels = skillMaxLevels;
         this.skillAttributes = skillAttributes;
         this.skillBonuses = skillBonuses;
@@ -41,6 +43,7 @@ public class SkillSyncPacket implements FabricPacket {
     @Override
     public void write(PacketByteBuf buf) {
         buf.writeCollection(this.skillIds, PacketByteBuf::writeString);
+        buf.writeCollection(this.skillIndexes, PacketByteBuf::writeInt);
         buf.writeCollection(this.skillMaxLevels, PacketByteBuf::writeInt);
         buf.writeCollection(this.skillAttributes, (bufx, list) -> new SkillAttributesRecord(list.skillAttributes()).write(bufx));
         this.skillBonuses.write(buf);
@@ -53,6 +56,10 @@ public class SkillSyncPacket implements FabricPacket {
 
     public List<String> skillIds() {
         return skillIds;
+    }
+
+    public List<Integer> skillIndexes() {
+        return skillIndexes;
     }
 
     public List<Integer> skillMaxLevels() {

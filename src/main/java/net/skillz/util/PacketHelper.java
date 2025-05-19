@@ -28,12 +28,14 @@ public class PacketHelper {
 
     public static void updateSkills(ServerPlayerEntity serverPlayerEntity) {
         List<String> skillIds = new ArrayList<>();
+        List<Integer> skillIndexes = new ArrayList<>();
         List<Integer> skillMaxLevels = new ArrayList<>();
         List<SkillSyncPacket.SkillAttributesRecord> skillAttributes = new ArrayList<>();
         List<SkillBonus> skillBonuses = new ArrayList<>(LevelManager.BONUSES.values());
 
         for (Skill skill : LevelManager.SKILLS.values()) {
             skillIds.add(skill.id());
+            skillIndexes.add(skill.index());
             skillMaxLevels.add(skill.maxLevel());
 
             List<SkillAttribute> skillAttributeList = new ArrayList<>(skill.attributes());
@@ -41,7 +43,7 @@ public class PacketHelper {
         }
 
         SkillSyncPacket.SkillBonusesRecord skillBonusesRecord = new SkillSyncPacket.SkillBonusesRecord(skillBonuses);
-        ServerPlayNetworking.send(serverPlayerEntity, new SkillSyncPacket(skillIds, skillMaxLevels, skillAttributes, skillBonusesRecord));
+        ServerPlayNetworking.send(serverPlayerEntity, new SkillSyncPacket(skillIds, skillIndexes, skillMaxLevels, skillAttributes, skillBonusesRecord));
     }
 
     public static void updatePlayerSkills(ServerPlayerEntity serverPlayerEntity, @Nullable ServerPlayerEntity oldPlayerEntity) {

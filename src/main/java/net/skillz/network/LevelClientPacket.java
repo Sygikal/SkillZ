@@ -28,6 +28,7 @@ public class LevelClientPacket {
         ClientPlayNetworking.registerGlobalReceiver(SkillSyncPacket.PACKET_ID, (client, handler, buf, sender) -> {
             SkillSyncPacket payload = new SkillSyncPacket(buf);
             List<String> skillIds = payload.skillIds();
+            List<Integer> skillIndexes = payload.skillIndexes();
             List<Integer> skillMaxLevels = payload.skillMaxLevels();
             List<SkillSyncPacket.SkillAttributesRecord> skillAttributes = payload.skillAttributes();
             SkillSyncPacket.SkillBonusesRecord skillBonuses = payload.skillBonuses();
@@ -37,7 +38,7 @@ public class LevelClientPacket {
 
                 LevelManager.SKILLS.clear();
                 for (int i = 0; i < skillIds.size(); i++) {
-                    Skill skill = new Skill(skillIds.get(i) , skillMaxLevels.get(i), skillAttributes.get(i).skillAttributes());
+                    Skill skill = new Skill(skillIds.get(i), skillIndexes.get(i), skillMaxLevels.get(i), skillAttributes.get(i).skillAttributes());
                     LevelManager.SKILLS.put(skillIds.get(i), skill);
 
                     if (!levelManager.getPlayerSkills().containsKey(skillIds.get(i))) {

@@ -19,11 +19,12 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class LevelManager {
 
-    public static final Map<String, Skill> SKILLS = new HashMap<>();
+    public static final Map<String, Skill> SKILLS = new LinkedHashMap<>();
     public static final Map<String, EntityAttribute> SKILLATTRIBUTES = new HashMap<>();
     public static final Map<Integer, PlayerRestriction> BLOCK_RESTRICTIONS = new HashMap<>();
     public static final Map<Integer, PlayerRestriction> CRAFTING_RESTRICTIONS = new HashMap<>();

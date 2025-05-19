@@ -36,6 +36,7 @@ import java.awt.*;
 import java.lang.reflect.Array;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Environment(EnvType.CLIENT)
 public class LevelScreen extends Screen implements Tab {
@@ -63,6 +64,9 @@ public class LevelScreen extends Screen implements Tab {
     private int skillRow = 0;
 
     private List<BookWidget> bookWidgets = new ArrayList<>();
+
+    Map<String, Skill> SORTED = new LinkedHashMap<>();
+
 
     public LevelScreen() {
         super(Text.translatable("screen.skillz.skill_screen"));
@@ -116,8 +120,15 @@ public class LevelScreen extends Screen implements Tab {
         }*/
         //updateLevelButtons();
 
+        //SORTED.putAll(LevelManager.SKILLS.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.comparing(Skill::index))));
+
+        Map<String, Skill> asd = LevelManager.SKILLS.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.comparingInt(Skill::index))).collect(Collectors.toMap(
+                Map.Entry::getKey,
+                Map.Entry::getValue,
+                (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
         int i = 0;
-        for (Skill skill : LevelManager.SKILLS.values()) {
+        for (Skill skill : asd.values()) {
             /*this.newLeveButtons.add(
                     this.addDrawableChild(
                             new WidgetButtonPage(skill,this.x + (i % 2 == 0 ? 80 : 169), this.y + 91 + i / 2 * 20, 13, 13, 33, 42, true, true, null,

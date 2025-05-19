@@ -23,8 +23,11 @@ import net.skillz.util.FileUtil;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.ToIntFunction;
+import java.util.stream.Collectors;
 
 public class SkillLoader implements SimpleSynchronousResourceReloadListener {
 
@@ -43,8 +46,6 @@ public class SkillLoader implements SimpleSynchronousResourceReloadListener {
         // clear bonuses
         LevelManager.BONUSES.clear();
 
-        // safety check
-        AtomicInteger skillCount = new AtomicInteger();
         List<Integer> attributeIds = new ArrayList<>();
 
         manager.findResources("skill", id -> id.getPath().endsWith(".json")).forEach((id, resourceRef) -> {
@@ -61,6 +62,10 @@ public class SkillLoader implements SimpleSynchronousResourceReloadListener {
                 String skillId = FileUtil.getBaseName(id.getPath());
 
                 int maxLevel = data.get("maxlevel").getAsInt();
+                int index = 999;
+                if (data.has("index")) {
+                    index = data.get("index").getAsInt();
+                }
                 List<SkillAttribute> attributes = new ArrayList<>();
 
                 for (JsonElement attributeElement : data.getAsJsonArray("attributes")) {
@@ -117,15 +122,11 @@ public class SkillLoader implements SimpleSynchronousResourceReloadListener {
                         LevelManager.BONUSES.put(bonusKey, new SkillBonus(bonusKey, skillId, bonusLevel));
                     }
                 }
-                LevelManager.SKILLS.put(skillId, new Skill(skillId, maxLevel, attributes));
-
-
-                skillCount.getAndIncrement();
+                LevelManager.SKILLS.put(skillId, new Skill(skillId, index, maxLevel, attributes));
             } catch (Exception e) {
                 SkillZMain.LOGGER.error("Error occurred while loading resource {}. {}", id.toString(), e.toString());
             }
         });
-
         /*for (int i = 0; i < skillCount.get(); i++) {
             if (!LevelManager.SKILLS.containsKey(i)) {
                 throw new MissingResourceException("Missing skill with id " + i + "! Please add a skill with this id.", this.getClass().getName(), SkillZMain.MOD_ID);
@@ -136,8 +137,5 @@ public class SkillLoader implements SimpleSynchronousResourceReloadListener {
                 throw new MissingResourceException("Missing attribute with id " + i + "! Please add an attribute with this id.", this.getClass().getName(), SkillZMain.MOD_ID);
             }
         }
-        /*Map<Integer, Skill> sortedMap = new TreeMap<>(LevelManager.SKILLS);
-        LevelManager.SKILLS.clear();
-        LevelManager.SKILLS.putAll(sortedMap);*/
     }
 }
