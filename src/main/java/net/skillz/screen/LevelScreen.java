@@ -244,10 +244,7 @@ public class LevelScreen extends Screen implements Tab {
                     int k = 27;
                     for (int i = this.attributeRow; i < this.attributeRow + maxAttributes; i++) {
                         String attributeKey = SkillZMain.getEntityAttributeIdAsString(this.attributes.get(i).getAttribute());
-                        if (attributeKey.contains(":")) {
-                            attributeKey = attributeKey.split(":")[1];
-                        }
-                        context.drawTexture(SkillZMain.identifierOf("textures/gui/sprites/" + attributeKey + ".png"), this.x + 214, this.y + k, 0, 0, 9, 9, 9, 9);
+                        context.drawTexture(Identifier.of(attributeKey.split(":")[0],"textures/gui/sprites/attribute/" + attributeKey.split(":")[1] + ".png"), this.x + 214, this.y + k, 0, 0, 9, 9, 9, 9);
                         float attributeValue = (float) Math.round(this.client.player.getAttributeInstance(this.attributes.get(i).getAttribute().value()).getValue() * 100.0D) / 100.0F;
                         context.drawText(this.textRenderer, Text.of(String.valueOf(attributeValue)), this.x + 214 + 15, this.y + k, 0xE0E0E0, false);
 
