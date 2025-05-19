@@ -13,10 +13,6 @@ public class SkillAttribute {
     private final EntityAttributeModifier.Operation operation;
     private final boolean useBaseValue;
 
-    public SkillAttribute(int id, RegistryEntry<EntityAttribute> attribute, float baseValue, float levelValue, EntityAttributeModifier.Operation operation) {
-        this(id, attribute, baseValue, false, levelValue, operation);
-    }
-
     public SkillAttribute(int id, RegistryEntry<EntityAttribute> attribute, float baseValue, boolean useBaseValue, float levelValue, EntityAttributeModifier.Operation operation) {
         this.id = id;
         this.attribute = attribute;
