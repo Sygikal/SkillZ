@@ -3,10 +3,12 @@ package net.skillz.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.init.ConfigInit;
+import net.skillz.init.EventInit;
 import net.skillz.level.LevelManager;
 import net.skillz.level.restriction.PlayerRestriction;
 import net.skillz.registry.EnchantmentRegistry;
@@ -108,56 +110,17 @@ public class TooltipUtil {
                     final Text fullName = enchantment.getName(enchantments.get(enchantment));
                     for (Text line : lines) {
                         if (line.equals(fullName)) {
-                            //System.out.println(levelManager.getRequiredEnchantmentLevel(Registries.ENCHANTMENT.getEntry(enchantment), enchantments.get(enchantment)));
-                            boolean changed = false;
                             MutableText asd = Text.literal("");
-                            int count = 0;
                             if (isCreative || !levelManager.hasRequiredEnchantmentLevel(Registries.ENCHANTMENT.getEntry(enchantment), enchantments.get(enchantment))) {
                                 int enchantmentId = EnchantmentRegistry.getId(Registries.ENCHANTMENT.getEntry(enchantment), enchantments.get(enchantment));
-                                /*if (LevelManager.ENCHANTMENT_RESTRICTIONS.containsKey(enchantmentId)) {
-                                    PlayerRestriction playerRestriction = LevelManager.ENCHANTMENT_RESTRICTIONS.get(enchantmentId);
-                                    for (Map.Entry<Integer, Integer> entry : playerRestriction.getSkillLevelRestrictions().entrySet()) {
-                                        if (isCreative || levelManager.getSkillLevel(entry.getKey()) < entry.getValue()) {
-                                            //lines.add(Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(entry.getKey()).getKey() + ".tooltip", entry.getValue()).formatted(Formatting.RED));
-                                            asd.append(Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(entry.getKey()).getKey() + ".tooltip", entry.getValue()).formatted(Formatting.RED));
-                                            if ((playerRestriction.getSkillLevelRestrictions().entrySet().size() - count) > 1 ) {
-                                                asd.append(Text.literal(",").formatted(Formatting.RED)).append(ScreenTexts.SPACE);
-                                            }
-                                            changed = true;
-                                            count++;
-                                        }
-                                    }
-                                }*/
                                 if (LevelManager.ENCHANTMENT_RESTRICTIONS.containsKey(enchantmentId)) {
-                                    Map<String, Integer> map = levelManager.getRequiredEnchantmentLevel(Registries.ENCHANTMENT.getEntry(enchantment), enchantments.get(enchantment));
-                                    for (Map.Entry<String, Integer> entry : map.entrySet()) {
-                                        boolean noHasLevel = levelManager.getSkillLevel(entry.getKey()) < entry.getValue();
-                                        if (isCreative || noHasLevel) {
-                                            //lines.add(Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(entry.getKey()).getKey() + ".tooltip", entry.getValue()).formatted(Formatting.RED));
-                                            asd.append(Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(entry.getKey()).id() + ".tooltip", entry.getValue()).formatted((ConfigInit.CLIENT.hideReachedLevels || noHasLevel) ? Formatting.RED : Formatting.GRAY));
-                                            if ((map.size() - count) > 1) {
-                                                asd.append(Text.literal(",").formatted(Formatting.GRAY)).append(ScreenTexts.SPACE);
-                                            }
-                                            changed = true;
-                                            count++;
-                                        }
-                                    }
+                                    asd = EventInit.sendRestriction(levelManager.getRequiredEnchantmentLevel(Registries.ENCHANTMENT.getEntry(enchantment), enchantments.get(enchantment)), levelManager);
                                 }
                             }
-
-                            //Text descriptionText = descriptions.get(enchantment);
-
-                            /*if (config.indentSize > 0) {
-                                descriptionText = Component.literal(StringUtils.repeat(' ', config.indentSize)).append(descriptionText);
-                            }
-
-                            tooltip.add(tooltip.indexOf(line) + 1, descriptionText);*/
-                            //lines.add(lines.indexOf(line) + 1, Text.of("asd"));
-                            if (changed) {
+                            if (!Objects.equals(asd.getString(), "")) {
                                 lines.set(lines.indexOf(line), line.copy().append(ScreenTexts.SPACE).append(Text.literal("(").formatted(Formatting.GRAY))
                                         .append(asd).append(Text.literal(")").formatted(Formatting.GRAY)));
                             }
-                            //lines.get(lines.indexOf(line)).copy().append(ScreenTexts.SPACE).append(Text.literal("(help 1)").formatted(Formatting.RED));
                             break;
                         }
                     }

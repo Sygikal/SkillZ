@@ -1,6 +1,7 @@
 package net.skillz.mixin.player;
 
 import net.skillz.access.LevelManagerAccess;
+import net.skillz.init.EventInit;
 import net.skillz.level.LevelManager;
 import net.minecraft.block.Block;
 import net.minecraft.client.world.ClientWorld;
@@ -10,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -44,7 +46,7 @@ public class MinecraftClientMixin {
 
     @Inject(method = "handleBlockBreaking", at = @At("HEAD"), cancellable = true)
     private void handleBlockBreakingMixin(boolean breaking, CallbackInfo info) {
-        if (restrictItemUsage() || restrictBlockBreaking()) {
+        if (restrictItemUsage() || restrictBlockBreaking(breaking)) {
             info.cancel();
         }
     }
@@ -56,13 +58,14 @@ public class MinecraftClientMixin {
         }
     }
 
+    @Unique
     private boolean restrictItemUsage() {
         if (ConfigInit.MAIN.LEVEL.lockedHandUsage && player != null && !player.isCreative()) {
             Item item = player.getMainHandStack().getItem();
             if (item != null && !item.equals(Items.AIR)) {
                 LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
                 if (!levelManager.hasRequiredItemLevel(item)) {
-                    player.sendMessage(Text.translatable("item.skillz.locked.tooltip").formatted(Formatting.RED), true);
+                    player.sendMessage(EventInit.sendRestriction(levelManager.getRequiredItemLevel(item), levelManager), true);
                     return true;
                 }
             }
@@ -70,13 +73,17 @@ public class MinecraftClientMixin {
         return false;
     }
 
-    private boolean restrictBlockBreaking() {
+    @Unique
+    private boolean restrictBlockBreaking(boolean breaking) {
         if (ConfigInit.MAIN.LEVEL.lockedBlockBreaking && player != null && !player.isCreative()) {
             if (this.crosshairTarget != null && this.crosshairTarget.getType() == net.minecraft.util.hit.HitResult.Type.BLOCK) {
                 BlockHitResult blockHitResult = (BlockHitResult) this.crosshairTarget;
                 Block block = world.getBlockState(blockHitResult.getBlockPos()).getBlock();
                 LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
                 if (!levelManager.hasRequiredMiningLevel(block)) {
+                    if (breaking) {
+                        player.sendMessage(EventInit.sendRestriction(levelManager.getRequiredMiningLevel(block), levelManager), true);
+                    }
                     return true;
                 }
             }

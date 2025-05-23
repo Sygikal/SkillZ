@@ -6,6 +6,9 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.screen.ScreenTexts;
+import net.minecraft.text.MutableText;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.level.LevelManager;
 import net.skillz.level.Skill;
@@ -20,6 +23,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Map;
 
 public class EventInit {
 
@@ -66,26 +71,27 @@ public class EventInit {
             }
         });
 
+        //Called when item right-clicked
         UseItemCallback.EVENT.register((player, world, hand) -> {
             if (!player.isCreative() && !player.isSpectator()) {
                 LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
                 if (!levelManager.hasRequiredItemLevel(player.getStackInHand(hand).getItem())) {
                     System.out.println(levelManager.getRequiredItemLevel(player.getStackInHand(hand).getItem()));
-                    //player.sendMessage(Text.literal(customList.get(customList.indexOf(string) + 2)).formatted(Formatting.RED), true);
-                    player.sendMessage(Text.translatable("restriction.skillz.locked.tooltip").formatted(Formatting.RED), true);
+                    player.sendMessage(sendRestriction(levelManager.getRequiredItemLevel(player.getStackInHand(hand).getItem()), levelManager), true);
                     return TypedActionResult.fail(player.getStackInHand(hand));
                 }
             }
             return TypedActionResult.pass(ItemStack.EMPTY);
         });
 
+        //Called when block right-clicked
         UseBlockCallback.EVENT.register((player, world, hand, result) -> {
             if (!player.isCreative() && !player.isSpectator()) {
                 BlockPos blockPos = result.getBlockPos();
                 if (world.canPlayerModifyAt(player, blockPos)) {
                     LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
                     if (!levelManager.hasRequiredBlockLevel(world.getBlockState(blockPos).getBlock())) {
-                        player.sendMessage(Text.translatable("restriction.skillz.locked.tooltip").formatted(Formatting.RED), true);
+                        player.sendMessage(sendRestriction(levelManager.getRequiredBlockLevel(world.getBlockState(blockPos).getBlock()), levelManager), true);
                         return ActionResult.success(false);
                     }
                 }
@@ -93,18 +99,35 @@ public class EventInit {
             return ActionResult.PASS;
         });
 
+        //Called when entity right-clicked
         UseEntityCallback.EVENT.register((player, world, hand, entity, entityHitResult) -> {
             if (!player.isCreative() && !player.isSpectator()) {
                 if (!entity.hasControllingPassenger() || !((EntityAccessor) entity).callCanAddPassenger(player)) {
                     LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
                     if (!levelManager.hasRequiredEntityLevel(entity.getType())) {
-                        player.sendMessage(Text.translatable("restriction.skillz.locked.tooltip").formatted(Formatting.RED), true);
+                        player.sendMessage(sendRestriction(levelManager.getRequiredEntityLevel(entity.getType()), levelManager), true);
                         return ActionResult.success(false);
                     }
                 }
             }
             return ActionResult.PASS;
         });
+    }
+
+    public static MutableText sendRestriction(Map<String, Integer> map, LevelManager levelManager) {
+        MutableText asd = Text.literal("");
+        int count = 0;
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            boolean noHasLevel = levelManager.getSkillLevel(entry.getKey()) < entry.getValue();
+            if (!ConfigInit.CLIENT.hideReachedLevels || noHasLevel) {
+                asd.append(Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(entry.getKey()).id() + ".tooltip", entry.getValue()).formatted((ConfigInit.CLIENT.hideReachedLevels || noHasLevel) ? Formatting.RED : Formatting.GRAY));
+                if ((map.size() - count) > 1) {
+                    asd.append(Text.literal(",").formatted((ConfigInit.CLIENT.hideReachedLevels || noHasLevel) ? Formatting.RED : Formatting.GRAY)).append(ScreenTexts.SPACE);
+                }
+            }
+            count++;
+        }
+        return asd;
     }
 
 }
