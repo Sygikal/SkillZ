@@ -41,7 +41,7 @@
 		"minecraft": "~1.20.1",
 		"java": ">=17",
 		"fabric-api": "*",
-		"tabapi": ">=1.0.0",
+		"tabapi": ">=1.2.2",
 		"fzzy_config": "*",
 		"attribute-backport": "*"
 	},
