@@ -92,7 +92,7 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
     //TODO merchantImmuneBonus
     @Inject(method = "setAttacker", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;handleInteraction(Lnet/minecraft/entity/EntityInteraction;Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/InteractionObserver;)V"), cancellable = true)
     private void setAttackerMixin(@Nullable LivingEntity attacker, CallbackInfo info) {
-        if (attacker instanceof PlayerEntity playerEntity && BonusHelper.merchantImmuneBonus(playerEntity)) {
+        if (attacker instanceof PlayerEntity playerEntity && BonusHelper.hasBonus("merchantImmune", playerEntity)) {
             super.setAttacker(attacker);
             info.cancel();
         }

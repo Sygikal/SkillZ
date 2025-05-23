@@ -57,7 +57,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements LevelMan
 
     @ModifyArg(method = "addExhaustion", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"), index = 0)
     private float injected(float original) {
-        original *= BonusHelper.exhaustionReductionBonus(this.playerEntity);
+        //original *= BonusHelper.exhaustionReductionBonus(this.playerEntity);
+        original *= BonusHelper.doIntegerBonus("exhaustionReduction", this.playerEntity, 0, (level) -> (int) (1.0f - (level * ConfigInit.MAIN.BONUSES.exhaustionReductionBonus)));
         return original;
     }
 
@@ -102,7 +103,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements LevelMan
     @ModifyVariable(method = "attack", at = @At(value = "STORE", ordinal = 2), ordinal = 0)
     private float attackCriticalDamageMixin(float original) {
         original /= 1.5F;
-        original += BonusHelper.meleeCriticalDamageBonus(this.playerEntity);
+        //original += BonusHelper.meleeCriticalDamageBonus(this.playerEntity);
+        original += BonusHelper.doLinearFloatBonus("meleeCriticalAttackDamage", this.playerEntity, 0 , ConfigInit.MAIN.BONUSES.meleeCriticalAttackDamageBonus);
         original *= 1.5F;
         return original;
     }
@@ -123,7 +125,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements LevelMan
 
     @ModifyArg(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;damage(Lnet/minecraft/entity/damage/DamageSource;F)Z"), index = 1)
     private float attackDoubleDamageMixin(float original) {
-        if (BonusHelper.meleeDoubleDamageBonus(this.playerEntity)) {
+        if (/*BonusHelper.meleeDoubleDamageBonus(this.playerEntity)*/BonusHelper.doBooleanBonus("meleeDoubleAttackDamageChance", this.playerEntity, ConfigInit.MAIN.BONUSES.meleeDoubleAttackDamageChanceBonus)) {
             original *= 2f;
         }
         return original;
@@ -132,7 +134,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements LevelMan
     @Inject(method = "damage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerEntity;dropShoulderEntities()V"), cancellable = true)
     private void damageMixin(DamageSource source, float amount, CallbackInfoReturnable<Boolean> info) {
         BonusHelper.damageReflectionBonus(this.playerEntity, source, amount);
-        if (!source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY) && BonusHelper.evadingDamageBonus(this.playerEntity)) {
+        if (!source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY) && /*BonusHelper.evadingDamageBonus(this.playerEntity)*/ BonusHelper.doLinearBooleanBonus("evadingDamageChance", this.playerEntity, ConfigInit.MAIN.BONUSES.evadingDamageChanceBonus)) {
             info.setReturnValue(false);
         }
     }

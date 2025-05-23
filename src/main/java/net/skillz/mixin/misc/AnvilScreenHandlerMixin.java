@@ -1,5 +1,6 @@
 package net.skillz.mixin.misc;
 
+import net.skillz.init.ConfigInit;
 import net.skillz.util.BonusHelper;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
@@ -41,7 +42,7 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
     //TODO: canTakeOutput
     @Inject(method = "canTakeOutput", at = @At("HEAD"), cancellable = true)
     protected void canTakeOutputMixin(PlayerEntity player, boolean present, CallbackInfoReturnable<Boolean> info) {
-        if (BonusHelper.anvilXpCapBonus(player)) {
+        if (/*BonusHelper.anvilXpCapBonus(player)*/ /*BonusHelper.doBooleanBonus("anvilXpCap", player)*/ (levelCost.get() <= 0 || BonusHelper.anvilXpDiscountBonus(this.player, this.levelCost.get()) <= 0)) {
             info.setReturnValue(true);
         }
     }
@@ -59,9 +60,9 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
     @Inject(method = "updateResult()V", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/CraftingResultInventory;setStack(ILnet/minecraft/item/ItemStack;)V", ordinal = 4))
     private void updateResultMixin(CallbackInfo info) {
-        if (this.levelCost.get() > 1) {
+        //if (this.levelCost.get() > 1) {
             this.levelCost.set(BonusHelper.anvilXpDiscountBonus(this.player, this.levelCost.get()));
-        }
+        //}
     }
 
     /*@Inject(method = "onTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/Property;get()I"), require = 0)
@@ -72,19 +73,12 @@ public abstract class AnvilScreenHandlerMixin extends ForgingScreenHandler {
 
     @Inject(method = "onTakeOutput", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/Property;get()I"), require = 0)
     private void onTakeOutputMixin(PlayerEntity playerEntity, ItemStack stack, CallbackInfo ci) {
-        if (BonusHelper.anvilXpChanceBonus(playerEntity)) {
+        if (/*BonusHelper.anvilXpChanceBonus(playerEntity)*/BonusHelper.doBooleanBonus("anvilXpChance", playerEntity, ConfigInit.MAIN.BONUSES.anvilXpChanceBonus)) {
             this.levelCost.set(0);
         }
     }
 
-    /*@Environment(EnvType.CLIENT)
-    @Inject(method = "getLevelCost", at = @At(value = "HEAD"), cancellable = true)
-    public void getLevelCostMixin(CallbackInfoReturnable<Integer> info) {
-        if (this.levelCost.get() > 30 && smithingLevel >= ConfigInit.CONFIG.maxLevel) {
-            info.setReturnValue(30);
-        }
-    }*/
-
+    //This discount is rendered in the UI
     @Inject(method = "getLevelCost", at = @At(value = "HEAD"), cancellable = true)
     public void getLevelCostMixin(CallbackInfoReturnable<Integer> info) {
         int levelCost = BonusHelper.anvilXpDiscountBonus(this.player, this.levelCost.get());

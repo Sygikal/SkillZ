@@ -41,6 +41,9 @@ public class HungerManagerMixin {
 
     @Inject(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V", shift = Shift.AFTER, ordinal = 0))
     private void updateAbsorptionMixin(PlayerEntity player, CallbackInfo info) {
-        BonusHelper.healthAbsorptionBonus(player);
+        if(BonusHelper.hasBonus("healthAbsorption", player)) {
+            player.setAbsorptionAmount(ConfigInit.MAIN.BONUSES.healthAbsorptionBonus);
+        }
+        //BonusHelper.healthAbsorptionBonus(player);
     }
 }
