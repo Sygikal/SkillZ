@@ -58,8 +58,8 @@ public class RestrictionLoader implements SimpleSynchronousResourceReloadListene
         EnchantmentRegistry.updateEnchantments();
 
         manager.findResources("restriction", id -> id.getPath().endsWith(".json")).forEach((id, resourceRef) -> {
-            System.out.println(id);
-            System.out.println(id.getNamespace());
+            //System.out.println(id);
+            //System.out.println(id.getNamespace());
             try {
                 if (!ConfigInit.MAIN.PROGRESSION.defaultRestrictions && id.getNamespace().equals("skillz")) {
                     return;
