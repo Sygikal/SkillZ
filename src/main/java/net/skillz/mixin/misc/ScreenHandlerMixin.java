@@ -31,7 +31,7 @@ public class ScreenHandlerMixin {
         if (player.isCreative()) {
             return;
         }
-        if (slotIndex >= 0 && slotIndex != ScreenHandler.EMPTY_SPACE_SLOT_INDEX && RestrictionHelper.restrictSlotClick(player, actionType, this.cursorStack, this.slots.get(slotIndex), (ScreenHandler) (Object) this)) {
+        if (slotIndex >= 0 && slotIndex != ScreenHandler.EMPTY_SPACE_SLOT_INDEX && RestrictionHelper.restrictSlotClick(player, button, actionType, this.cursorStack, this.slots.get(slotIndex), (ScreenHandler) (Object) this)) {
             info.cancel();
         }
     }

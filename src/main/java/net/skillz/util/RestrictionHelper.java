@@ -15,10 +15,12 @@ public class RestrictionHelper {
 
     private static final boolean isAccessoriesLoaded = FabricLoader.getInstance().isModLoaded("accessories");
 
-    public static boolean restrictSlotClick(PlayerEntity playerEntity, SlotActionType actionType, ItemStack cursorStack, Slot slot, ScreenHandler screenHandler) {
+    public static boolean restrictSlotClick(PlayerEntity playerEntity, int button, SlotActionType actionType, ItemStack cursorStack, Slot slot, ScreenHandler screenHandler) {
         if (!playerEntity.isCreative()) {
             LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
-            if (actionType.equals(SlotActionType.QUICK_MOVE)) {
+            if (actionType.equals(SlotActionType.SWAP)) {
+                return ! playerEntity.getInventory().getStack(button).isEmpty() && !levelManager.hasRequiredItemLevel( playerEntity.getInventory().getStack(button).getItem());
+            }else if (actionType.equals(SlotActionType.QUICK_MOVE)) {
                 return !slot.getStack().isEmpty() && !levelManager.hasRequiredItemLevel(slot.getStack().getItem());
             } else if (!cursorStack.isEmpty()) {
                 boolean isNonNormalSlot = !slot.getClass().equals(Slot.class);
