@@ -49,7 +49,7 @@ public class SkillLoader implements SimpleSynchronousResourceReloadListener {
         List<Integer> attributeIds = new ArrayList<>();
 
         manager.findResources("skill", id -> id.getPath().endsWith(".json")).forEach((id, resourceRef) -> {
-            System.out.println(id);
+            //System.out.println(id);
             //System.out.println(id.getPath());
             //System.out.println(id.getNamespace());
             try {
@@ -74,7 +74,6 @@ public class SkillLoader implements SimpleSynchronousResourceReloadListener {
                     //TODO EntityAttribute registry keys
                     Identifier iden;
                     if (attributeJsonObject.get("type").getAsString().contains("attribute-backport:player.block_interaction_range") && FabricLoader.getInstance().isModLoaded("reach-entity-attributes")) {
-                        System.out.println("ASEX");
                         iden = Identifier.splitOn("reach-entity-attributes:reach", ':');
                     }else {
                         iden = Identifier.splitOn(attributeJsonObject.get("type").getAsString(), ':');
