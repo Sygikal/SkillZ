@@ -17,7 +17,7 @@ import net.minecraft.util.Formatting;
 @Mixin(AxeItem.class)
 public class AxeItemMixin {
 
-    @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
     private void useOnBlockMixin(ItemUsageContext context, CallbackInfoReturnable<ActionResult> info) {
         PlayerEntity player = context.getPlayer();
         if (!player.isCreative() && !player.isSpectator()) {
@@ -27,5 +27,5 @@ public class AxeItemMixin {
                 info.setReturnValue(ActionResult.PASS);
             }
         }
-    }
+    }*/
 }

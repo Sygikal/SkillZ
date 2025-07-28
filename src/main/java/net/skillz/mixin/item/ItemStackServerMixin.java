@@ -1,6 +1,13 @@
 package net.skillz.mixin.item;
 
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Formatting;
 import net.skillz.access.ItemStackAccess;
+import net.skillz.access.LevelManagerAccess;
+import net.skillz.init.EventInit;
+import net.skillz.level.LevelManager;
 import net.skillz.util.BonusHelper;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -41,6 +48,18 @@ public abstract class ItemStackServerMixin implements ItemStackAccess {
         if (BonusHelper.itemDamageChanceBonus(player)) {
             System.out.println("Damage has been nulled");
             cir.cancel();
+        }
+    }
+
+    @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
+    private void useOnBlockMixin(ItemUsageContext context, CallbackInfoReturnable<ActionResult> info) {
+        PlayerEntity player = context.getPlayer();
+        if (!player.isCreative() && !player.isSpectator()) {
+            LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
+            if (!levelManager.hasRequiredItemLevel(player.getStackInHand(context.getHand()).getItem())) {
+                player.sendMessage(EventInit.sendRestriction(levelManager.getRequiredItemLevel(player.getStackInHand(context.getHand()).getItem()), levelManager), true);
+                info.setReturnValue(ActionResult.PASS);
+            }
         }
     }
 
