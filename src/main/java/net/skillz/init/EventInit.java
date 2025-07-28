@@ -72,11 +72,12 @@ public class EventInit {
         });
 
         //Called when item right-clicked
+
         UseItemCallback.EVENT.register((player, world, hand) -> {
             if (!player.isCreative() && !player.isSpectator()) {
                 LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
                 if (!levelManager.hasRequiredItemLevel(player.getStackInHand(hand).getItem())) {
-                    System.out.println(levelManager.getRequiredItemLevel(player.getStackInHand(hand).getItem()));
+                    //System.out.println(levelManager.getRequiredItemLevel(player.getStackInHand(hand).getItem()));
                     player.sendMessage(sendRestriction(levelManager.getRequiredItemLevel(player.getStackInHand(hand).getItem()), levelManager), true);
                     return TypedActionResult.fail(player.getStackInHand(hand));
                 }
