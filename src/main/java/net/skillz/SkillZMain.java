@@ -2,9 +2,15 @@ package net.skillz;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.attribute.ClampedEntityAttribute;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.skillz.access.LevelManagerAccess;
 import net.skillz.init.*;
+import net.skillz.level.LevelManager;
 import net.skillz.network.LevelServerPacket;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -33,6 +39,17 @@ public class SkillZMain implements ModInitializer {
         LevelServerPacket.init();
         TagInit.init();
         ItemInit.init();
+    }
+
+    public static boolean shouldRestrictItem(PlayerEntity player, Item item) {
+        if (!player.isCreative() && !player.isSpectator()) {
+            LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
+            if (!levelManager.hasRequiredItemLevel(item)) {
+                player.sendMessage(EventInit.sendRestriction(levelManager.getRequiredItemLevel(item), levelManager), true);
+                return true;
+            }
+        }
+        return false;
     }
 
     public static Identifier identifierOf(String name) {
