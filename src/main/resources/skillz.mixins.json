@@ -137,6 +137,7 @@
     "network.ClientPlayNetworkHandlerMixin",
     "network.ClientPlayPacketListenerMixin",
     "network.NetworkStateMixin",
+    "network.ServerPlayNetworkHandlerMixin",
     "player.ClientPlayerListS2CPacketMixin",
     "player.CraftingScreenHandlerMixin",
     "player.HungerManagerMixin",

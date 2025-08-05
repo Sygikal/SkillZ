@@ -4,6 +4,7 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
+import net.skillz.SkillZMain;
 import net.skillz.access.ItemStackAccess;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.init.EventInit;
@@ -54,12 +55,15 @@ public abstract class ItemStackServerMixin implements ItemStackAccess {
     @Inject(method = "useOnBlock", at = @At("HEAD"), cancellable = true)
     private void useOnBlockMixin(ItemUsageContext context, CallbackInfoReturnable<ActionResult> info) {
         PlayerEntity player = context.getPlayer();
-        if (!player.isCreative() && !player.isSpectator()) {
+        /*if (!player.isCreative() && !player.isSpectator()) {
             LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
             if (!levelManager.hasRequiredItemLevel(player.getStackInHand(context.getHand()).getItem())) {
                 player.sendMessage(EventInit.sendRestriction(levelManager.getRequiredItemLevel(player.getStackInHand(context.getHand()).getItem()), levelManager), true);
                 info.setReturnValue(ActionResult.PASS);
             }
+        }*/
+        if (player != null && SkillZMain.shouldRestrictItem(player, player.getStackInHand(context.getHand()).getItem() )) {
+            info.setReturnValue(ActionResult.PASS);
         }
     }
 

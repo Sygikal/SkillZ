@@ -1,11 +1,17 @@
 package net.skillz.mixin.player;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemUsageContext;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.skillz.SkillZMain;
 import net.skillz.access.ItemStackAccess;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.access.PlayerDropAccess;
 import net.skillz.entity.LevelExperienceOrbEntity;
 import net.skillz.init.ConfigInit;
+import net.skillz.init.EventInit;
 import net.skillz.level.LevelManager;
 import net.skillz.util.BonusHelper;
 import net.minecraft.entity.EntityType;
@@ -43,6 +49,20 @@ public abstract class PlayerEntityMixin extends LivingEntity implements LevelMan
 
     public PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
+    }
+
+    @Inject(method = "interact", at = @At("HEAD"), cancellable = true)
+    private void interactMixin(Entity entity, Hand hand, CallbackInfoReturnable<ActionResult> cir) {
+        /*if (!playerEntity.isCreative() && !playerEntity.isSpectator()) {
+            LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
+            if (!levelManager.hasRequiredItemLevel(playerEntity.getStackInHand(hand).getItem())) {
+                playerEntity.sendMessage(EventInit.sendRestriction(levelManager.getRequiredItemLevel(playerEntity.getStackInHand(hand).getItem()), levelManager), true);
+                cir.setReturnValue(ActionResult.PASS);
+            }
+        }*/
+        if (SkillZMain.shouldRestrictItem(playerEntity, playerEntity.getStackInHand(hand).getItem())) {
+            cir.setReturnValue(ActionResult.PASS);
+        }
     }
 
     @Inject(method = "readCustomDataFromNbt", at = @At(value = "TAIL"))
@@ -104,7 +124,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements LevelMan
     private float attackCriticalDamageMixin(float original) {
         original /= 1.5F;
         //original += BonusHelper.meleeCriticalDamageBonus(this.playerEntity);
-        original += BonusHelper.doLinearFloatBonus("meleeCriticalAttackDamage", this.playerEntity, 0 , ConfigInit.MAIN.BONUSES.meleeCriticalAttackDamageBonus);
+        original += BonusHelper.doScalingFloatBonus("meleeCriticalAttackDamage", this.playerEntity, 0 , ConfigInit.MAIN.BONUSES.meleeCriticalAttackDamageBonus);
         original *= 1.5F;
         return original;
     }
@@ -141,7 +161,13 @@ public abstract class PlayerEntityMixin extends LivingEntity implements LevelMan
 
     @Inject(method = "eatFood", at = @At(value = "HEAD"))
     private void eatFoodMixin(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> info) {
-        BonusHelper.foodIncreasionBonus(this.playerEntity, stack);
+        if (stack.getItem().isFood()) {
+            BonusHelper.doRunnableBonus("foodIncreasion", this.playerEntity, (level) -> {
+                net.minecraft.item.FoodComponent foodComponent = stack.getItem().getFoodComponent();
+                float multiplier = level * ConfigInit.MAIN.BONUSES.foodIncreasionBonus;
+                playerEntity.getHungerManager().add((int) (foodComponent.getHunger() * multiplier), foodComponent.getSaturationModifier() * multiplier);
+            });
+        }
     }
 
     @Override

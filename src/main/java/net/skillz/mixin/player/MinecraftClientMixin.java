@@ -1,5 +1,10 @@
 package net.skillz.mixin.player;
 
+import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.skillz.SkillZMain;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.init.EventInit;
 import net.skillz.level.LevelManager;
@@ -44,6 +49,20 @@ public class MinecraftClientMixin {
     @Nullable
     public HitResult crosshairTarget;
 
+    @Inject(method = "doItemUse", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isItemEnabled(Lnet/minecraft/resource/featuretoggle/FeatureSet;)Z"), cancellable = true)
+    private void doItemUseMixin(CallbackInfo ci, @Local ItemStack itemStack) {
+        if (player != null && SkillZMain.shouldRestrictItem(player, itemStack.getItem())) {
+            ci.cancel();
+        }
+        /*if (!player.isCreative() && !player.isSpectator()) {
+            LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
+            if (!levelManager.hasRequiredItemLevel(itemStack.getItem())) {
+                player.sendMessage(EventInit.sendRestriction(levelManager.getRequiredItemLevel(itemStack.getItem()), levelManager), true);
+                ci.cancel();
+            }
+        }*/
+    }
+
     @Inject(method = "handleBlockBreaking", at = @At("HEAD"), cancellable = true)
     private void handleBlockBreakingMixin(boolean breaking, CallbackInfo info) {
         if (restrictItemUsage() || restrictBlockBreaking(breaking)) {
@@ -60,14 +79,15 @@ public class MinecraftClientMixin {
 
     @Unique
     private boolean restrictItemUsage() {
-        if (ConfigInit.MAIN.LEVEL.lockedHandUsage && player != null && !player.isCreative()) {
+        if (ConfigInit.MAIN.LEVEL.lockedHandUsage && player != null) {
             Item item = player.getMainHandStack().getItem();
             if (item != null && !item.equals(Items.AIR)) {
-                LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
+                /*LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
                 if (!levelManager.hasRequiredItemLevel(item)) {
                     player.sendMessage(EventInit.sendRestriction(levelManager.getRequiredItemLevel(item), levelManager), true);
                     return true;
-                }
+                }*/
+                return SkillZMain.shouldRestrictItem(player, item);
             }
         }
         return false;
