@@ -2,6 +2,9 @@ package net.skillz.mixin.block;
 
 import java.util.List;
 
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.level.LevelManager;
 import net.skillz.util.BonusHelper;
@@ -119,7 +122,14 @@ public abstract class BlockMixin {
     @Inject(method = "getDroppedStacks(Lnet/minecraft/block/BlockState;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/entity/BlockEntity;Lnet/minecraft/entity/Entity;Lnet/minecraft/item/ItemStack;)Ljava/util/List;", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;getDroppedStacks(Lnet/minecraft/loot/context/LootContextParameterSet$Builder;)Ljava/util/List;"), locals = LocalCapture.CAPTURE_FAILSOFT)
     private static void getDroppedStacksMixin(BlockState state, ServerWorld world, BlockPos pos, @Nullable BlockEntity blockEntity, @Nullable Entity entity, ItemStack stack, CallbackInfoReturnable<List<ItemStack>> info, LootContextParameterSet.Builder builder) {
         if (entity instanceof PlayerEntity playerEntity) {
-            BonusHelper.miningDropChanceBonus(playerEntity, state, pos, builder);
+            if (state.isIn(ConventionalBlockTags.ORES) && EnchantmentHelper.getEquipmentLevel(Enchantments.SILK_TOUCH, playerEntity) <= 0) {
+                if (BonusHelper.doBooleanBonus("miningDropChance", playerEntity, ConfigInit.MAIN.BONUSES.miningDropChanceBonus)) {
+                    List<ItemStack> list = state.getDroppedStacks(builder);
+                    if (!list.isEmpty()) {
+                        Block.dropStack(playerEntity.getWorld(), pos, state.getDroppedStacks(builder).get(0).split(1));
+                    }
+                }
+            }
         }
     }
 

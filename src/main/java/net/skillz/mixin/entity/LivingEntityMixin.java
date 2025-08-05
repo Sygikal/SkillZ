@@ -1,6 +1,8 @@
 package net.skillz.mixin.entity;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.level.LevelManager;
 import net.skillz.util.BonusHelper;
@@ -11,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -40,6 +43,9 @@ public abstract class LivingEntityMixin extends Entity {
     @Nullable
     protected PlayerEntity attackingPlayer;
 
+    @Unique
+    LivingEntity entity = ((LivingEntity)(Object)this);
+
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
@@ -57,8 +63,9 @@ public abstract class LivingEntityMixin extends Entity {
             return original;
         }*/
         //TODO fallDamageReductionBonus
-        if (source.isOf(DamageTypes.FALL) && (Object) this instanceof PlayerEntity playerEntity) {
-            return EnchantmentHelper.getProtectionAmount(this.getArmorItems(), source) + BonusHelper.fallDamageReductionBonus(playerEntity);
+        if (source.isOf(DamageTypes.FALL) && entity instanceof PlayerEntity playerEntity) {
+            return EnchantmentHelper.getProtectionAmount(this.getArmorItems(), source) + /*BonusHelper.fallDamageReductionBonus(playerEntity)*/
+                    BonusHelper.doScalingFloatBonus("fallDamageReduction", playerEntity, 0.0F, ConfigInit.MAIN.BONUSES.fallDamageReductionBonus);
         } else {
             return EnchantmentHelper.getProtectionAmount(this.getArmorItems(), source);
         }
@@ -74,10 +81,7 @@ public abstract class LivingEntityMixin extends Entity {
         }
         return original;*/
         //TODO totem 1
-        if ((Object) this instanceof PlayerEntity playerEntity && original.isOf(Items.TOTEM_OF_UNDYING)) {
-            if (playerEntity.isCreative()) {
-                return original;
-            }
+        if (entity instanceof PlayerEntity playerEntity && !playerEntity.isCreative() && original.isOf(Items.TOTEM_OF_UNDYING)) {
             LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
             if (!levelManager.hasRequiredItemLevel(original.getItem())) {
                 return ItemStack.EMPTY;
@@ -99,14 +103,19 @@ public abstract class LivingEntityMixin extends Entity {
             }
         }*/
         //TODO totem 2
-        if ((Object) this instanceof PlayerEntity playerEntity && BonusHelper.deathGraceChanceBonus(playerEntity)) {
+        if (entity instanceof PlayerEntity playerEntity && /*BonusHelper.deathGraceChanceBonus(playerEntity)*/
+                BonusHelper.doLinearBooleanBonus("deathGraceChance", playerEntity, ConfigInit.MAIN.BONUSES.deathGraceChanceBonus)) {
+            playerEntity.setHealth(1.0F);
+            playerEntity.clearStatusEffects();
+            playerEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 100, 1));
+            playerEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 600, 0));
             info.setReturnValue(true);
         }
     }
 
     @Inject(method = "drop", at = @At(value = "HEAD"), cancellable = true)
     protected void dropMixin(DamageSource source, CallbackInfo info) {
-        if (!((Object) this instanceof PlayerEntity) && attackingPlayer != null && this.playerHitTimer > 0 && ConfigInit.MAIN.LEVEL.disableMobFarms
+        if (!(entity instanceof PlayerEntity) && attackingPlayer != null && this.playerHitTimer > 0 && ConfigInit.MAIN.LEVEL.disableMobFarms
                 && !((PlayerDropAccess) attackingPlayer).allowMobDrop()) {
             info.cancel();
         }
@@ -122,7 +131,7 @@ public abstract class LivingEntityMixin extends Entity {
     @Inject(method = "dropXp", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ExperienceOrbEntity;spawn(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;I)V"))
     protected void dropXpMixin(CallbackInfo info) {
         if (ConfigInit.MAIN.EXPERIENCE.mobXPMultiplier > 0.0F) {
-            if (!ConfigInit.MAIN.EXPERIENCE.spawnerMobXP && (Object) this instanceof MobEntity mobEntity && ((MobEntityAccess) mobEntity).isSpawnerMob()) {
+            if (!ConfigInit.MAIN.EXPERIENCE.spawnerMobXP && (Object) entity instanceof MobEntity mobEntity && ((MobEntityAccess) mobEntity).isSpawnerMob()) {
             } else {
                 LevelExperienceOrbEntity.spawn((ServerWorld) this.getWorld(), this.getPos(),
                         (int) (this.getXpToDrop() * ConfigInit.MAIN.EXPERIENCE.mobXPMultiplier

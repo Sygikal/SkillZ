@@ -1,5 +1,6 @@
 package net.skillz.mixin.entity;
 
+import net.skillz.init.ConfigInit;
 import net.skillz.util.BonusHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -75,7 +76,8 @@ public abstract class VillagerEntityMixin extends MerchantEntity {
         if (!player.hasStatusEffect(StatusEffects.HERO_OF_THE_VILLAGE)) {
             for (TradeOffer tradeOffer : this.getOffers()) {
                 int originalPrice = tradeOffer.getOriginalFirstBuyItem().getCount();
-                tradeOffer.increaseSpecialPrice(-(int) (originalPrice - originalPrice * BonusHelper.priceDiscountBonus(player)));
+                //tradeOffer.increaseSpecialPrice(-(int) (originalPrice - originalPrice * BonusHelper.priceDiscountBonus(player)));
+                tradeOffer.increaseSpecialPrice(-(int) (originalPrice - originalPrice * BonusHelper.doInversePercentageFloatBonus("priceDiscount", player, 1.0F, ConfigInit.MAIN.BONUSES.priceDiscountBonus)));
             }
         }
     }

@@ -65,18 +65,6 @@ public class BonusHelper {
         return false;
     }
 
-    public static boolean doBooleanBonus(String bonusKey, PlayerEntity playerEntity) {
-        if (LevelManager.BONUSES.containsKey(bonusKey)) {
-            LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
-            SkillBonus skillBonus = LevelManager.BONUSES.get(bonusKey);
-            int level = levelManager.getPlayerSkills().get(skillBonus.getId()).getLevel();
-            if (level >= skillBonus.getLevel()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static int doInversePercentageIntegerBonus(String bonusKey, PlayerEntity playerEntity, int base, float probability) {
         if (LevelManager.BONUSES.containsKey(bonusKey)) {
             LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
@@ -89,7 +77,31 @@ public class BonusHelper {
         return base;
     }
 
+    public static float doInversePercentageFloatBonus(String bonusKey, PlayerEntity playerEntity, float base, float probability) {
+        if (LevelManager.BONUSES.containsKey(bonusKey)) {
+            LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
+            SkillBonus skillBonus = LevelManager.BONUSES.get(bonusKey);
+            int level = levelManager.getPlayerSkills().get(skillBonus.getId()).getLevel();
+            if (level >= skillBonus.getLevel()) {
+                return (base * (1.0f - level * probability));
+            }
+        }
+        return base;
+    }
+
     public static float doLinearFloatBonus(String bonusKey, PlayerEntity playerEntity, float defaultReturn, float probability) {
+        if (LevelManager.BONUSES.containsKey(bonusKey)) {
+            LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
+            SkillBonus skillBonus = LevelManager.BONUSES.get(bonusKey);
+            int level = levelManager.getPlayerSkills().get(skillBonus.getId()).getLevel();
+            if (level >= skillBonus.getLevel()) {
+                return probability;
+            }
+        }
+        return defaultReturn;
+    }
+
+    public static float doScalingFloatBonus(String bonusKey, PlayerEntity playerEntity, float defaultReturn, float probability) {
         if (LevelManager.BONUSES.containsKey(bonusKey)) {
             LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
             SkillBonus skillBonus = LevelManager.BONUSES.get(bonusKey);
@@ -246,62 +258,6 @@ public class BonusHelper {
         }
     }*/
 
-    public static float fallDamageReductionBonus(PlayerEntity playerEntity) {
-        if (LevelManager.BONUSES.containsKey("fallDamageReduction")) {
-            LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
-            SkillBonus skillBonus = LevelManager.BONUSES.get("fallDamageReduction");
-            int level = levelManager.getPlayerSkills().get(skillBonus.getId()).getLevel();
-            if (level >= skillBonus.getLevel()) {
-                return level * ConfigInit.MAIN.BONUSES.fallDamageReductionBonus;
-            }
-        }
-        return 0.0f;
-    }
-
-    public static boolean deathGraceChanceBonus(PlayerEntity playerEntity) {
-        if (LevelManager.BONUSES.containsKey("deathGraceChance")) {
-            LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
-            SkillBonus skillBonus = LevelManager.BONUSES.get("deathGraceChance");
-            int level = levelManager.getPlayerSkills().get(skillBonus.getId()).getLevel();
-            if (level >= skillBonus.getLevel() && playerEntity.getRandom().nextFloat() <= ConfigInit.MAIN.BONUSES.deathGraceChanceBonus) {
-                playerEntity.setHealth(1.0F);
-                playerEntity.clearStatusEffects();
-                playerEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 100, 1));
-                playerEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 600, 0));
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static float tntStrengthBonus(PlayerEntity playerEntity) {
-        if (LevelManager.BONUSES.containsKey("tntStrength")) {
-            LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
-            SkillBonus skillBonus = LevelManager.BONUSES.get("tntStrength");
-            int level = levelManager.getPlayerSkills().get(skillBonus.getId()).getLevel();
-            if (level >= skillBonus.getLevel()) {
-                return ConfigInit.MAIN.BONUSES.tntStrengthBonus;
-            }
-        }
-        return 0.0f;
-    }
-
-    public static float priceDiscountBonus(PlayerEntity playerEntity) {
-        if (playerEntity.hasStatusEffect(StatusEffects.HERO_OF_THE_VILLAGE)) {
-            return 1.0f;
-        }
-        if (LevelManager.BONUSES.containsKey("priceDiscount")) {
-            LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
-            SkillBonus skillBonus = LevelManager.BONUSES.get("priceDiscount");
-            int level = levelManager.getPlayerSkills().get(skillBonus.getId()).getLevel();
-            if (level >= skillBonus.getLevel()) {
-                return 1.0f - (level * ConfigInit.MAIN.BONUSES.priceDiscountBonus);
-            }
-        }
-        return 1.0f;
-    }
-
     public static void tradeXpBonus(ServerWorld serverWorld, @Nullable PlayerEntity playerEntity, MerchantEntity merchantEntity, int amount) {
         amount = (int) (amount * ConfigInit.MAIN.EXPERIENCE.tradingXPMultiplier);
         if (amount > 0) {
@@ -318,22 +274,6 @@ public class BonusHelper {
             LevelExperienceOrbEntity.spawn(serverWorld, merchantEntity.getPos().add(0.0D, 0.5D, 0.0D), amount);
             // Todo: HERE
             // ? 1.0F + ConfigInit.CONFIG.basedOnMultiplier * ((PlayerStatsManagerAccess) lastCustomer).getPlayerStatsManager().getOverallLevel()
-        }
-    }
-
-    public static void miningDropChanceBonus(PlayerEntity playerEntity, BlockState state, BlockPos pos, LootContextParameterSet.Builder builder) {
-        if (state.isIn(ConventionalBlockTags.ORES) && EnchantmentHelper.getEquipmentLevel(Enchantments.SILK_TOUCH, playerEntity) <= 0) {
-            if (LevelManager.BONUSES.containsKey("miningDropChance")) {
-                LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
-                SkillBonus skillBonus = LevelManager.BONUSES.get("miningDropChance");
-                int level = levelManager.getPlayerSkills().get(skillBonus.getId()).getLevel();
-                if (level >= skillBonus.getLevel() && playerEntity.getRandom().nextFloat() <= level * ConfigInit.MAIN.BONUSES.miningDropChanceBonus) {
-                    List<ItemStack> list = state.getDroppedStacks(builder);
-                    if (!list.isEmpty()) {
-                        Block.dropStack(playerEntity.getWorld(), pos, state.getDroppedStacks(builder).get(0).split(1));
-                    }
-                }
-            }
         }
     }
 
@@ -369,7 +309,7 @@ public class BonusHelper {
     }*/
 
     public static int anvilXpDiscountBonus(PlayerEntity playerEntity, int levelCost) {
-        if (levelCost > ConfigInit.MAIN.BONUSES.anvilXpCap && /*anvilXpCapBonus(playerEntity)*/ doBooleanBonus("anvilXpCap", playerEntity)) {
+        if (levelCost > ConfigInit.MAIN.BONUSES.anvilXpCap && /*anvilXpCapBonus(playerEntity)*/ hasBonus("anvilXpCap", playerEntity)) {
             return ConfigInit.MAIN.BONUSES.anvilXpCap;
         }
         /*if (LevelManager.BONUSES.containsKey("anvilXpDiscount")) {
@@ -491,19 +431,6 @@ public class BonusHelper {
         return false;
     }*/
 
-    public static void foodIncreasionBonus(PlayerEntity playerEntity, ItemStack itemStack) {
-        if (LevelManager.BONUSES.containsKey("foodIncreasion") && itemStack.getItem().isFood()) {
-            LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
-            SkillBonus skillBonus = LevelManager.BONUSES.get("foodIncreasion");
-            int level = levelManager.getPlayerSkills().get(skillBonus.getId()).getLevel();
-            if (level >= skillBonus.getLevel()) {
-                net.minecraft.item.FoodComponent foodComponent = itemStack.getItem().getFoodComponent();
-                float multiplier = level * ConfigInit.MAIN.BONUSES.foodIncreasionBonus;
-                playerEntity.getHungerManager().add((int) (foodComponent.getHunger() * multiplier), foodComponent.getSaturationModifier() * multiplier);
-            }
-        }
-    }
-
     public static void damageReflectionBonus(PlayerEntity playerEntity, DamageSource source, float amount) {
         if (source.getAttacker() != null && LevelManager.BONUSES.containsKey("damageReflection") && LevelManager.BONUSES.containsKey("damageReflectionChance")) {
             LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
@@ -529,6 +456,21 @@ public class BonusHelper {
             }
         }
         return false;
+    }*/
+
+    /*public static float priceDiscountBonus(PlayerEntity playerEntity) {
+        if (playerEntity.hasStatusEffect(StatusEffects.HERO_OF_THE_VILLAGE)) {
+            return 1.0f;
+        }
+        if (LevelManager.BONUSES.containsKey("priceDiscount")) {
+            LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
+            SkillBonus skillBonus = LevelManager.BONUSES.get("priceDiscount");
+            int level = levelManager.getPlayerSkills().get(skillBonus.getId()).getLevel();
+            if (level >= skillBonus.getLevel()) {
+                return 1.0f - (level * ConfigInit.MAIN.BONUSES.priceDiscountBonus);
+            }
+        }
+        return 1.0f;
     }*/
 
 
