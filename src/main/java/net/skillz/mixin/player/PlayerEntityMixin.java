@@ -78,7 +78,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements LevelMan
     @ModifyArg(method = "addExhaustion", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/HungerManager;addExhaustion(F)V"), index = 0)
     private float injected(float original) {
         //original *= BonusHelper.exhaustionReductionBonus(this.playerEntity);
-        original *= BonusHelper.doIntegerBonus("exhaustionReduction", this.playerEntity, 0, (level) -> (int) (1.0f - (level * ConfigInit.MAIN.BONUSES.exhaustionReductionBonus)));
+        original *= BonusHelper.doFloatBonus("exhaustionReduction", this.playerEntity, 1, (level) -> (1.0f - (level * ConfigInit.MAIN.BONUSES.exhaustionReductionBonus)));
         return original;
     }
 
