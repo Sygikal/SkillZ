@@ -51,7 +51,7 @@ public class LevelScreen extends Screen implements Tab {
     private int y;
 
     private LevelManager levelManager;
-    private ClientPlayerEntity clientPlayerEntity;
+    //private ClientPlayerEntity clientPlayerEntity;
     //private Quaternionf quaternionf = new Quaternionf().rotateZ((float) Math.PI).rotateLocalY(2.7f);
     //private boolean turnClientPlayer = false;
 
@@ -79,14 +79,16 @@ public class LevelScreen extends Screen implements Tab {
         this.y = (this.height - this.backgroundHeight) / 2;
 
         this.levelManager = ((LevelManagerAccess) this.client.player).getLevelManager();
-        this.clientPlayerEntity = this.client.interactionManager.createPlayer(this.client.world, this.client.player.getStatHandler(), this.client.player.getRecipeBook(), false, false);
+
+        //Why was this a thing
+        /*this.clientPlayerEntity = this.client.interactionManager.createPlayer(this.client.world, this.client.player.getStatHandler(), this.client.player.getRecipeBook(), false, false);
         ((ClientPlayerAccess) this.clientPlayerEntity).setShouldRenderClientName(false);
 
         for (EquipmentSlot equipmentSlot : EquipmentSlot.values()) {
             if (!this.client.player.getEquippedStack(equipmentSlot).isEmpty()) {
                 this.clientPlayerEntity.equipStack(equipmentSlot, this.client.player.getEquippedStack(equipmentSlot));
             }
-        }
+        }*/
 
         Map<Integer, SkillAttribute> skillAttributes = new HashMap<>();
         int attributeCount = 0;
@@ -189,7 +191,7 @@ public class LevelScreen extends Screen implements Tab {
         {
             int i = 0;
             for (WidgetButtonPage page : newLeveButtons) {
-                if (page.chopped && (i < 12)) {
+                if (page.visible && (i < 12)) {
 
                     page.hovered = mouseX >= (this.x + (i % 2 == 0 ? 80 : 169)) && mouseY >= (this.y + 91 + i / 2 * 20) && mouseX < (this.x + (i % 2 == 0 ? 80 : 169)) + page.getWidth() && mouseY < (this.y + 91 + i / 2 * 20) + page.getHeight();
 
@@ -286,9 +288,10 @@ public class LevelScreen extends Screen implements Tab {
         }
 
 
-        if (this.clientPlayerEntity != null) {
+        if (this.client != null && this.client.player != null) {
             //InventoryScreen.drawEntity(context, this.x + 33, this.y + 43, 30, this.quaternionf, null, this.clientPlayerEntity);
-            InventoryScreen.drawEntity(context, this.x + 33, this.y + 70, 30, (float)(this.x + 33) - mouseX, (float)(this.y + 70 - 50) - mouseY, this.clientPlayerEntity);
+            //InventoryScreen.drawEntity(context, 100, 100, 30, (float)100 - mouseX, (float)(100 - 50) - mouseY, this.client.player);
+            InventoryScreen.drawEntity(context, this.x + 33, this.y + 72, 30, (float)(this.x + 33) - mouseX, (float)(this.y + 72 - 50) - mouseY, this.client.player);
 
             /*if (isPointWithinBounds(this.x + 9, this.y + 67, 15, 10, mouseX, mouseY)) {
                 context.drawTexture(ICON_TEXTURE, this.x + 9, this.y + 67, 0, 138, 15, 10);
@@ -381,7 +384,7 @@ public class LevelScreen extends Screen implements Tab {
         {
             int i = 0;
             for (WidgetButtonPage page : newLeveButtons) {
-                if (page.chopped && (i < 12)) {
+                if (page.visible && (i < 12)) {
                     if (DrawUtil.isPointWithinBounds(this.x + (i % 2 == 0 ? 11 : 99), this.y + 89 + i / 2 * 20, 16, 16, mouseX, mouseY)) {
                         this.client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                         this.client.setScreen(new SkillInfoScreen(this.levelManager, page.skill.id()));
@@ -414,55 +417,43 @@ public class LevelScreen extends Screen implements Tab {
             }
         }
         if (DrawUtil.isPointWithinBounds(this.x + 7, this.y + 86, 186, 122, mouseX, mouseY)) {
-            //System.out.println(this.newLeveButtons.size());
-            //this.newLeveButtons.get(this.newLeveButtons.size()-1).visible = false;
-            //this.newLeveButtons.get(0).visible = false;
-
-            if (verticalAmount < 0) {
-                int i = 0;
-                int x = 0;
-                for (WidgetButtonPage page : this.newLeveButtons) {
-                    if (this.newLeveButtons.size() > 12) {
-                        int others = this.newLeveButtons.size() - 12;
-                        if (x < others) {
-                            //System.out.println(i + " " + x + " " + others);
-                            if (!page.chopped) {
-                                x++;
-                            }
-                            /*if (i > 11) {
-                                this.newLeveButtons.get(i+x).chopped = true;
-                            }*/
-                            if (page.chopped) {
-                                if (i < 2 + x) {
-                                    this.newLeveButtons.get(i).chopped = false;
-                                }
-                            }
-                            i++;
+            int visibleCount = 0;
+            for (WidgetButtonPage page : newLeveButtons) {
+                if (this.newLeveButtons.size() > 12) {
+                    if (verticalAmount > 0) {
+                        //Scrolling down
+                        if (page.visible) {
+                            break;
                         }
+                        visibleCount++;
                     }
                 }
-            }else {
-                int i = 0;
-                int x = 0;
-                //System.out.println(this.newLeveButtons.size());
-                for (WidgetButtonPage page : this.newLeveButtons) {
-                    if (this.newLeveButtons.size() > 12) {
-                        int others = this.newLeveButtons.size() - 12;
-                        //if (x < others) {
-                            //System.out.println(i + " " + x + " " + others);
-                            /*if (!page.chopped) {
-                                x++;
-                            }*/
-                            /*if (i > 11) {
-                                this.newLeveButtons.get(i).chopped = false;
-                            }*/
-                            if (!page.chopped) {
-                                if (i < 2) {
-                                    this.newLeveButtons.get(i).chopped = true;
-                                }
+            }
+
+            int i = 0;
+            int x = 0;
+            for (WidgetButtonPage page : this.newLeveButtons) {
+                if (this.newLeveButtons.size() > 12) {
+                    int extra = this.newLeveButtons.size() - 12;
+                    if (verticalAmount < 0) {
+                        //Scrolling down
+                        if (!page.visible) {
+                            x++;
+                        }
+                        if (page.visible && x < extra) {
+                            if (i < 2 + x) {
+                                this.newLeveButtons.get(i).visible = false;
                             }
-                            i++;
-                        //}
+                        }
+                        i++;
+                    }else if (verticalAmount > 0) {
+                        //Scrolling up
+                        if (!page.visible) {
+                            if (i >= visibleCount - 2) {
+                                this.newLeveButtons.get(i).visible = true;
+                            }
+                        }
+                        i++;
                     }
                 }
             }
@@ -527,7 +518,7 @@ public class LevelScreen extends Screen implements Tab {
         private final int textureY;
         private List<Text> tooltip = new ArrayList<Text>();
         private int clickedKey = -1;
-        public boolean chopped = true;
+        public boolean visible = true;
         public boolean hovered = false;
 
         public WidgetButtonPage(Skill skill, int x, int y, int sizeX, int sizeY, int textureX, int textureY, boolean hoverOutline, boolean clickable, @Nullable Text tooltip, ButtonWidget.PressAction onPress) {
