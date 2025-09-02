@@ -17,15 +17,15 @@ public class LevelHelper {
         for (SkillAttribute skillAttribute : skill.attributes()) {
             EntityAttributeInstance attr = serverPlayerEntity.getAttributeInstance(skillAttribute.getAttribute().value());
             if (attr != null) {
-                if (skillAttribute.useBaseValue()) {
-                    attr.setBaseValue(skillAttribute.getBaseValue());
-                }
                 Identifier identifier = SkillZMain.identifierOf(skill.id());
                 UUID uid = UUID.nameUUIDFromBytes(identifier.toString().getBytes());
                 if (attr.getModifier(uid) != null && attr.hasModifier(attr.getModifier(uid))) {
                     attr.removeModifier(uid);
                 }
-                attr.addTemporaryModifier(new EntityAttributeModifier(uid, identifier.toString(), skillAttribute.getLevelValue() * levelManager.getSkillLevel(skill.id()), skillAttribute.getOperation()));
+                attr.addPersistentModifier(new EntityAttributeModifier(uid, identifier.toString(), skillAttribute.getLevelValue() * levelManager.getSkillLevel(skill.id()), skillAttribute.getOperation()));
+                if (skillAttribute.useBaseValue()) {
+                    attr.setBaseValue(skillAttribute.getBaseValue());
+                }
             }
         }
     }
