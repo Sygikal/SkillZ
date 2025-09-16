@@ -1,7 +1,7 @@
 package net.skillz.mixin.network;
 
 import net.skillz.access.OrbAccess;
-import net.skillz.entity.LevelExperienceOrbEntity;
+import net.skillz.content.entity.LevelExperienceOrbEntity;
 import net.skillz.network.packet.OrbPacket;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;

@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import net.skillz.entity.LevelExperienceOrbEntity;
+import net.skillz.content.entity.LevelExperienceOrbEntity;
 import net.skillz.init.ConfigInit;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.projectile.thrown.ExperienceBottleEntity;

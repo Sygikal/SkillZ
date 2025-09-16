@@ -3,7 +3,7 @@ package net.skillz.level;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.skillz.init.ConfigInit;
 import net.skillz.level.restriction.PlayerRestriction;
-import net.skillz.registry.EnchantmentRegistry;
+import net.skillz.content.registry.EnchantmentRegistry;
 import net.skillz.util.LevelHelper;
 import net.skillz.util.PacketHelper;
 import net.minecraft.block.Block;

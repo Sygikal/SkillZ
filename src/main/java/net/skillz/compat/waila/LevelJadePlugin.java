@@ -1,4 +1,4 @@
-package net.skillz.waila;
+package net.skillz.compat.waila;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;

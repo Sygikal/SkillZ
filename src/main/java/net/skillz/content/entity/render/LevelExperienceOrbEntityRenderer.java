@@ -1,8 +1,8 @@
-package net.skillz.entity.render;
+package net.skillz.content.entity.render;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.skillz.entity.LevelExperienceOrbEntity;
+import net.skillz.content.entity.LevelExperienceOrbEntity;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;

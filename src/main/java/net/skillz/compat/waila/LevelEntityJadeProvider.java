@@ -1,4 +1,4 @@
-package net.skillz.waila;
+package net.skillz.compat.waila;
 
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.init.RenderInit;

@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import org.spongepowered.asm.mixin.injection.At;
 
-import net.skillz.entity.LevelExperienceOrbEntity;
+import net.skillz.content.entity.LevelExperienceOrbEntity;
 import net.skillz.init.ConfigInit;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.AnimalEntity;

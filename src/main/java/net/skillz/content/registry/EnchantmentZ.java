@@ -1,4 +1,4 @@
-package net.skillz.registry;
+package net.skillz.content.registry;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.registry.entry.RegistryEntry;

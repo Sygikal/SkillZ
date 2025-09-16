@@ -1,4 +1,4 @@
-package net.skillz.entity;
+package net.skillz.content.entity;
 
 import net.skillz.access.ServerPlayerSyncAccess;
 import net.skillz.init.EntityInit;

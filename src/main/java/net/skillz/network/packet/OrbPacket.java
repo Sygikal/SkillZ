@@ -1,10 +1,9 @@
 package net.skillz.network.packet;
 
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.util.Identifier;
 import net.skillz.SkillZMain;
 import net.skillz.access.OrbAccess;
-import net.skillz.entity.LevelExperienceOrbEntity;
+import net.skillz.content.entity.LevelExperienceOrbEntity;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.Packet;

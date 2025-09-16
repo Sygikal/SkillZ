@@ -1,7 +1,7 @@
 package net.skillz.init;
 
-import net.skillz.criteria.LevelCriterion;
-import net.skillz.criteria.SkillCriterion;
+import net.skillz.content.criteria.LevelCriterion;
+import net.skillz.content.criteria.SkillCriterion;
 import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.scoreboard.ScoreboardCriterion;
 

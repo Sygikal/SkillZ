@@ -11,7 +11,7 @@ import net.skillz.init.ConfigInit;
 import net.skillz.init.EventInit;
 import net.skillz.level.LevelManager;
 import net.skillz.level.restriction.PlayerRestriction;
-import net.skillz.registry.EnchantmentRegistry;
+import net.skillz.content.registry.EnchantmentRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;

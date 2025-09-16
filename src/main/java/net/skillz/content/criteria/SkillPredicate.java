@@ -1,4 +1,4 @@
-package net.skillz.criteria;
+package net.skillz.content.criteria;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

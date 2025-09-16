@@ -1,4 +1,4 @@
-package net.skillz.waila;
+package net.skillz.compat.waila;
 
 import mcp.mobius.waila.api.IRegistrar;
 import mcp.mobius.waila.api.IWailaPlugin;

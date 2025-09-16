@@ -17,7 +17,7 @@ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 
 import org.spongepowered.asm.mixin.injection.At;
 
-import net.skillz.entity.LevelExperienceOrbEntity;
+import net.skillz.content.entity.LevelExperienceOrbEntity;
 import net.skillz.init.ConfigInit;
 import net.skillz.init.TagInit;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;

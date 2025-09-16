@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import net.skillz.access.MobEntityAccess;
 import net.skillz.access.PlayerDropAccess;
-import net.skillz.entity.LevelExperienceOrbEntity;
+import net.skillz.content.entity.LevelExperienceOrbEntity;
 import net.skillz.init.ConfigInit;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;

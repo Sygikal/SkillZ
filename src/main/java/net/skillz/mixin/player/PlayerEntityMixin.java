@@ -2,16 +2,14 @@ package net.skillz.mixin.player;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemUsageContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.skillz.SkillZMain;
 import net.skillz.access.ItemStackAccess;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.access.PlayerDropAccess;
-import net.skillz.entity.LevelExperienceOrbEntity;
+import net.skillz.content.entity.LevelExperienceOrbEntity;
 import net.skillz.init.ConfigInit;
-import net.skillz.init.EventInit;
 import net.skillz.level.LevelManager;
 import net.skillz.util.BonusHelper;
 import net.minecraft.entity.EntityType;

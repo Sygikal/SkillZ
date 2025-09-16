@@ -1,22 +1,16 @@
 package net.skillz.data.populate.impl;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import dev.sygii.ultralib.data.util.OptionalObject;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.*;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.skillz.SkillZMain;
 import net.skillz.data.populate.Populator;
 import net.skillz.level.LevelManager;
 import net.skillz.level.restriction.PlayerRestriction;
-import net.skillz.registry.EnchantmentRegistry;
-import net.skillz.registry.EnchantmentZ;
+import net.skillz.content.registry.EnchantmentRegistry;
 import org.apache.commons.compress.utils.Lists;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

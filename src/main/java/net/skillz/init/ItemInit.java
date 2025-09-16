@@ -2,7 +2,7 @@ package net.skillz.init;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.skillz.SkillZMain;
-import net.skillz.item.*;
+import net.skillz.content.item.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;

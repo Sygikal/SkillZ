@@ -5,8 +5,8 @@ import net.skillz.SkillZMain;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.level.*;
 import net.skillz.network.packet.*;
-import net.skillz.registry.EnchantmentRegistry;
-import net.skillz.registry.EnchantmentZ;
+import net.skillz.content.registry.EnchantmentRegistry;
+import net.skillz.content.registry.EnchantmentZ;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.Nullable;
 

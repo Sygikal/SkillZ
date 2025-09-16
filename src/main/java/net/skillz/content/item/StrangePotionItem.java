@@ -1,4 +1,4 @@
-package net.skillz.item;
+package net.skillz.content.item;
 
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.init.ConfigInit;

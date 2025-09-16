@@ -6,7 +6,7 @@ import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.skillz.SkillZMain;
-import net.skillz.entity.render.LevelExperienceOrbEntityRenderer;
+import net.skillz.content.entity.render.LevelExperienceOrbEntityRenderer;
 import net.skillz.screen.SkillInfoScreen;
 import net.skillz.screen.SkillRestrictionScreen;
 import net.skillz.screen.LevelScreen;
