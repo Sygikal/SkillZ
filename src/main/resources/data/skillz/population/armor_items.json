@@ -1,0 +1,13 @@
+{
+  "default": true,
+  "populator": {
+    "type": "skillz:armor_material"
+  },
+  "skills": [
+    {
+      "skill": "defense",
+      "base": 0,
+      "multiply": 2
+    }
+  ]
+}

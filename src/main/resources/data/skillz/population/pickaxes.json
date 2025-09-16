@@ -1,0 +1,15 @@
+{
+  "default": true,
+  "populator": {
+    "type": "skillz:tool_material",
+    "algorithm": "MINING_LEVEL",
+    "tool_type": "PICKAXE"
+  },
+  "skills": [
+    {
+      "skill": "mining",
+      "base": 0,
+      "multiply": 2
+    }
+  ]
+}
