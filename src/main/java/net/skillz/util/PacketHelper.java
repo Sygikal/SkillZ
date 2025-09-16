@@ -77,7 +77,7 @@ public class PacketHelper {
         List<Integer> keys = new ArrayList<>();
         List<String> ids = new ArrayList<>();
         List<Integer> levels = new ArrayList<>();
-        System.out.println(EnchantmentRegistry.ENCHANTMENTS);
+        //System.out.println(EnchantmentRegistry.ENCHANTMENTS);
         for (Map.Entry<Integer, EnchantmentZ> entry : EnchantmentRegistry.ENCHANTMENTS.entrySet()) {
             keys.add(entry.getKey());
             ids.add(SkillZMain.getEnchantmentIdAsString(entry.getValue().getEntry()));
