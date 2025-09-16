@@ -1,17 +1,11 @@
 package net.skillz.mixin.misc;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
-
-import net.minecraft.util.Language;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.At;
 
 import net.fabricmc.api.Environment;
-import net.skillz.data.LevelLists;
 import net.fabricmc.api.EnvType;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.EnchantmentScreen;
@@ -19,7 +13,6 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.EnchantmentScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 @Environment(EnvType.CLIENT)
 @Mixin(EnchantmentScreen.class)

@@ -1,25 +1,13 @@
 package net.skillz.mixin.compat;
 
-import java.util.ArrayList;
-
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import dev.emi.trinkets.api.TrinketItem;
-import net.skillz.data.LevelLists;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ArmorItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 @Mixin(TrinketItem.class)
 public class TrinketItemMixin {
 
-    @Inject(method = "equipItem", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "equipItem", at = @At("HEAD"), cancellable = true)
     private static void equipItemMixin(PlayerEntity user, ItemStack stack, CallbackInfoReturnable<Boolean> info) {
         ArrayList<Object> levelList = LevelLists.customItemList;
         if (!levelList.isEmpty() && levelList.contains(Registries.ITEM.getId(stack.getItem()).toString())) {
@@ -44,5 +32,5 @@ public class TrinketItemMixin {
                 info.setReturnValue(false);
 //            }
         }
-    }
+    }*/
 }

@@ -14,7 +14,6 @@ import dev.emi.trinkets.SurvivalTrinketSlot;
 import dev.emi.trinkets.api.SlotReference;
 import dev.emi.trinkets.api.TrinketInventory;
 import dev.emi.trinkets.api.TrinketsApi;
-import net.skillz.data.LevelLists;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
@@ -33,7 +32,7 @@ public class SurvivalTrinketSlotMixin {
     @Final
     private int slotOffset;
 
-    @Inject(method = "canInsert", at = @At("HEAD"), cancellable = true)
+    /*@Inject(method = "canInsert", at = @At("HEAD"), cancellable = true)
     private void canInsertMixin(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
         if (trinketInventory.getComponent().getEntity() instanceof PlayerEntity player
                 && TrinketsApi.getTrinket(stack.getItem()).canEquip(stack, new SlotReference(trinketInventory, slotOffset), trinketInventory.getComponent().getEntity())) {
@@ -56,6 +55,6 @@ public class SurvivalTrinketSlotMixin {
                 //}
             }
         }
-    }
+    }*/
 
 }
