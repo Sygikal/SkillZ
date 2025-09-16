@@ -56,7 +56,7 @@ public class LevelScreen extends Screen implements Tab {
     //private boolean turnClientPlayer = false;
 
     private List<SkillAttribute> attributes = new ArrayList<>();
-    private boolean showAttributes = false;
+    private static boolean showAttributes = false;
     private int attributeRow = 0;
 
     private final WidgetButtonPage[] levelButtons = new WidgetButtonPage[12];
