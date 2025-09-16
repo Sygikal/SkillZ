@@ -4,39 +4,27 @@
     "skills": {
       "constitution": 8
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:brush"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "constitution": 10
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:spyglass"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "constitution": 12
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:goat_horn"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
@@ -45,10 +33,6 @@
     },
     "blocks": [
       "minecraft:jukebox"
-    ],
-    "crafting": [],
-    "entities": [],
-    "items": [],
-    "mining": []
+    ]
   }
 ]

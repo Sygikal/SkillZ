@@ -6,10 +6,6 @@
     },
     "blocks": [
       "minecraft:beacon"
-    ],
-    "crafting": [],
-    "entities": [],
-    "items": [],
-    "mining": []
+    ]
   }
 ]

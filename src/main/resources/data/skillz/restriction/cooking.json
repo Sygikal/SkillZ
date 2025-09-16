@@ -4,13 +4,9 @@
     "skills": {
       "cooking": 4
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:milk_bucket"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
@@ -19,11 +15,7 @@
     },
     "blocks": [
       "minecraft:smoker"
-    ],
-    "crafting": [],
-    "entities": [],
-    "items": [],
-    "mining": []
+    ]
   },
   {
     "replace": false,
@@ -32,10 +24,6 @@
     },
     "blocks": [
       "minecraft:cauldron"
-    ],
-    "crafting": [],
-    "entities": [],
-    "items": [],
-    "mining": []
+    ]
   }
 ]

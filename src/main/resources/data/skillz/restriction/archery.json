@@ -4,38 +4,26 @@
     "skills": {
       "archery": 5
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:bow"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "archery": 10
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:crossbow"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "archery": 20
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:trident"
-    ],
-    "mining": []
+    ]
   }
 ]

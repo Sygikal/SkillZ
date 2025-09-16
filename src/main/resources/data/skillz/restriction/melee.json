@@ -4,92 +4,53 @@
     "skills": {
       "melee": 1
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:wooden_sword"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "melee": 3
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:stone_sword"
-    ],
-    "mining": []
-  },
-  {
-    "replace": false,
-    "skills": {
-      "melee": 3,
-      "magic": 6
-    },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
-    "mining": [],
-    "enchantments": {
-      "minecraft:sharpness": 1
-    }
+    ]
   },
   {
     "replace": false,
     "skills": {
       "melee": 7
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:golden_sword"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "melee": 8
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:iron_sword"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "melee": 15
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:diamond_sword"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "melee": 20
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:netherite_sword"
-    ],
-    "mining": []
+    ]
   }
 ]

@@ -4,41 +4,29 @@
     "skills": {
       "agility": 2
     },
-    "blocks": [],
-    "crafting": [],
     "entities": [
       "minecraft:boat",
       "minecraft:chest_boat"
-    ],
-    "items": [],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "agility": 5
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:turtle_helmet"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "agility": 8
     },
-    "blocks": [],
-    "crafting": [],
     "entities": [
       "minecraft:minecart",
       "minecraft:chest_minecart"
-    ],
-    "items": [],
-    "mining": []
+    ]
   },
   {
     "replace": false,
@@ -48,24 +36,17 @@
     "blocks": [
       "minecraft:cartography_table"
     ],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:recovery_compass"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "agility": 15
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:elytra"
-    ],
-    "mining": []
+    ]
   }
 ]

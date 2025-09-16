@@ -4,9 +4,6 @@
     "skills": {
       "mining": 1
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:wooden_pickaxe"
     ],
@@ -27,10 +24,6 @@
     "skills": {
       "mining": 2
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
     "mining": [
       "minecraft:bone_block",
       "minecraft:sandstone",
@@ -64,9 +57,6 @@
     "skills": {
       "mining": 3
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:stone_pickaxe"
     ],
@@ -109,10 +99,6 @@
     "skills": {
       "mining": 4
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
     "mining": [
       "minecraft:coal_block",
       "minecraft:coal_ore",
@@ -140,10 +126,6 @@
     "skills": {
       "mining": 5
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
     "mining": [
       "minecraft:diorite",
       "minecraft:diorite_stairs",
@@ -159,10 +141,6 @@
     "skills": {
       "mining": 6
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
     "mining": [
       "minecraft:andesite",
       "minecraft:andesite_stairs",
@@ -212,9 +190,6 @@
     "skills": {
       "mining": 7
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:golden_pickaxe"
     ],
@@ -231,9 +206,6 @@
     "skills": {
       "mining": 8
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:iron_pickaxe"
     ],
@@ -254,10 +226,6 @@
     "skills": {
       "mining": 9
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
     "mining": [
       "minecraft:granite",
       "minecraft:granite_stairs",
@@ -273,10 +241,6 @@
     "skills": {
       "mining": 10
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
     "mining": [
       "minecraft:dripstone_block",
       "minecraft:pointed_dripstone",
@@ -289,10 +253,6 @@
     "skills": {
       "mining": 11
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
     "mining": [
       "minecraft:magma_block",
       "minecraft:sculk",
@@ -308,10 +268,6 @@
     "skills": {
       "mining": 12
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
     "mining": [
       "minecraft:deepslate_coal_ore",
       "minecraft:deepslate_copper_ore",
@@ -346,10 +302,6 @@
     "skills": {
       "mining": 13
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
     "mining": [
       "minecraft:redstone_block",
       "minecraft:redstone_ore",
@@ -364,10 +316,6 @@
     "skills": {
       "mining": 14
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
     "mining": [
       "minecraft:sea_lantern",
       "minecraft:prismarine",
@@ -387,9 +335,6 @@
     "skills": {
       "mining": 15
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:diamond_pickaxe"
     ],
@@ -404,10 +349,6 @@
     "skills": {
       "mining": 16
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
     "mining": [
       "minecraft:emerald_block",
       "minecraft:emerald_ore",
@@ -436,10 +377,6 @@
     "skills": {
       "mining": 17
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
     "mining": [
       "minecraft:crimson_nylium",
       "minecraft:warped_nylium",
@@ -464,10 +401,6 @@
     "skills": {
       "mining": 18
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
     "mining": [
       "minecraft:nether_quartz_ore",
       "minecraft:quartz_block",
@@ -496,10 +429,6 @@
     "skills": {
       "mining": 19
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
-    "items": [],
     "mining": [
       "minecraft:obsidian",
       "minecraft:crying_obsidian",
@@ -515,9 +444,6 @@
     "skills": {
       "mining": 20
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:netherite_pickaxe"
     ],

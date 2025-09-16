@@ -4,38 +4,26 @@
     "skills": {
       "bartering": 5
     },
-    "blocks": [],
-    "crafting": [],
     "entities": [
       "minecraft:villager"
-    ],
-    "items": [],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "bartering": 10
     },
-    "blocks": [],
-    "crafting": [],
     "entities": [
       "minecraft:wandering_trader"
-    ],
-    "items": [],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "bartering": 15
     },
-    "blocks": [],
-    "crafting": [],
     "entities": [
       "minecraft:piglin"
-    ],
-    "items": [],
-    "mining": []
+    ]
   }
 ]
