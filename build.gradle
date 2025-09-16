@@ -29,6 +29,7 @@ repositories {
 	maven { url "https://maven.bai.lol" }
 	//PB4
 	maven { url "https://maven.nucleoid.xyz/" }
+	mavenLocal()
 }
 
 fabricApi {
@@ -54,6 +55,8 @@ dependencies {
 
 	modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
 	modApi "maven.modrinth:tabapi:${project.tabapi_version}"
+	modApi "dev.sygii:ultralib:1.0.2"
+
 
 	/*modApi ('maven.modrinth:libz:1.0.2+1.20.1') {
 		exclude(group: "net.fabricmc.fabric-api")

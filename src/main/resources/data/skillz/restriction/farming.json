@@ -4,14 +4,10 @@
     "skills": {
       "farming": 1
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:wooden_hoe",
       "minecraft:wooden_axe"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
@@ -21,50 +17,36 @@
     "blocks": [
       "minecraft:composter"
     ],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:stone_hoe",
       "minecraft:stone_axe"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "farming": 5
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:fishing_rod",
       "minecraft:shears"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "farming": 7
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:golden_hoe",
       "minecraft:golden_axe"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "farming": 8
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:iron_hoe",
       "minecraft:iron_axe",
@@ -78,8 +60,7 @@
       "minecraft:tadpole_bucket",
       "minecraft:lava_bucket",
       "minecraft:powder_snow_bucket"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
@@ -90,38 +71,26 @@
       "minecraft:bee_nest",
       "minecraft:beehive",
       "minecraft:loom"
-    ],
-    "crafting": [],
-    "entities": [],
-    "items": [],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "farming": 15
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:diamond_hoe",
       "minecraft:diamond_axe"
-    ],
-    "mining": []
+    ]
   },
   {
     "replace": false,
     "skills": {
       "farming": 20
     },
-    "blocks": [],
-    "crafting": [],
-    "entities": [],
     "items": [
       "minecraft:netherite_hoe",
       "minecraft:netherite_axe"
-    ],
-    "mining": []
+    ]
   }
 ]
