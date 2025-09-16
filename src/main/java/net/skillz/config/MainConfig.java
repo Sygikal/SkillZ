@@ -42,12 +42,17 @@ public class MainConfig extends Config {
     public static class ProgressionSection extends ConfigSection {
         @RequiresAction(action = Action.RESTART)
         public boolean restrictions = true;
-        @RequiresAction(action = Action.RESTART)
-        @Comment("This will allow any restriction within the 'skillz' namespace to load")
+        @RequiresAction(action = Action.RELOAD_DATA)
+        @Comment("Allow loading of default restrictions")
         public boolean defaultRestrictions = true;
-        @RequiresAction(action = Action.RESTART)
-        @Comment("This will allow any skill within the 'skillz' namespace to load")
+
+        @RequiresAction(action = Action.RELOAD_DATA)
+        @Comment("Allow loading of default skills")
         public boolean defaultSkills = true;
+
+        @RequiresAction(action = Action.RELOAD_DATA)
+        @Comment("Allow loading of default populations")
+        public boolean defaultPopulations = true;
 
     }
 
