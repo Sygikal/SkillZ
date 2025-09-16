@@ -3,6 +3,7 @@ package net.skillz.data;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dev.sygii.ultralib.data.util.OptionalObject;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.fabricmc.loader.api.FabricLoader;
 import net.skillz.SkillZMain;
@@ -53,11 +54,12 @@ public class SkillLoader implements SimpleSynchronousResourceReloadListener {
             //System.out.println(id.getPath());
             //System.out.println(id.getNamespace());
             try {
-                if (!ConfigInit.MAIN.PROGRESSION.defaultSkills && id.getNamespace().equals("skillz")) {
-                    return;
-                }
                 InputStream stream = resourceRef.getInputStream();
                 JsonObject data = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject();
+
+                if (OptionalObject.get(data, "default", false).getAsBoolean() && !ConfigInit.MAIN.PROGRESSION.defaultSkills) {
+                    return;
+                }
 
                 String skillId = FileUtil.getBaseName(id.getPath());
 
