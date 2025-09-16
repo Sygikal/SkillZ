@@ -98,7 +98,7 @@ public class LineWidget {
             //int vert = 0;
             boolean showTooltip = false;
             for (Map.Entry<Integer, PlayerRestriction> entry : this.restrictions.entrySet()) {
-                Text tooltipTitle = Text.literal("entry.getKey().toString()");
+                Text tooltipTitle = Text.literal(entry.getKey().toString());
                 //if (code != 2) {
                 /*if (count > 8) {
                     count = 0;
@@ -133,19 +133,21 @@ public class LineWidget {
                     //separator += 18;
                 } else {// if (this.code == 3) {
                     ItemStack stack = this.customStacks.get(entry.getKey());
-                    Map.Entry<Enchantment, Integer> asd = EnchantmentHelper.get(stack).entrySet().iterator().next();
-                    Enchantment ench = asd.getKey();
-                    int level = asd.getValue();
-                    tooltipTitle = ench.getName(level);
+                    if (EnchantmentHelper.get(stack).entrySet().iterator().hasNext()) {
+                        Map.Entry<Enchantment, Integer> asd = EnchantmentHelper.get(stack).entrySet().iterator().next();
+                        Enchantment ench = asd.getKey();
+                        int level = asd.getValue();
+                        tooltipTitle = ench.getName(level);
                     /*for (Enchantment enchantment : asd.keySet()) {
                         tooltipTitle = enchantment.getName(asd.get(enchantment));
                     }*/
-                    //System.out.println(asd);
-                    //stack.getEnchantments();
-                    //RegistryEntry<Enchantment> enchantment = EnchantmentHelper.getEnchantments(stack).getEnchantments().stream().findFirst().get();
+                        //System.out.println(asd);
+                        //stack.getEnchantments();
+                        //RegistryEntry<Enchantment> enchantment = EnchantmentHelper.getEnchantments(stack).getEnchantments().stream().findFirst().get();
                     /*int level = stack.getOrDefault(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT).getLevel(enchantment);
                     tooltipTitle = Enchantment.getName(enchantment, level);*/
-                    drawContext.drawItem(stack, x + separator, y);
+                        drawContext.drawItem(stack, x + separator, y);
+                    }
                 }
                 if (!showTooltip && DrawUtil.isPointWithinBounds(x + separator, y, 16, 16, mouseX, mouseY)) {
                     List<Text> tooltip = new ArrayList<>();
