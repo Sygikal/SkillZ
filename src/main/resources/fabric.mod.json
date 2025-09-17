@@ -29,7 +29,7 @@
 			"net.skillz.compat.SkillZREIPlugin"
 		],
 		"jade": [
-			"net.skillz.waila.LevelJadePlugin"
+			"net.skillz.compat.waila.LevelJadePlugin"
 		]
 	},
 	"mixins": [
@@ -43,7 +43,8 @@
 		"fabric-api": "*",
 		"tabapi": ">=1.2.2",
 		"fzzy_config": "*",
-		"attribute-backport": "*"
+		"attribute-backport": "*",
+		"ultralib": ">=1.0.2"
 	},
 	"suggests": {
 		"another-mod": "*"
