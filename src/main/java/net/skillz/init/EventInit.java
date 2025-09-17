@@ -23,6 +23,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
+import net.skillz.util.TooltipUtil;
 
 import java.util.Map;
 
@@ -115,20 +116,24 @@ public class EventInit {
         });
     }
 
-    public static MutableText sendRestriction(Map<String, Integer> map, LevelManager levelManager) {
+    public static MutableText sendRestriction(Map<String, Integer> map, LevelManager levelManager, boolean showLines) {
         MutableText asd = Text.literal("");
         int count = 0;
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
             boolean noHasLevel = levelManager.getSkillLevel(entry.getKey()) < entry.getValue();
-            if (!ConfigInit.CLIENT.hideReachedLevels || noHasLevel) {
-                asd.append(Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(entry.getKey()).id() + ".tooltip", entry.getValue()).formatted((ConfigInit.CLIENT.hideReachedLevels || noHasLevel) ? Formatting.RED : Formatting.GRAY));
+            if (showLines || noHasLevel) {
+                asd.append(TooltipUtil.getRestrictionKey(entry.getKey(), entry.getValue()).formatted(noHasLevel ? Formatting.RED : Formatting.GRAY));
                 if ((map.size() - count) > 1) {
-                    asd.append(Text.literal(",").formatted((ConfigInit.CLIENT.hideReachedLevels || noHasLevel) ? Formatting.RED : Formatting.GRAY)).append(ScreenTexts.SPACE);
+                    asd.append(Text.literal(",").formatted(noHasLevel ? Formatting.RED : Formatting.GRAY)).append(ScreenTexts.SPACE);
                 }
             }
             count++;
         }
         return asd;
+    }
+
+    public static MutableText sendRestriction(Map<String, Integer> map, LevelManager levelManager) {
+        return sendRestriction(map, levelManager, !ConfigInit.CLIENT.hideReachedLevels);
     }
 
 }
