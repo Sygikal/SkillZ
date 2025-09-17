@@ -111,17 +111,26 @@ public class LineWidget {
                     Item item = Registries.ITEM.get(entry.getKey());
                     tooltipTitle = item.getName();
                     drawContext.drawItem(Registries.ITEM.get(entry.getKey()).getDefaultStack(), x + separator, y);
+                    if (DrawUtil.isPointWithinBounds(x + separator, y, 16, 16, mouseX, mouseY)) {
+                        drawContext.drawItemTooltip(this.client.textRenderer, Registries.ITEM.get(entry.getKey()).getDefaultStack(), mouseX, mouseY);
+                        showTooltip = true;
+                    }
                 } else if (this.code == 1) {
                     Block block = Registries.BLOCK.get(entry.getKey());
                     tooltipTitle = block.getName();
                     drawContext.drawItem(block.asItem().getDefaultStack(), x + separator, y);
+                    if (DrawUtil.isPointWithinBounds(x + separator, y, 16, 16, mouseX, mouseY)) {
+                        drawContext.drawItemTooltip(this.client.textRenderer, block.asItem().getDefaultStack(), mouseX, mouseY);
+                        showTooltip = true;
+                    }
                 } else if (this.code == 2) {
                     EntityType<?> entityType = Registries.ENTITY_TYPE.get(entry.getKey());
                     tooltipTitle = entityType.getName();
-                    if (this.customStacks.containsKey(entry.getKey())) {
-                        //drawContext.drawItem(this.customStacks.get(entry.getKey()), x + separator, y);
-                    } else {
-                        //drawContext.drawTexture(this.customImages.get(entry.getKey()), x + separator, y, 0, 0, 16, 16);
+                    if (this.customStacks.containsKey(entry.getKey()) && this.customStacks.get(entry.getKey()).getItem() instanceof SpawnEggItem) {
+                        if (DrawUtil.isPointWithinBounds(x + separator, y, 16, 16, mouseX, mouseY)) {
+                            drawContext.drawItemTooltip(this.client.textRenderer, this.customStacks.get(entry.getKey()), mouseX, mouseY);
+                            showTooltip = true;
+                        }
                     }
                     Entity entity = entityType.create(this.client.world);
                     //InventoryScreen.drawEntity(drawContext, x + separator + 9, y + 18, 10, (float)(x + separator) - mouseX, (float)y - mouseY, (LivingEntity) entity);
@@ -147,6 +156,10 @@ public class LineWidget {
                     /*int level = stack.getOrDefault(DataComponentTypes.STORED_ENCHANTMENTS, ItemEnchantmentsComponent.DEFAULT).getLevel(enchantment);
                     tooltipTitle = Enchantment.getName(enchantment, level);*/
                         drawContext.drawItem(stack, x + separator, y);
+                        if (DrawUtil.isPointWithinBounds(x + separator, y, 16, 16, mouseX, mouseY)) {
+                            drawContext.drawItemTooltip(this.client.textRenderer, stack, mouseX, mouseY);
+                            showTooltip = true;
+                        }
                     }
                 }
                 if (!showTooltip && DrawUtil.isPointWithinBounds(x + separator, y, 16, 16, mouseX, mouseY)) {
