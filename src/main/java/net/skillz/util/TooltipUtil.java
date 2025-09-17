@@ -6,6 +6,9 @@ import java.util.Map;
 import java.util.Objects;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.item.*;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.init.ConfigInit;
 import net.skillz.init.EventInit;
@@ -19,9 +22,6 @@ import net.minecraft.client.render.*;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.SpawnEggItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.MutableText;
@@ -31,74 +31,99 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.skillz.screen.SkillRestrictionScreen;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
 
 public class TooltipUtil {
+    public static Text USABLE = Text.translatable("restriction.skillz.usable.tooltip");
+    public static Text MINEABLE = Text.translatable("restriction.skillz.mineable.tooltip");
+    public static Text CRAFTABLE = Text.translatable("restriction.skillz.craftable.tooltip");
+
+    public static MutableText getRestrictionKey(String id, int value) {
+        return Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(id).id() + ".tooltip", value);
+    }
+
+    public static void addLines(List<Text> lines, Text category, int id, LevelManager manager, boolean showLines, Map<Integer, PlayerRestriction> restrictionMap) {
+        if (showLines || !hasRequiredLevel(manager, id, restrictionMap)) {
+            if (restrictionMap.containsKey(id)) {
+                PlayerRestriction playerRestriction = restrictionMap.get(id);
+                lines.add(category);
+                for (Map.Entry<String, Integer> entry : playerRestriction.getSkillLevelRestrictions().entrySet()) {
+                    boolean noHasLevel = manager.getSkillLevel(entry.getKey()) < entry.getValue();
+                    if (showLines || noHasLevel) {
+                        lines.add(getRestrictionKey(entry.getKey(), entry.getValue()).formatted(noHasLevel ? Formatting.RED : Formatting.GREEN));
+                    }
+                }
+            }
+        }
+    }
+
+    public static boolean hasRequiredLevel(LevelManager manager, int id, Map<Integer, PlayerRestriction> restrictionMap) {
+        if (restrictionMap.containsKey(id)) {
+            PlayerRestriction playerRestriction = restrictionMap.get(id);
+            for (Map.Entry<String, Integer> entry : playerRestriction.getSkillLevelRestrictions().entrySet()) {
+                if (manager.getSkillLevel(entry.getKey()) < entry.getValue()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     public static void renderItemTooltip(MinecraftClient client, ItemStack stack, List<Text> lines) {
         if (client.player != null) {
             LevelManager levelManager = ((LevelManagerAccess) client.player).getLevelManager();
-            boolean isCreative = client.player.isCreative() || !ConfigInit.CLIENT.hideReachedLevels; // Add all lines, not only the missing ones
+            boolean showLines = client.player.isCreative() || !ConfigInit.CLIENT.hideReachedLevels || client.currentScreen instanceof SkillRestrictionScreen; // Add all lines, not only the missing ones
             Formatting format = Formatting.GRAY;
 
             if (stack.getItem() instanceof BlockItem blockItem) {
                 int blockId = Registries.BLOCK.getRawId(blockItem.getBlock());
-                if (isCreative || !levelManager.hasRequiredBlockLevel(blockItem.getBlock())) {
+                if (showLines || !levelManager.hasRequiredBlockLevel(blockItem.getBlock())) {
                     if (LevelManager.BLOCK_RESTRICTIONS.containsKey(blockId)) {
                         PlayerRestriction playerRestriction = LevelManager.BLOCK_RESTRICTIONS.get(blockId);
-                        lines.add(Text.translatable("restriction.skillz.usable.tooltip"));
+                        lines.add(USABLE);
                         for (Map.Entry<String, Integer> entry : playerRestriction.getSkillLevelRestrictions().entrySet()) {
                             boolean noHasLevel = levelManager.getSkillLevel(entry.getKey()) < entry.getValue();
-                            if (isCreative || noHasLevel) {
-                                lines.add(Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(entry.getKey()).id() + ".tooltip", entry.getValue()).formatted((ConfigInit.CLIENT.hideReachedLevels || noHasLevel) ? Formatting.RED : Formatting.GREEN));
+                            if (showLines || noHasLevel) {
+                                lines.add(getRestrictionKey(entry.getKey(), entry.getValue()).formatted(noHasLevel ? Formatting.RED : Formatting.GREEN));
                             }
                         }
                     }
                 }
-                if (isCreative || !levelManager.hasRequiredMiningLevel(blockItem.getBlock())) {
+                if (showLines || !levelManager.hasRequiredMiningLevel(blockItem.getBlock())) {
                     if (LevelManager.MINING_RESTRICTIONS.containsKey(blockId)) {
                         PlayerRestriction playerRestriction = LevelManager.MINING_RESTRICTIONS.get(blockId);
-                        lines.add(Text.translatable("restriction.skillz.mineable.tooltip"));
+                        lines.add(MINEABLE);
                         for (Map.Entry<String, Integer> entry : playerRestriction.getSkillLevelRestrictions().entrySet()) {
                             boolean noHasLevel = levelManager.getSkillLevel(entry.getKey()) < entry.getValue();
-                            if (isCreative || noHasLevel) {
-                                lines.add(Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(entry.getKey()).id() + ".tooltip", entry.getValue()).formatted((ConfigInit.CLIENT.hideReachedLevels || noHasLevel) ? Formatting.RED : Formatting.GREEN));
+                            if (showLines || noHasLevel) {
+                                lines.add(getRestrictionKey(entry.getKey(), entry.getValue()).formatted(noHasLevel ? Formatting.RED : Formatting.GREEN));
                             }
                         }
                     }
                 }
             }
             int itemId = Registries.ITEM.getRawId(stack.getItem());
-            if (isCreative || !levelManager.hasRequiredItemLevel(stack.getItem())) {
-                /*if (LevelManager.ITEM_RESTRICTIONS.containsKey(itemId)) {
-                    PlayerRestriction playerRestriction = LevelManager.ITEM_RESTRICTIONS.get(itemId);
-                    lines.add(Text.translatable("restriction.skillz.usable.tooltip"));
-                    for (Map.Entry<Integer, Integer> entry : playerRestriction.getSkillLevelRestrictions().entrySet()) {
-                        if (isCreative || levelManager.getSkillLevel(entry.getKey()) < entry.getValue()) {
-                            lines.add(Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(entry.getKey()).key() + ".tooltip", entry.getValue()).formatted(Formatting.RED));
-                        }
-                    }
-                }*/
-
+            if (showLines || !levelManager.hasRequiredItemLevel(stack.getItem())) {
                 if (LevelManager.ITEM_RESTRICTIONS.containsKey(itemId)) {
-                    lines.add(Text.translatable("restriction.skillz.usable.tooltip"));
+                    lines.add(USABLE);
                     for (Map.Entry<String, Integer> entry : levelManager.getRequiredItemLevel(stack.getItem()).entrySet()) {
                         boolean noHasLevel = levelManager.getSkillLevel(entry.getKey()) < entry.getValue();
-                        if (isCreative || noHasLevel) {
-                            lines.add(Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(entry.getKey()).id() + ".tooltip", entry.getValue()).formatted((ConfigInit.CLIENT.hideReachedLevels || noHasLevel) ? Formatting.RED : Formatting.GREEN));
+                        if (showLines || noHasLevel) {
+                            lines.add(getRestrictionKey(entry.getKey(), entry.getValue()).formatted(noHasLevel ? Formatting.RED : Formatting.GREEN));
                         }
                     }
                 }
             }
-            if (isCreative || !levelManager.hasRequiredCraftingLevel(stack.getItem())) {
+            if (showLines || !levelManager.hasRequiredCraftingLevel(stack.getItem())) {
                 if (LevelManager.CRAFTING_RESTRICTIONS.containsKey(itemId)) {
                     PlayerRestriction playerRestriction = LevelManager.CRAFTING_RESTRICTIONS.get(itemId);
-                    lines.add(Text.translatable("restriction.skillz.craftable.tooltip"));
+                    lines.add(CRAFTABLE);
                     for (Map.Entry<String, Integer> entry : playerRestriction.getSkillLevelRestrictions().entrySet()) {
                         boolean noHasLevel = levelManager.getSkillLevel(entry.getKey()) < entry.getValue();
-                        if (isCreative || noHasLevel) {
-                            lines.add(Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(entry.getKey()).id() + ".tooltip", entry.getValue()).formatted((ConfigInit.CLIENT.hideReachedLevels || noHasLevel) ? Formatting.RED : Formatting.GREEN));
+                        if (showLines || noHasLevel) {
+                            lines.add(getRestrictionKey(entry.getKey(), entry.getValue()).formatted(noHasLevel ? Formatting.RED : Formatting.GREEN));
                         }
                     }
                 }
@@ -111,10 +136,10 @@ public class TooltipUtil {
                     for (Text line : lines) {
                         if (line.equals(fullName)) {
                             MutableText asd = Text.literal("");
-                            if (isCreative || !levelManager.hasRequiredEnchantmentLevel(Registries.ENCHANTMENT.getEntry(enchantment), enchantments.get(enchantment))) {
+                            if (showLines || !levelManager.hasRequiredEnchantmentLevel(Registries.ENCHANTMENT.getEntry(enchantment), enchantments.get(enchantment))) {
                                 int enchantmentId = EnchantmentRegistry.getId(Registries.ENCHANTMENT.getEntry(enchantment), enchantments.get(enchantment));
                                 if (LevelManager.ENCHANTMENT_RESTRICTIONS.containsKey(enchantmentId)) {
-                                    asd = EventInit.sendRestriction(levelManager.getRequiredEnchantmentLevel(Registries.ENCHANTMENT.getEntry(enchantment), enchantments.get(enchantment)), levelManager);
+                                    asd = EventInit.sendRestriction(levelManager.getRequiredEnchantmentLevel(Registries.ENCHANTMENT.getEntry(enchantment), enchantments.get(enchantment)), levelManager, showLines);
                                 }
                             }
                             if (!Objects.equals(asd.getString(), "")) {
@@ -127,14 +152,14 @@ public class TooltipUtil {
                 }
             }
             if (stack.getItem() instanceof SpawnEggItem spawnEggItem) {
-                if (isCreative || !levelManager.hasRequiredEntityLevel(spawnEggItem.getEntityType(stack.getNbt()))) {
+                if (showLines || !levelManager.hasRequiredEntityLevel(spawnEggItem.getEntityType(stack.getNbt()))) {
                     int entityId = Registries.ENTITY_TYPE.getRawId(spawnEggItem.getEntityType(stack.getNbt()));
                     if (LevelManager.ENTITY_RESTRICTIONS.containsKey(entityId)) {
                         PlayerRestriction playerRestriction = LevelManager.ENTITY_RESTRICTIONS.get(entityId);
-                        lines.add(Text.translatable("restriction.skillz.usable.tooltip"));
+                        lines.add(USABLE);
                         for (Map.Entry<String, Integer> entry : playerRestriction.getSkillLevelRestrictions().entrySet()) {
-                            if (isCreative || levelManager.getSkillLevel(entry.getKey()) < entry.getValue()) {
-                                lines.add(Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(entry.getKey()).id() + ".tooltip", entry.getValue()).formatted(Formatting.RED));
+                            if (showLines || levelManager.getSkillLevel(entry.getKey()) < entry.getValue()) {
+                                lines.add(getRestrictionKey(entry.getKey(), entry.getValue()).formatted(Formatting.RED));
                             }
                         }
                     }
