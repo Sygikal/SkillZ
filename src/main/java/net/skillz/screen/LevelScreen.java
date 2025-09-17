@@ -51,9 +51,6 @@ public class LevelScreen extends Screen implements Tab {
     private int y;
 
     private LevelManager levelManager;
-    //private ClientPlayerEntity clientPlayerEntity;
-    //private Quaternionf quaternionf = new Quaternionf().rotateZ((float) Math.PI).rotateLocalY(2.7f);
-    //private boolean turnClientPlayer = false;
 
     private List<SkillAttribute> attributes = new ArrayList<>();
     private static boolean showAttributes = false;
@@ -79,16 +76,6 @@ public class LevelScreen extends Screen implements Tab {
         this.y = (this.height - this.backgroundHeight) / 2;
 
         this.levelManager = ((LevelManagerAccess) this.client.player).getLevelManager();
-
-        //Why was this a thing
-        /*this.clientPlayerEntity = this.client.interactionManager.createPlayer(this.client.world, this.client.player.getStatHandler(), this.client.player.getRecipeBook(), false, false);
-        ((ClientPlayerAccess) this.clientPlayerEntity).setShouldRenderClientName(false);
-
-        for (EquipmentSlot equipmentSlot : EquipmentSlot.values()) {
-            if (!this.client.player.getEquippedStack(equipmentSlot).isEmpty()) {
-                this.clientPlayerEntity.equipStack(equipmentSlot, this.client.player.getEquippedStack(equipmentSlot));
-            }
-        }*/
 
         Map<Integer, SkillAttribute> skillAttributes = new HashMap<>();
         int attributeCount = 0;
