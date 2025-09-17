@@ -30,13 +30,14 @@ public class ClientConfig extends Config {
     public boolean showLevel = true;
 
     @Comment("Inventory key goes back to main screen rather than closing the inventory")
-    public boolean switchScreen = false;
+    public boolean switchScreen = true;
 
-    public boolean showLockedBlockInfo = false;
+    @Comment("Show tooltip on the hud for restrictions (should only use if you dont have jade)")
+    public boolean showRestrictionOnHUD = false;
 
-    public int lockedBlockInfoPosX = 0;
+    public int hudInfoX = 0;
 
-    public int lockedBlockInfoPosY = 0;
+    public int hudInfoY = 0;
 
     public enum BlockHighlightOption {
         NORMAL,
