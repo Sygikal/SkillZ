@@ -18,17 +18,13 @@ import java.util.Map;
 public class EnchantmentPopulator extends Populator {
     public static final Identifier ID = SkillZMain.identifierOf("enchantment_populator");
 
-    private final List<Identifier> enchantBlacklist = Lists.newArrayList();
     private final boolean cursed;
     private final boolean treasure;
 
-
-
-    public EnchantmentPopulator(boolean cursed, boolean treasure, JsonArray enchantBlacklist) {
+    public EnchantmentPopulator(boolean cursed, boolean treasure) {
         super(ID);
         this.cursed = cursed;
         this.treasure = treasure;
-        enchantBlacklist.forEach((elem) -> {this.enchantBlacklist.add(Identifier.tryParse(elem.getAsString()));});
     }
 
     @Override
@@ -41,9 +37,9 @@ public class EnchantmentPopulator extends Populator {
                 continue;
             }
             for (int i = 1; i <= ench.getMaxLevel(); i++) {
-                if (!enchantBlacklist.contains(Registries.ENCHANTMENT.getId(ench))) {
+                if (!getIdBlacklist().contains(Registries.ENCHANTMENT.getId(ench))) {
                     int finalI = i;
-                    Map<String, Integer> populatedRestriction = getSkillMap(skillArray, formula -> {
+                    Map<String, Integer> populatedRestriction = getSkillMap(skillArray, Registries.ENCHANTMENT.getId(ench), formula -> {
                         return formula.
                                 replace("MIN_POWER", String.valueOf(EnchantAlgorithm.MIN_POWER.runner.run(ench, finalI))).
                                 replace("MAX_POWER", String.valueOf(EnchantAlgorithm.MAX_POWER.runner.run(ench, finalI))).

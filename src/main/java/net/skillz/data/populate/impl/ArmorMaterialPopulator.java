@@ -29,14 +29,11 @@ public class ArmorMaterialPopulator extends Populator {
 
     private final List<String> whitelist = Lists.newArrayList();
     private final List<String> blacklist = Lists.newArrayList();
-    private final List<Identifier> itemBlacklist = Lists.newArrayList();
 
-
-    public ArmorMaterialPopulator(JsonArray whitelist, JsonArray blacklist, JsonArray itemBlacklist) {
+    public ArmorMaterialPopulator(JsonArray whitelist, JsonArray blacklist) {
         super(ID);
         whitelist.forEach((elem) -> {this.whitelist.add(elem.getAsString());});
         blacklist.forEach((elem) -> {this.blacklist.add(elem.getAsString());});
-        itemBlacklist.forEach((elem) -> {this.itemBlacklist.add(Identifier.tryParse(elem.getAsString()));});
     }
 
     @Override
@@ -44,7 +41,7 @@ public class ArmorMaterialPopulator extends Populator {
         for (Item item : Registries.ITEM) {
             if (item instanceof ArmorItem armor) {
                 String name = armor.getMaterial().getName();
-                if (!itemBlacklist.contains(Registries.ITEM.getId(item))) {
+                if (!getIdBlacklist().contains(Registries.ITEM.getId(item))) {
                     if ((!whitelist.isEmpty() && whitelist.contains(name)) || (!blacklist.isEmpty() && !blacklist.contains(name)) || (blacklist.isEmpty() && whitelist.isEmpty())) {
                         LoaderInit.itemsForRePopulation.computeIfAbsent(armor.getMaterial().getName(), k -> Pair.of(new ArrayList<>(), new ArrayList<>())).getValue().add(armor);
 
@@ -91,12 +88,14 @@ public class ArmorMaterialPopulator extends Populator {
                     formula = formula.replace("PIECES", String.valueOf(setPieces));
 
                     int requirement = Math.round((float) FileUtil.evaluateFormula(formula));
-                    if (requirement > 0) populatedRestriction.put(pair.getRight(), requirement);
+                    if (requirement > 0) {
+                        populatedRestriction.put(pair.getRight(), requirement);
+                    }
                 }
             }
 
             for (Item item : stringListEntry.getValue().getValue()) {
-                if (item instanceof ArmorItem) {
+                if (item instanceof ArmorItem && !populatedRestriction.isEmpty()) {
                     LevelManager.ITEM_RESTRICTIONS.put(Registries.ITEM.getRawId(item), new PlayerRestriction(Registries.ITEM.getRawId(item), populatedRestriction));
                 }
             }

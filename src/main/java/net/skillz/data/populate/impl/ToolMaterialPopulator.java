@@ -25,14 +25,11 @@ import java.util.stream.Collectors;
 public class ToolMaterialPopulator extends Populator {
     public static final Identifier ID = SkillZMain.identifierOf("tool_material");
 
-    private final List<Identifier> itemBlacklist = Lists.newArrayList();
     private final ToolSubType subtype;
 
-
-    public ToolMaterialPopulator(ToolSubType subtype, JsonArray itemBlacklist) {
+    public ToolMaterialPopulator(ToolSubType subtype) {
         super(ID);
         this.subtype = subtype;
-        itemBlacklist.forEach((elem) -> {this.itemBlacklist.add(Identifier.tryParse(elem.getAsString()));});
     }
 
     @Override
@@ -46,8 +43,8 @@ public class ToolMaterialPopulator extends Populator {
                         (tool instanceof AxeItem && subtype.equals(ToolSubType.AXE)) ||
                         (tool instanceof HoeItem && subtype.equals(ToolSubType.HOE)) ||
                         (tool instanceof ShovelItem && subtype.equals(ToolSubType.SHOVEL)))) {
-                    if (!itemBlacklist.contains(Registries.ITEM.getId(item))) {
-                        Map<String, Integer> populatedRestriction = getSkillMap(skillArray, formula -> {
+                    if (!getIdBlacklist().contains(Registries.ITEM.getId(item))) {
+                        Map<String, Integer> populatedRestriction = getSkillMap(skillArray, Registries.ITEM.getId(item), formula -> {
                             return formula.
                                     replace("MINING_LEVEL", String.valueOf(ToolAlgorithm.MINING_LEVEL.runner.run(tool.getMaterial()))).
                                     replace("ATTACK_DAMAGE", String.valueOf(ToolAlgorithm.ATTACK_DAMAGE.runner.run(tool.getMaterial()))).
