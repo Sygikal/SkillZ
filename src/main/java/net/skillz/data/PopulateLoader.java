@@ -39,6 +39,8 @@ public class PopulateLoader extends SimpleDataLoader {
     public void preReload() {
         LoaderInit.POPULATORS.clear();
         LoaderInit.itemsForRePopulation.clear();
+        LoaderInit.blockForRePopulation.clear();
+        LoaderInit.blockForRePopulation2.clear();
     }
 
     @Override
@@ -46,12 +48,18 @@ public class PopulateLoader extends SimpleDataLoader {
         if (OptionalObject.get(data, "default", false).getAsBoolean() && !ConfigInit.MAIN.PROGRESSION.defaultPopulations) {
             return;
         }
+
         JsonObject popObj = data.get("populator").getAsJsonObject();
         Identifier populatorType = Identifier.tryParse(popObj.get("type").getAsString());
         Populator populator = LoaderInit.populateCreator.create(populatorType, popObj);
 
+        OptionalObject.get(popObj, "id_blacklist", new JsonArray()).getAsJsonArray().forEach((elem) -> {
+            populator.addToIdBlacklist(Identifier.tryParse(elem.getAsString()));
+        });
+
         JsonArray skillObj = data.get("skills").getAsJsonArray();
         populator.populate(skillObj);
+
         LoaderInit.POPULATORS.add(populator);
     }
 
