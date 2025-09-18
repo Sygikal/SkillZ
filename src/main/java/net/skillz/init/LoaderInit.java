@@ -15,10 +15,7 @@ import net.skillz.data.PopulateLoader;
 import net.skillz.data.RestrictionLoader;
 import net.skillz.data.SkillLoader;
 import net.skillz.data.populate.Populator;
-import net.skillz.data.populate.impl.ArmorMaterialPopulator;
-import net.skillz.data.populate.impl.EnchantmentPopulator;
-import net.skillz.data.populate.impl.MiningPopulator;
-import net.skillz.data.populate.impl.ToolMaterialPopulator;
+import net.skillz.data.populate.impl.*;
 import net.skillz.level.LevelManager;
 import net.skillz.level.restriction.PlayerRestriction;
 import net.skillz.util.PacketHelper;
@@ -39,6 +36,8 @@ public class LoaderInit {
 
     public static final Map<String, Pair<List<Pair<String, String>>, List<Item>>> itemsForRePopulation = new HashMap<>();
     public static final Map<Block, List<Pair<String, Integer>>> blockForRePopulation = new HashMap<>();
+    public static final Map<Block, List<Pair<String, Integer>>> blockForRePopulation2 = new HashMap<>();
+
 
 
     public static void init() {
@@ -70,27 +69,34 @@ public class LoaderInit {
         populateCreator.registerCreator(ArmorMaterialPopulator.ID, data ->
                 new ArmorMaterialPopulator(
                         OptionalObject.get(data, "whitelist", new JsonArray()).getAsJsonArray(),
-                        OptionalObject.get(data, "blacklist", new JsonArray()).getAsJsonArray(),
-                        OptionalObject.get(data, "item_blacklist", new JsonArray()).getAsJsonArray()));
+                        OptionalObject.get(data, "blacklist", new JsonArray()).getAsJsonArray()));
 
         populateCreator.registerCreator(ToolMaterialPopulator.ID, data ->
                 new ToolMaterialPopulator(
-                        ToolMaterialPopulator.ToolSubType.valueOf(data.get("tool_type").getAsString().toUpperCase()),
-                        OptionalObject.get(data, "item_blacklist", new JsonArray()).getAsJsonArray()));
+                        ToolMaterialPopulator.ToolSubType.valueOf(data.get("tool_type").getAsString().toUpperCase())));
 
-        populateCreator.registerCreator(MiningPopulator.ID, data ->
-                new MiningPopulator(
+        populateCreator.registerCreator(SkillZMain.identifierOf("mining_populator"), data ->
+                new BlockPopulator(SkillZMain.identifierOf("mining_populator"), LevelManager.MINING_RESTRICTIONS, LoaderInit.blockForRePopulation,
+                        OptionalObject.get(data, "additional", new JsonArray()).getAsJsonArray(),
+                        OptionalObject.get(data, "filters", new JsonArray()).getAsJsonArray(),
                         OptionalObject.get(data, "tags", new JsonArray()).getAsJsonArray(),
                         OptionalObject.get(data, "tag_blacklist", new JsonArray()).getAsJsonArray(),
-                        OptionalObject.get(data, "block_blacklist", new JsonArray()).getAsJsonArray(),
+                        OptionalObject.get(data, "min", 0).getAsInt(),
+                        OptionalObject.get(data, "max", 50).getAsInt()));
+
+        populateCreator.registerCreator(SkillZMain.identifierOf("block_usage_populator"), data ->
+                new BlockPopulator(SkillZMain.identifierOf("block_usage_populator"), LevelManager.BLOCK_RESTRICTIONS, LoaderInit.blockForRePopulation2,
+                        OptionalObject.get(data, "additional", new JsonArray()).getAsJsonArray(),
+                        OptionalObject.get(data, "filters", new JsonArray()).getAsJsonArray(),
+                        OptionalObject.get(data, "tags", new JsonArray()).getAsJsonArray(),
+                        OptionalObject.get(data, "tag_blacklist", new JsonArray()).getAsJsonArray(),
                         OptionalObject.get(data, "min", 0).getAsInt(),
                         OptionalObject.get(data, "max", 50).getAsInt()));
 
         populateCreator.registerCreator(EnchantmentPopulator.ID, data ->
                 new EnchantmentPopulator(
                         OptionalObject.get(data, "cursed", false).getAsBoolean(),
-                        OptionalObject.get(data, "treasure", true).getAsBoolean(),
-                        OptionalObject.get(data, "enchant_blacklist", new JsonArray()).getAsJsonArray()));
+                        OptionalObject.get(data, "treasure", true).getAsBoolean()));
     }
 
 }
