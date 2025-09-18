@@ -6,3 +6,5 @@ accessible class net/minecraft/enchantment/EnchantmentHelper$Consumer
 accessible method net/minecraft/entity/vehicle/AbstractMinecartEntity getItem ()Lnet/minecraft/item/Item;
 accessible class net/minecraft/network/NetworkState$PacketHandler
 accessible method net/minecraft/network/NetworkState$PacketHandler register (Ljava/lang/Class;Ljava/util/function/Function;)Lnet/minecraft/network/NetworkState$PacketHandler;
+
+accessible field net/minecraft/block/AbstractBlock settings Lnet/minecraft/block/AbstractBlock$Settings;
