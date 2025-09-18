@@ -37,7 +37,7 @@ public class LoaderInit {
 
     public static final List<Populator> POPULATORS = Lists.newArrayList();
 
-    public static final Map<String, Pair<List<Pair<Pair<Integer, Integer>, String>>, List<Item>>> itemsForRePopulation = new HashMap<>();
+    public static final Map<String, Pair<List<Pair<String, String>>, List<Item>>> itemsForRePopulation = new HashMap<>();
     public static final Map<Block, List<Pair<String, Integer>>> blockForRePopulation = new HashMap<>();
 
 
@@ -75,7 +75,6 @@ public class LoaderInit {
 
         populateCreator.registerCreator(ToolMaterialPopulator.ID, data ->
                 new ToolMaterialPopulator(
-                        ToolMaterialPopulator.ToolAlgorithm.valueOf(data.get("algorithm").getAsString().toUpperCase()),
                         ToolMaterialPopulator.ToolSubType.valueOf(data.get("tool_type").getAsString().toUpperCase()),
                         OptionalObject.get(data, "item_blacklist", new JsonArray()).getAsJsonArray()));
 
@@ -83,14 +82,12 @@ public class LoaderInit {
                 new MiningPopulator(
                         OptionalObject.get(data, "tags", new JsonArray()).getAsJsonArray(),
                         OptionalObject.get(data, "tag_blacklist", new JsonArray()).getAsJsonArray(),
-                        MiningPopulator.BlockAlgorithm.valueOf(data.get("algorithm").getAsString().toUpperCase()),
                         OptionalObject.get(data, "block_blacklist", new JsonArray()).getAsJsonArray(),
                         OptionalObject.get(data, "min", 0).getAsInt(),
                         OptionalObject.get(data, "max", 50).getAsInt()));
 
         populateCreator.registerCreator(EnchantmentPopulator.ID, data ->
                 new EnchantmentPopulator(
-                        EnchantmentPopulator.EnchantAlgorithm.valueOf(data.get("algorithm").getAsString().toUpperCase()),
                         OptionalObject.get(data, "cursed", false).getAsBoolean(),
                         OptionalObject.get(data, "treasure", true).getAsBoolean(),
                         OptionalObject.get(data, "enchant_blacklist", new JsonArray()).getAsJsonArray()));
