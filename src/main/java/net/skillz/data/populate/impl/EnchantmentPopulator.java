@@ -19,19 +19,15 @@ public class EnchantmentPopulator extends Populator {
     public static final Identifier ID = SkillZMain.identifierOf("enchantment_populator");
 
     private final List<Identifier> enchantBlacklist = Lists.newArrayList();
-    //private final ToolSubType subtype;
-    private final EnchantAlgorithm algo;
     private final boolean cursed;
     private final boolean treasure;
 
 
 
-    public EnchantmentPopulator(EnchantAlgorithm algo, boolean cursed, boolean treasure, JsonArray enchantBlacklist) {
+    public EnchantmentPopulator(boolean cursed, boolean treasure, JsonArray enchantBlacklist) {
         super(ID);
-        this.algo = algo;
         this.cursed = cursed;
         this.treasure = treasure;
-        //this.subtype = subtype;
         enchantBlacklist.forEach((elem) -> {this.enchantBlacklist.add(Identifier.tryParse(elem.getAsString()));});
     }
 
@@ -45,14 +41,19 @@ public class EnchantmentPopulator extends Populator {
                 continue;
             }
             for (int i = 1; i <= ench.getMaxLevel(); i++) {
-                int restriction = Math.round(this.algo.runner.run(ench, i));
-
                 if (!enchantBlacklist.contains(Registries.ENCHANTMENT.getId(ench))) {
-                    Map<String, Integer> populatedRestriction = getSkillMap(skillArray, restriction);
+                    int finalI = i;
+                    Map<String, Integer> populatedRestriction = getSkillMap(skillArray, formula -> {
+                        return formula.
+                                replace("MIN_POWER", String.valueOf(EnchantAlgorithm.MIN_POWER.runner.run(ench, finalI))).
+                                replace("MAX_POWER", String.valueOf(EnchantAlgorithm.MAX_POWER.runner.run(ench, finalI))).
+                                replace("WEIGHT", String.valueOf(EnchantAlgorithm.WEIGHT.runner.run(ench, finalI)));
+                    });
 
                     int enchantmentRawId = EnchantmentRegistry.getId(Registries.ENCHANTMENT.getId(ench), i);
 
                     if (!populatedRestriction.isEmpty()) {
+
                         LevelManager.ENCHANTMENT_RESTRICTIONS.put(enchantmentRawId, new PlayerRestriction(enchantmentRawId, populatedRestriction));
                     }
                 }

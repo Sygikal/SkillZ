@@ -27,12 +27,10 @@ public class ToolMaterialPopulator extends Populator {
 
     private final List<Identifier> itemBlacklist = Lists.newArrayList();
     private final ToolSubType subtype;
-    private final ToolAlgorithm algo;
 
 
-    public ToolMaterialPopulator(ToolAlgorithm algo, ToolSubType subtype, JsonArray itemBlacklist) {
+    public ToolMaterialPopulator(ToolSubType subtype, JsonArray itemBlacklist) {
         super(ID);
-        this.algo = algo;
         this.subtype = subtype;
         itemBlacklist.forEach((elem) -> {this.itemBlacklist.add(Identifier.tryParse(elem.getAsString()));});
     }
@@ -41,7 +39,6 @@ public class ToolMaterialPopulator extends Populator {
     public void populate(JsonArray skillArray) {
         for (Item item : Registries.ITEM) {
             if (item instanceof ToolItem tool) {
-                int restriction = Math.round(this.algo.runner.run(tool.getMaterial()));
 
                 if (subtype.equals(ToolSubType.ALL) ||
                         ((tool instanceof PickaxeItem && subtype.equals(ToolSubType.PICKAXE)) ||
@@ -50,7 +47,14 @@ public class ToolMaterialPopulator extends Populator {
                         (tool instanceof HoeItem && subtype.equals(ToolSubType.HOE)) ||
                         (tool instanceof ShovelItem && subtype.equals(ToolSubType.SHOVEL)))) {
                     if (!itemBlacklist.contains(Registries.ITEM.getId(item))) {
-                        Map<String, Integer> populatedRestriction = getSkillMap(skillArray, restriction);
+                        Map<String, Integer> populatedRestriction = getSkillMap(skillArray, formula -> {
+                            return formula.
+                                    replace("MINING_LEVEL", String.valueOf(ToolAlgorithm.MINING_LEVEL.runner.run(tool.getMaterial()))).
+                                    replace("ATTACK_DAMAGE", String.valueOf(ToolAlgorithm.ATTACK_DAMAGE.runner.run(tool.getMaterial()))).
+                                    replace("ENCHANTABILITY", String.valueOf(ToolAlgorithm.ENCHANTABILITY.runner.run(tool.getMaterial()))).
+                                    replace("MINING_SPEED", String.valueOf(ToolAlgorithm.MINING_SPEED.runner.run(tool.getMaterial())));
+
+                        });
 
                         if (!populatedRestriction.isEmpty()) {
                             LevelManager.ITEM_RESTRICTIONS.put(Registries.ITEM.getRawId(item), new PlayerRestriction(Registries.ITEM.getRawId(item), populatedRestriction));

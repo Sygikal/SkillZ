@@ -31,15 +31,13 @@ public class MiningPopulator extends Populator {
     private final List<String> tagWhitelist = Lists.newArrayList();
     private final List<String> tagBlacklist = Lists.newArrayList();
     private final List<Identifier> blockBlacklist = Lists.newArrayList();
-    private final BlockAlgorithm algo;
     private final int minCutoff;
     private final int maxCutoff;
 
-    public MiningPopulator(JsonArray tagWhitelist, JsonArray tagBlacklist, BlockAlgorithm algo, JsonArray blockBlacklist, Integer minCutoff, Integer maxCutoff) {
+    public MiningPopulator(JsonArray tagWhitelist, JsonArray tagBlacklist, JsonArray blockBlacklist, Integer minCutoff, Integer maxCutoff) {
         super(ID);
         tagWhitelist.forEach((elem) -> {this.tagWhitelist.add(elem.getAsString());});
         tagBlacklist.forEach((elem) -> {this.tagBlacklist.add(elem.getAsString());});
-        this.algo = algo;
         this.minCutoff = minCutoff;
         this.maxCutoff = maxCutoff;
         blockBlacklist.forEach((elem) -> {this.blockBlacklist.add(Identifier.tryParse(elem.getAsString()));});
@@ -49,13 +47,15 @@ public class MiningPopulator extends Populator {
     public void populate(JsonArray skillArray) {
 
         for (Block block : Registries.BLOCK) {
-            int restriction = Math.round(this.algo.runner.run(block));
-
             if (!blockBlacklist.contains(Registries.BLOCK.getId(block)) && block.getHardness() > minCutoff && block.getHardness() < maxCutoff) {
 
                 //LoaderInit.blockForRePopulation.computeIfAbsent(block, k -> new ArrayList<>()).add();
 
-                Map<String, Integer> populatedRestriction = getSkillMap(skillArray, restriction);
+                Map<String, Integer> populatedRestriction = getSkillMap(skillArray, formula -> {
+                    return formula.
+                            replace("RESISTANCE", String.valueOf(BlockAlgorithm.RESISTANCE.runner.run(block))).
+                            replace("HARDNESS", String.valueOf(BlockAlgorithm.HARDNESS.runner.run(block)));
+                });
 
                 for (Map.Entry<String, Integer> entry : populatedRestriction.entrySet()) {
                     LoaderInit.blockForRePopulation.computeIfAbsent(block, k -> new ArrayList<>()).add(Pair.of(entry.getKey(), entry.getValue()));

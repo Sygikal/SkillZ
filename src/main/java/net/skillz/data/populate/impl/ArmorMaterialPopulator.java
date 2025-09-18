@@ -13,6 +13,7 @@ import net.skillz.data.populate.Populator;
 import net.skillz.init.LoaderInit;
 import net.skillz.level.LevelManager;
 import net.skillz.level.restriction.PlayerRestriction;
+import net.skillz.util.FileUtil;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -50,10 +51,10 @@ public class ArmorMaterialPopulator extends Populator {
                         for (JsonElement elem : skillArray) {
                             JsonObject obj = elem.getAsJsonObject();
                             String skillKey = obj.get("skill").getAsString();
-                            int base = obj.get("base").getAsInt();
-                            int multiply = OptionalObject.get(obj, "multiply", 1).getAsInt();
+                            String formula = obj.get("formula").getAsString();
+
                             if (LevelManager.SKILLS.containsKey(skillKey)) {
-                                LoaderInit.itemsForRePopulation.computeIfAbsent(armor.getMaterial().getName(), k -> Pair.of(new ArrayList<>(), new ArrayList<>())).getKey().add(Pair.of(Pair.of(base, multiply), skillKey));
+                                LoaderInit.itemsForRePopulation.computeIfAbsent(armor.getMaterial().getName(), k -> Pair.of(new ArrayList<>(), new ArrayList<>())).getKey().add(Pair.of(formula, skillKey));
                             }
                         }
                     }
@@ -64,20 +65,33 @@ public class ArmorMaterialPopulator extends Populator {
 
     @Override
     public void postPopulate() {
-        for (Map.Entry<String, Pair<List<Pair<Pair<Integer, Integer>, String>>, List<Item>>> stringListEntry : LoaderInit.itemsForRePopulation.entrySet()) {
+        for (Map.Entry<String, Pair<List<Pair<String, String>>, List<Item>>> stringListEntry : LoaderInit.itemsForRePopulation.entrySet()) {
             Map<String, Integer> populatedRestriction = new HashMap<>();
 
-            float averageProtection = 0;
+            int totalProtection = 0;
+            float totalToughness = 0;
+            float totalKnockbackRes = 0;
+            int setPieces = 0;
             for (Item item : stringListEntry.getValue().getValue()) {
                 if (item instanceof ArmorItem armor) {
-                    averageProtection += armor.getProtection() + armor.getToughness();
+                    totalProtection += armor.getProtection();
+                    totalToughness += armor.getToughness();
+                    totalKnockbackRes += armor.getMaterial().getKnockbackResistance();
+                    setPieces += 1;
                 }
             }
 
-            int restrict = Math.round(averageProtection / 4);
-            for (Pair<Pair<Integer, Integer>, String> pair : stringListEntry.getValue().getKey()) {
-                if (LevelManager.SKILLS.containsKey(pair.getValue())) {
-                    populatedRestriction.put(pair.getValue(), pair.getKey().getKey() + (restrict * pair.getKey().getValue()));
+            for (Pair<String, String> pair : stringListEntry.getValue().getKey()) {
+                if (LevelManager.SKILLS.containsKey(pair.getRight())) {
+                    String formula = pair.getLeft();
+                    formula = formula.replace("SKILL_MAX", String.valueOf(LevelManager.SKILLS.get(pair.getRight()).maxLevel()));
+                    formula = formula.replace("TOTAL_PROT", String.valueOf(totalProtection));
+                    formula = formula.replace("TOTAL_TOUGH", String.valueOf(totalToughness));
+                    formula = formula.replace("TOTAL_KB_RES", String.valueOf(totalKnockbackRes));
+                    formula = formula.replace("PIECES", String.valueOf(setPieces));
+
+                    int requirement = Math.round((float) FileUtil.evaluateFormula(formula));
+                    if (requirement > 0) populatedRestriction.put(pair.getRight(), requirement);
                 }
             }
 
