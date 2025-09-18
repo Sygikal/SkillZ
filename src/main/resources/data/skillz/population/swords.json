@@ -2,14 +2,12 @@
   "default": true,
   "populator": {
     "type": "skillz:tool_material",
-    "algorithm": "MINING_LEVEL",
     "tool_type": "SWORD"
   },
   "skills": [
     {
       "skill": "melee",
-      "base": 0,
-      "multiply": 2
+      "formula": "min(0 + (MINING_LEVEL * (1 + (ATTACK_DAMAGE / 2))), SKILL_MAX)"
     }
   ]
 }

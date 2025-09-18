@@ -2,15 +2,6 @@
   {
     "replace": false,
     "skills": {
-      "melee": 1
-    },
-    "items": [
-      "minecraft:wooden_sword"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
       "melee": 3
     },
     "items": [
@@ -20,7 +11,7 @@
   {
     "replace": false,
     "skills": {
-      "melee": 7
+      "melee": 5
     },
     "items": [
       "minecraft:golden_sword"

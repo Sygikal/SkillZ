@@ -6,8 +6,7 @@
   "skills": [
     {
       "skill": "defense",
-      "base": 0,
-      "multiply": 2
+      "formula": "min(0 + ((((TOTAL_PROT + TOTAL_TOUGH + (TOTAL_KB_RES * 10)) / PIECES) * 2) / 1), SKILL_MAX)"
     }
   ]
 }

@@ -1,14 +1,12 @@
 {
   "default": true,
   "populator": {
-    "type": "skillz:enchantment_populator",
-    "algorithm": "MIN_POWER"
+    "type": "skillz:enchantment_populator"
   },
   "skills": [
     {
       "skill": "magic",
-      "base": 1,
-      "divide": 3
+      "formula": "min(1 + MIN_POWER / 3, SKILL_MAX)"
     }
   ]
 }

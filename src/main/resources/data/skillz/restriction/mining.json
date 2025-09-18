@@ -4,9 +4,6 @@
     "skills": {
       "mining": 1
     },
-    "items": [
-      "minecraft:wooden_pickaxe"
-    ],
     "mining": [
       "minecraft:gravel",
       "minecraft:suspicious_gravel",
@@ -126,6 +123,10 @@
     "skills": {
       "mining": 5
     },
+    "items": [
+      "minecraft:golden_pickaxe",
+      "minecraft:golden_shovel"
+    ],
     "mining": [
       "minecraft:diorite",
       "minecraft:diorite_stairs",
@@ -190,9 +191,6 @@
     "skills": {
       "mining": 7
     },
-    "items": [
-      "minecraft:golden_pickaxe"
-    ],
     "mining": [
       "minecraft:calcite",
       "minecraft:gold_block",
