@@ -7,17 +7,14 @@ import dev.sygii.ultralib.data.util.OptionalObject;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.block.Block;
-import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
 import net.skillz.SkillZMain;
-import net.skillz.data.PopulateLoader;
-import net.skillz.data.RestrictionLoader;
 import net.skillz.data.SkillLoader;
+import net.skillz.data.RestrictionLoader;
+import net.skillz.data.PopulateLoader;
 import net.skillz.data.populate.Populator;
 import net.skillz.data.populate.impl.*;
 import net.skillz.level.LevelManager;
-import net.skillz.level.restriction.PlayerRestriction;
 import net.skillz.util.PacketHelper;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -77,21 +74,23 @@ public class LoaderInit {
 
         populateCreator.registerCreator(SkillZMain.identifierOf("mining_populator"), data ->
                 new BlockPopulator(SkillZMain.identifierOf("mining_populator"), LevelManager.MINING_RESTRICTIONS, LoaderInit.blockForRePopulation,
+                        OptionalObject.get(data, "hidden", new JsonArray()).getAsJsonArray(),
                         OptionalObject.get(data, "additional", new JsonArray()).getAsJsonArray(),
                         OptionalObject.get(data, "filters", new JsonArray()).getAsJsonArray(),
                         OptionalObject.get(data, "tags", new JsonArray()).getAsJsonArray(),
                         OptionalObject.get(data, "tag_blacklist", new JsonArray()).getAsJsonArray(),
-                        OptionalObject.get(data, "min", 0).getAsInt(),
-                        OptionalObject.get(data, "max", 50).getAsInt()));
+                        OptionalObject.get(data, "min", 0.0).getAsFloat(),
+                        OptionalObject.get(data, "max", 50.0).getAsFloat()));
 
         populateCreator.registerCreator(SkillZMain.identifierOf("block_usage_populator"), data ->
                 new BlockPopulator(SkillZMain.identifierOf("block_usage_populator"), LevelManager.BLOCK_RESTRICTIONS, LoaderInit.blockForRePopulation2,
+                        OptionalObject.get(data, "hidden", new JsonArray()).getAsJsonArray(),
                         OptionalObject.get(data, "additional", new JsonArray()).getAsJsonArray(),
                         OptionalObject.get(data, "filters", new JsonArray()).getAsJsonArray(),
                         OptionalObject.get(data, "tags", new JsonArray()).getAsJsonArray(),
                         OptionalObject.get(data, "tag_blacklist", new JsonArray()).getAsJsonArray(),
-                        OptionalObject.get(data, "min", 0).getAsInt(),
-                        OptionalObject.get(data, "max", 50).getAsInt()));
+                        OptionalObject.get(data, "min", 0.0).getAsFloat(),
+                        OptionalObject.get(data, "max", 50.0).getAsFloat()));
 
         populateCreator.registerCreator(EnchantmentPopulator.ID, data ->
                 new EnchantmentPopulator(
