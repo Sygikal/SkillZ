@@ -199,13 +199,15 @@ public class SkillRestrictionScreen extends Screen implements Tab {
         int count = 0;
         Map<Integer, PlayerRestriction> newMap = new LinkedHashMap<>();
         for (Map.Entry<Integer, PlayerRestriction> entry : this.restrictions.entrySet()) {
-            if (count > 8) {
-                this.lines.add(new LineWidget(this.client, null, new LinkedHashMap<>(newMap), code));
-                newMap.clear();
-                count = 0;
+            if (!entry.getValue().isHidden()) {
+                if (count > 8) {
+                    this.lines.add(new LineWidget(this.client, null, new LinkedHashMap<>(newMap), code));
+                    newMap.clear();
+                    count = 0;
+                }
+                newMap.put(entry.getKey(), entry.getValue());
+                count++;
             }
-            newMap.put(entry.getKey(), entry.getValue());
-            count++;
         }
         this.lines.add(new LineWidget(this.client, null, new LinkedHashMap<>(newMap), code));
     }
