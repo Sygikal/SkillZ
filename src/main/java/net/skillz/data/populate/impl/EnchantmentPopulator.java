@@ -6,6 +6,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.skillz.SkillZMain;
 import net.skillz.data.populate.Populator;
+import net.skillz.init.ConfigInit;
 import net.skillz.level.LevelManager;
 import net.skillz.level.restriction.PlayerRestriction;
 import net.skillz.content.registry.EnchantmentRegistry;
@@ -49,8 +50,9 @@ public class EnchantmentPopulator extends Populator {
                     int enchantmentRawId = EnchantmentRegistry.getId(Registries.ENCHANTMENT.getId(ench), i);
 
                     if (!populatedRestriction.isEmpty()) {
-
-                        LevelManager.ENCHANTMENT_RESTRICTIONS.put(enchantmentRawId, new PlayerRestriction(enchantmentRawId, populatedRestriction));
+                        if (LevelManager.ENCHANTMENT_RESTRICTIONS.get(enchantmentRawId) == null || ConfigInit.MAIN.PROGRESSION.populatorOverride) {
+                            LevelManager.ENCHANTMENT_RESTRICTIONS.put(enchantmentRawId, new PlayerRestriction(enchantmentRawId, populatedRestriction));
+                        }
                     }
                 }
             }
