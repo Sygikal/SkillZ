@@ -10,6 +10,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.skillz.SkillZMain;
 import net.skillz.data.populate.Populator;
+import net.skillz.init.ConfigInit;
 import net.skillz.init.LoaderInit;
 import net.skillz.level.LevelManager;
 import net.skillz.level.restriction.PlayerRestriction;
@@ -94,24 +95,29 @@ public class ArmorMaterialPopulator extends Populator {
                 }
             }
 
-            for (Item item : stringListEntry.getValue().getValue()) {
-                if (item instanceof ArmorItem && !populatedRestriction.isEmpty()) {
-                    LevelManager.ITEM_RESTRICTIONS.put(Registries.ITEM.getRawId(item), new PlayerRestriction(Registries.ITEM.getRawId(item), populatedRestriction));
+
+            if (!populatedRestriction.isEmpty()) {
+                for (Item item : stringListEntry.getValue().getValue()) {
+                    if (item instanceof ArmorItem) {
+                        if (LevelManager.ITEM_RESTRICTIONS.get(Registries.ITEM.getRawId(item)) == null || ConfigInit.MAIN.PROGRESSION.populatorOverride) {
+                            LevelManager.ITEM_RESTRICTIONS.put(Registries.ITEM.getRawId(item), new PlayerRestriction(Registries.ITEM.getRawId(item), populatedRestriction));
+                        }
+                    }
                 }
+
+                String keys = "[" +
+                        populatedRestriction.entrySet()
+                                .stream()
+                                .map(e -> e.getKey() + " " + e.getValue())
+                                .collect(Collectors.joining(", ")) + "]";
+
+                String items = "[" +
+                        stringListEntry.getValue().getValue()
+                                .stream()
+                                .map(Item::toString)
+                                .collect(Collectors.joining(", ")) + "]";
+                SkillZMain.LOGGER.info("Populating item {} to {}", items, keys);
             }
-
-            String keys = "[" +
-                    populatedRestriction.entrySet()
-                            .stream()
-                            .map(e -> e.getKey() + " " + e.getValue())
-                            .collect(Collectors.joining(", ")) + "]";
-
-            String items = "[" +
-                    stringListEntry.getValue().getValue()
-                            .stream()
-                            .map(Item::toString)
-                            .collect(Collectors.joining(", ")) + "]";
-            SkillZMain.LOGGER.info("Populating item {} to {}", items, keys);
         }
     }
 }
