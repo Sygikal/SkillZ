@@ -23,7 +23,6 @@ public class ClientPlayerInteractionMixin {
 
     @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
     private void useOnBlockMixin(World world, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> cir) {
-        System.out.println("sex");
         if (!player.isCreative() && !player.isSpectator()) {
             LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
             if (!levelManager.hasRequiredItemLevel(player.getStackInHand(hand).getItem())) {
