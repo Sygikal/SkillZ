@@ -9,6 +9,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.skillz.SkillZMain;
 import net.skillz.data.populate.Populator;
+import net.skillz.init.ConfigInit;
 import net.skillz.init.LoaderInit;
 import net.skillz.level.LevelManager;
 import net.skillz.level.restriction.PlayerRestriction;
@@ -54,7 +55,9 @@ public class ToolMaterialPopulator extends Populator {
                         });
 
                         if (!populatedRestriction.isEmpty()) {
-                            LevelManager.ITEM_RESTRICTIONS.put(Registries.ITEM.getRawId(item), new PlayerRestriction(Registries.ITEM.getRawId(item), populatedRestriction));
+                            if (LevelManager.ITEM_RESTRICTIONS.get(Registries.ITEM.getRawId(item)) == null || ConfigInit.MAIN.PROGRESSION.populatorOverride) {
+                                LevelManager.ITEM_RESTRICTIONS.put(Registries.ITEM.getRawId(item), new PlayerRestriction(Registries.ITEM.getRawId(item), populatedRestriction));
+                            }
                         }
                     }
                 }
