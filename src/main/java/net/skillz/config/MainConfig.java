@@ -6,6 +6,9 @@ import me.fzzyhmstrs.fzzy_config.annotations.RequiresAction;
 import me.fzzyhmstrs.fzzy_config.config.Config;
 import me.fzzyhmstrs.fzzy_config.config.ConfigSection;
 import net.skillz.SkillZMain;
+import org.apache.commons.compress.utils.Lists;
+
+import java.util.List;
 
 public class MainConfig extends Config {
 
@@ -40,11 +43,6 @@ public class MainConfig extends Config {
 
     public ProgressionSection PROGRESSION = new ProgressionSection();
     public static class ProgressionSection extends ConfigSection {
-        @RequiresAction(action = Action.RESTART)
-        public boolean restrictions = true;
-        @RequiresAction(action = Action.RELOAD_DATA)
-        @Comment("Allow loading of default restrictions")
-        public boolean defaultRestrictions = true;
 
         @RequiresAction(action = Action.RELOAD_DATA)
         @Comment("Allow loading of default skills")
@@ -53,6 +51,24 @@ public class MainConfig extends Config {
         @RequiresAction(action = Action.RELOAD_DATA)
         @Comment("Allow loading of default populations")
         public boolean defaultPopulations = true;
+
+        @RequiresAction(action = Action.RELOAD_DATA)
+        @Comment("Populators will override restriction data")
+        public boolean populatorOverride = true;
+
+        public RestrictionSection RESTRICTIONS = new RestrictionSection();
+        public static class RestrictionSection extends ConfigSection {
+            @RequiresAction(action = Action.RELOAD_DATA)
+            public boolean enableRestrictions = true;
+
+            @RequiresAction(action = Action.RELOAD_DATA)
+            @Comment("Allow loading of default restrictions")
+            public boolean defaultRestrictions = true;
+
+            @RequiresAction(action = Action.RELOAD_DATA)
+            @Comment("List of restriction ids to disable")
+            public List<String> disabledRestrictions = Lists.newArrayList();
+        }
 
     }
 
