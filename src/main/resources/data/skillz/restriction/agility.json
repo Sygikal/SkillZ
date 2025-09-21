@@ -1,52 +1,55 @@
-[
-  {
-    "replace": false,
-    "skills": {
-      "agility": 2
+{
+  "default": true,
+  "restrictions": [
+    {
+      "replace": false,
+      "skills": {
+        "agility": 2
+      },
+      "entities": [
+        "minecraft:boat",
+        "minecraft:chest_boat"
+      ]
     },
-    "entities": [
-      "minecraft:boat",
-      "minecraft:chest_boat"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "agility": 5
+    {
+      "replace": false,
+      "skills": {
+        "agility": 5
+      },
+      "items": [
+        "minecraft:turtle_helmet"
+      ]
     },
-    "items": [
-      "minecraft:turtle_helmet"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "agility": 8
+    {
+      "replace": false,
+      "skills": {
+        "agility": 8
+      },
+      "entities": [
+        "minecraft:minecart",
+        "minecraft:chest_minecart"
+      ]
     },
-    "entities": [
-      "minecraft:minecart",
-      "minecraft:chest_minecart"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "agility": 10
+    {
+      "replace": false,
+      "skills": {
+        "agility": 10
+      },
+      "blocks": [
+        "minecraft:cartography_table"
+      ],
+      "items": [
+        "minecraft:recovery_compass"
+      ]
     },
-    "blocks": [
-      "minecraft:cartography_table"
-    ],
-    "items": [
-      "minecraft:recovery_compass"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "agility": 15
-    },
-    "items": [
-      "minecraft:elytra"
-    ]
-  }
-]
+    {
+      "replace": false,
+      "skills": {
+        "agility": 15
+      },
+      "items": [
+        "minecraft:elytra"
+      ]
+    }
+  ]
+}

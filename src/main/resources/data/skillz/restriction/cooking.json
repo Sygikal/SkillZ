@@ -1,29 +1,32 @@
-[
-  {
-    "replace": false,
-    "skills": {
-      "cooking": 4
+{
+  "default": true,
+  "restrictions": [
+    {
+      "replace": false,
+      "skills": {
+        "cooking": 4
+      },
+      "items": [
+        "minecraft:milk_bucket"
+      ]
     },
-    "items": [
-      "minecraft:milk_bucket"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "cooking": 8
+    {
+      "replace": false,
+      "skills": {
+        "cooking": 8
+      },
+      "blocks": [
+        "minecraft:smoker"
+      ]
     },
-    "blocks": [
-      "minecraft:smoker"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "cooking": 10
-    },
-    "blocks": [
-      "minecraft:cauldron"
-    ]
-  }
-]
+    {
+      "replace": false,
+      "skills": {
+        "cooking": 10
+      },
+      "blocks": [
+        "minecraft:cauldron"
+      ]
+    }
+  ]
+}

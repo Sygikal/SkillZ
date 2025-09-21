@@ -1,11 +1,14 @@
-[
-  {
-    "replace": false,
-    "skills": {
-      "luck": 15
-    },
-    "blocks": [
-      "minecraft:beacon"
-    ]
-  }
-]
+{
+  "default": true,
+  "restrictions": [
+    {
+      "replace": false,
+      "skills": {
+        "luck": 15
+      },
+      "blocks": [
+        "minecraft:beacon"
+      ]
+    }
+  ]
+}

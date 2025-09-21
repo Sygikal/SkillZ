@@ -1,29 +1,32 @@
-[
-  {
-    "replace": false,
-    "skills": {
-      "archery": 5
+{
+  "default": true,
+  "restrictions": [
+    {
+      "replace": false,
+      "skills": {
+        "archery": 5
+      },
+      "items": [
+        "minecraft:bow"
+      ]
     },
-    "items": [
-      "minecraft:bow"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "archery": 10
+    {
+      "replace": false,
+      "skills": {
+        "archery": 10
+      },
+      "items": [
+        "minecraft:crossbow"
+      ]
     },
-    "items": [
-      "minecraft:crossbow"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "archery": 20
-    },
-    "items": [
-      "minecraft:trident"
-    ]
-  }
-]
+    {
+      "replace": false,
+      "skills": {
+        "archery": 20
+      },
+      "items": [
+        "minecraft:trident"
+      ]
+    }
+  ]
+}

@@ -1,38 +1,41 @@
-[
-  {
-    "replace": false,
-    "skills": {
-      "constitution": 8
+{
+  "default": true,
+  "restrictions": [
+    {
+      "replace": false,
+      "skills": {
+        "constitution": 8
+      },
+      "items": [
+        "minecraft:brush"
+      ]
     },
-    "items": [
-      "minecraft:brush"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "constitution": 10
+    {
+      "replace": false,
+      "skills": {
+        "constitution": 10
+      },
+      "items": [
+        "minecraft:spyglass"
+      ]
     },
-    "items": [
-      "minecraft:spyglass"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "constitution": 12
+    {
+      "replace": false,
+      "skills": {
+        "constitution": 12
+      },
+      "items": [
+        "minecraft:goat_horn"
+      ]
     },
-    "items": [
-      "minecraft:goat_horn"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "constitution": 16
-    },
-    "blocks": [
-      "minecraft:jukebox"
-    ]
-  }
-]
+    {
+      "replace": false,
+      "skills": {
+        "constitution": 16
+      },
+      "blocks": [
+        "minecraft:jukebox"
+      ]
+    }
+  ]
+}

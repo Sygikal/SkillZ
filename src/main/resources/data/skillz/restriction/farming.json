@@ -1,78 +1,81 @@
-[
-  {
-    "replace": false,
-    "skills": {
-      "farming": 3
+{
+  "default": true,
+  "restrictions": [
+    {
+      "replace": false,
+      "skills": {
+        "farming": 3
+      },
+      "blocks": [
+        "minecraft:composter"
+      ],
+      "items": [
+        "minecraft:stone_hoe",
+        "minecraft:stone_axe"
+      ]
     },
-    "blocks": [
-      "minecraft:composter"
-    ],
-    "items": [
-      "minecraft:stone_hoe",
-      "minecraft:stone_axe"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "farming": 5
+    {
+      "replace": false,
+      "skills": {
+        "farming": 5
+      },
+      "items": [
+        "minecraft:fishing_rod",
+        "minecraft:shears",
+        "minecraft:golden_hoe",
+        "minecraft:golden_axe"
+      ]
     },
-    "items": [
-      "minecraft:fishing_rod",
-      "minecraft:shears",
-      "minecraft:golden_hoe",
-      "minecraft:golden_axe"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "farming": 8
+    {
+      "replace": false,
+      "skills": {
+        "farming": 8
+      },
+      "items": [
+        "minecraft:iron_hoe",
+        "minecraft:iron_axe",
+        "minecraft:bucket",
+        "minecraft:water_bucket",
+        "minecraft:cod_bucket",
+        "minecraft:salmon_bucket",
+        "minecraft:tropical_fish_bucket",
+        "minecraft:pufferfish_bucket",
+        "minecraft:axolotl_bucket",
+        "minecraft:tadpole_bucket",
+        "minecraft:lava_bucket",
+        "minecraft:powder_snow_bucket"
+      ]
     },
-    "items": [
-      "minecraft:iron_hoe",
-      "minecraft:iron_axe",
-      "minecraft:bucket",
-      "minecraft:water_bucket",
-      "minecraft:cod_bucket",
-      "minecraft:salmon_bucket",
-      "minecraft:tropical_fish_bucket",
-      "minecraft:pufferfish_bucket",
-      "minecraft:axolotl_bucket",
-      "minecraft:tadpole_bucket",
-      "minecraft:lava_bucket",
-      "minecraft:powder_snow_bucket"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "farming": 10
+    {
+      "replace": false,
+      "skills": {
+        "farming": 10
+      },
+      "blocks": [
+        "minecraft:bee_nest",
+        "minecraft:beehive",
+        "minecraft:loom"
+      ]
     },
-    "blocks": [
-      "minecraft:bee_nest",
-      "minecraft:beehive",
-      "minecraft:loom"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "farming": 15
+    {
+      "replace": false,
+      "skills": {
+        "farming": 15
+      },
+      "items": [
+        "minecraft:diamond_hoe",
+        "minecraft:diamond_axe"
+      ]
     },
-    "items": [
-      "minecraft:diamond_hoe",
-      "minecraft:diamond_axe"
-    ]
-  },
-  {
-    "replace": false,
-    "skills": {
-      "farming": 20
-    },
-    "items": [
-      "minecraft:netherite_hoe",
-      "minecraft:netherite_axe"
-    ]
-  }
-]
+    {
+      "replace": false,
+      "skills": {
+        "farming": 20
+      },
+      "items": [
+        "minecraft:netherite_hoe",
+        "minecraft:netherite_axe"
+      ]
+    }
+  ]
+}
