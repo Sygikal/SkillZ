@@ -1,0 +1,57 @@
+{
+    "replace": false,
+    "values": [
+        {
+            "id": "#c:hidden_from_recipe_viewers",
+            "required": false
+        },
+        {
+            "id": "create:incomplete_precision_mechanism",
+            "required": false
+        },
+        {
+            "id": "create:unprocessed_obsidian_sheet",
+            "required": false
+        },
+        {
+            "id": "create:chromatic_compound",
+            "required": false
+        },
+        {
+            "id": "create:shadow_steel",
+            "required": false
+        },
+        {
+            "id": "create:refined_radiance",
+            "required": false
+        },
+        {
+            "id": "create:copper_backtank_placeable",
+            "required": false
+        },
+        {
+            "id": "create:netherite_backtank_placeable",
+            "required": false
+        },
+        {
+            "id": "create:minecart_contraption",
+            "required": false
+        },
+        {
+            "id": "create:furnace_minecart_contraption",
+            "required": false
+        },
+        {
+            "id": "create:chest_minecart_contraption",
+            "required": false
+        },
+        {
+            "id": "create:schematic",
+            "required": false
+        },
+        {
+            "id": "deeperdarker:warden_backtank_placeable",
+            "required": false
+        }
+    ]
+}

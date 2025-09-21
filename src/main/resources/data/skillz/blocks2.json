@@ -1,0 +1,18 @@
+{
+  "default": true,
+  "populator": {
+    "type": "skillz:block_usage_populator",
+    "min": 1,
+    "max": 100,
+    "filters": [
+      "HAS_BE",
+      "REQUIRES_TOOL"
+    ]
+  },
+  "skills": [
+    {
+      "skill": "constitution",
+      "formula": "min(0 + (HARDNESS + (HARDNESS / RESISTANCE)), SKILL_MAX)"
+    }
+  ]
+}

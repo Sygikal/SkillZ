@@ -1,0 +1,53 @@
+{
+  "default": true,
+  "populator": {
+    "hidden": [
+      "#skillz:hidden_restriction_item"
+    ],
+    "type": "skillz:mining_populator",
+    "min": 0.5,
+    "max": 100,
+    "filters": [
+      "SOLID",
+      "IS_OPAQUE",
+      "REQUIRES_TOOL"
+    ]
+  },
+  "skills": [
+    {
+      "skill": "mining",
+      "variables": [
+        {
+          "type": "pattern_match",
+          "name": "DEEPSLATE",
+          "contains": [
+            "deepslate"
+          ],
+          "return": 2
+        },
+        {
+          "type": "pattern_match",
+          "name": "NETHER",
+          "contains": [
+            "nether"
+          ]
+        },
+        {
+          "type": "pattern_match",
+          "name": "ORE",
+          "contains": [
+            "ore"
+          ]
+        },
+        {
+          "type": "in_tag",
+          "name": "DIAMOND",
+          "tags": [
+            "minecraft:diamond_ores"
+          ]
+        }
+      ],
+      "formula": "min(0 + (ORE + NETHER + DEEPSLATE + DIAMOND) + ((HARDNESS / 8) + (HARDNESS / max(RESISTANCE, 1))), SKILL_MAX)"
+    }
+  ]
+}
