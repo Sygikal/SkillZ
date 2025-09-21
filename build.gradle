@@ -55,7 +55,7 @@ dependencies {
 
 	modApi "com.terraformersmc:modmenu:${project.modmenu_version}"
 	modApi "maven.modrinth:tabapi:${project.tabapi_version}"
-	modApi "dev.sygii:ultralib:1.0.2"
+	modApi "dev.sygii:ultralib:${project.ultralib_version}"
 
 
 	/*modApi ('maven.modrinth:libz:1.0.2+1.20.1') {
