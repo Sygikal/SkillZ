@@ -4,12 +4,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.sygii.ultralib.data.util.OptionalObject;
-import net.minecraft.block.Block;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.skillz.level.LevelManager;
-import net.skillz.util.FileUtil;
+import net.skillz.util.TextUtil;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.HashMap;
@@ -33,12 +30,12 @@ public class Populator {
 
     }
 
-    public Map<String, Integer> getSkillMap(JsonArray skillArray, Identifier currId, FormulaRunner formulaRunner) {
-        Map<String, Integer> populatedRestriction = new HashMap<>();
+    public Map<Identifier, Integer> getSkillMap(JsonArray skillArray, Identifier currId, FormulaRunner formulaRunner) {
+        Map<Identifier, Integer> populatedRestriction = new HashMap<>();
 
         for (JsonElement elem : skillArray) {
             JsonObject obj = elem.getAsJsonObject();
-            String skillKey = obj.get("skill").getAsString();
+            Identifier skillKey = Identifier.tryParse(obj.get("skill").getAsString());
             String formula = obj.get("formula").getAsString();
 
             if (LevelManager.SKILLS.containsKey(skillKey)) {
@@ -80,7 +77,7 @@ public class Populator {
                 formula = formula.replace("SKILL_MAX", String.valueOf(LevelManager.SKILLS.get(skillKey).maxLevel()));
                 formula = formulaRunner.run(formula);
 
-                int requirement = Math.round((float)FileUtil.evaluateFormula(formula));
+                int requirement = Math.round((float) TextUtil.evaluateFormula(formula));
                 if (requirement > 0) populatedRestriction.put(skillKey, requirement);
             }
         }

@@ -1,5 +1,7 @@
 package net.skillz.level;
 
+import net.minecraft.util.Identifier;
+
 import java.util.List;
 
 public class SkillBonus {
@@ -41,10 +43,10 @@ public class SkillBonus {
     // evadingDamageChance: Chance to evade incoming damage
 
     private final String key;
-    private final String id;
+    private final Identifier id;
     private final int level;
 
-    public SkillBonus(String key, String id, int level) {
+    public SkillBonus(String key, Identifier id, int level) {
         this.id = id;
         this.level = level;
         this.key = key;
@@ -54,7 +56,7 @@ public class SkillBonus {
         return key;
     }
 
-    public String getId() {
+    public Identifier getId() {
         return id;
     }
 

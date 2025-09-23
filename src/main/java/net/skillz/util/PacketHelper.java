@@ -1,6 +1,7 @@
 package net.skillz.util;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.util.Identifier;
 import net.skillz.SkillZMain;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.level.*;
@@ -27,7 +28,8 @@ public class PacketHelper {
     }
 
     public static void updateSkills(ServerPlayerEntity serverPlayerEntity) {
-        List<String> skillIds = new ArrayList<>();
+        List<Identifier> skillIds = new ArrayList<>();
+        List<Identifier> skillTextures = new ArrayList<>();
         List<Integer> skillIndexes = new ArrayList<>();
         List<Integer> skillMaxLevels = new ArrayList<>();
         List<SkillSyncPacket.SkillAttributesRecord> skillAttributes = new ArrayList<>();
@@ -35,6 +37,7 @@ public class PacketHelper {
 
         for (Skill skill : LevelManager.SKILLS.values()) {
             skillIds.add(skill.id());
+            skillTextures.add(skill.texture());
             skillIndexes.add(skill.index());
             skillMaxLevels.add(skill.maxLevel());
 
@@ -43,7 +46,7 @@ public class PacketHelper {
         }
 
         SkillSyncPacket.SkillBonusesRecord skillBonusesRecord = new SkillSyncPacket.SkillBonusesRecord(skillBonuses);
-        ServerPlayNetworking.send(serverPlayerEntity, new SkillSyncPacket(skillIds, skillIndexes, skillMaxLevels, skillAttributes, skillBonusesRecord));
+        ServerPlayNetworking.send(serverPlayerEntity, new SkillSyncPacket(skillIds, skillTextures, skillIndexes, skillMaxLevels, skillAttributes, skillBonusesRecord));
     }
 
     public static void updatePlayerSkills(ServerPlayerEntity serverPlayerEntity, @Nullable ServerPlayerEntity oldPlayerEntity) {
@@ -56,7 +59,7 @@ public class PacketHelper {
             levelManager.setSkillPoints(oldLevelManager.getSkillPoints());
             levelManager.setLevelProgress(oldLevelManager.getLevelProgress());
         }
-        List<String> playerSkillIds = new ArrayList<>();
+        List<Identifier> playerSkillIds = new ArrayList<>();
         List<Integer> playerSkillLevels = new ArrayList<>();
         for (PlayerSkill playerSkill : levelManager.getPlayerSkills().values()) {
             playerSkillIds.add(playerSkill.getId());
