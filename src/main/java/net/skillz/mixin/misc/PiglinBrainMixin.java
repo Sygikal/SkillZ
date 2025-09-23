@@ -2,6 +2,7 @@ package net.skillz.mixin.misc;
 
 import java.util.List;
 
+import net.skillz.SkillZMain;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.level.LevelManager;
 import org.spongepowered.asm.mixin.Mixin;
@@ -46,12 +47,7 @@ public class PiglinBrainMixin {
 
     @Inject(method = "dropBarteredItem(Lnet/minecraft/entity/mob/PiglinEntity;Lnet/minecraft/entity/player/PlayerEntity;Ljava/util/List;)V", at = @At("HEAD"), cancellable = true)
     private static void dropBarteredItemMixin(PiglinEntity piglin, PlayerEntity player, List<ItemStack> items, CallbackInfo info) {
-        if (player.isCreative()) {
-            return;
-        }
-        LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
-        if (!levelManager.hasRequiredEntityLevel(piglin.getType())) {
-            player.sendMessage(Text.translatable("restriction.skillz.locked.tooltip").formatted(Formatting.RED), true);
+        if (SkillZMain.shouldRestrictEntity(player, piglin)) {
             if (!items.isEmpty()) {
                 piglin.swingHand(Hand.OFF_HAND);
                 LookTargetUtil.give(piglin, new ItemStack(Items.GOLD_INGOT), player.getPos().add(0.0, 1.0, 0.0));
