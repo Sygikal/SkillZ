@@ -44,17 +44,35 @@ public class MainConfig extends Config {
     public ProgressionSection PROGRESSION = new ProgressionSection();
     public static class ProgressionSection extends ConfigSection {
 
-        @RequiresAction(action = Action.RELOAD_DATA)
-        @Comment("Allow loading of default skills")
-        public boolean defaultSkills = true;
+        public PopulationSection POPULATION = new PopulationSection();
+        public static class PopulationSection extends ConfigSection {
+            @RequiresAction(action = Action.RELOAD_DATA)
+            @Comment("Allow loading of default populations")
+            public boolean defaultPopulations = true;
 
-        @RequiresAction(action = Action.RELOAD_DATA)
-        @Comment("Allow loading of default populations")
-        public boolean defaultPopulations = true;
+            @RequiresAction(action = Action.RELOAD_DATA)
+            @Comment("Populators will override restriction data")
+            public boolean populatorOverride = true;
 
-        @RequiresAction(action = Action.RELOAD_DATA)
-        @Comment("Populators will override restriction data")
-        public boolean populatorOverride = true;
+            @RequiresAction(action = Action.RELOAD_DATA)
+            @Comment("List of populator ids to disable")
+            public List<String> disabledPopulators = Lists.newArrayList();
+        }
+
+        public SkillSection SKILLS = new SkillSection();
+        public static class SkillSection extends ConfigSection {
+            @RequiresAction(action = Action.RELOAD_DATA)
+            @Comment("Allow loading of default skills")
+            public boolean defaultSkills = true;
+
+            @RequiresAction(action = Action.RELOAD_DATA)
+            @Comment("Default max level for skills")
+            public int defaultMaxLevel = 20;
+
+            @RequiresAction(action = Action.RELOAD_DATA)
+            @Comment("List of skill ids to disable")
+            public List<String> disabledSkills = Lists.newArrayList();
+        }
 
         public RestrictionSection RESTRICTIONS = new RestrictionSection();
         public static class RestrictionSection extends ConfigSection {
