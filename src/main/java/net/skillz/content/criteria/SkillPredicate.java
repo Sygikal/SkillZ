@@ -3,16 +3,17 @@ package net.skillz.content.criteria;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 
 public class SkillPredicate {
-    private final String jobName;
+    private final Identifier jobName;
 
-    public SkillPredicate(String jobName) {
+    public SkillPredicate(Identifier jobName) {
         this.jobName = jobName;
     }
 
-    public boolean test(String jobName) {
+    public boolean test(Identifier jobName) {
         if (this.jobName.equals(jobName)) {
             return true;
         } else {
@@ -21,13 +22,13 @@ public class SkillPredicate {
     }
 
     public static SkillPredicate fromJson(JsonElement json) {
-        String jobName = JsonHelper.asString(json, "skill_name");
+        Identifier jobName = Identifier.tryParse(JsonHelper.asString(json, "skill_id"));
         return new SkillPredicate(jobName);
     }
 
     public JsonElement toJson() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("skill_name", this.jobName);
+        jsonObject.addProperty("skill_id", this.jobName.toString());
         return jsonObject;
     }
 
