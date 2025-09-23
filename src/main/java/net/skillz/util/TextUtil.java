@@ -1,10 +1,23 @@
 package net.skillz.util;
 
+import net.minecraft.text.Text;
 import net.skillz.SkillZMain;
 
 import java.io.File;
 
-public class FileUtil {
+public class TextUtil {
+
+    public static Text getGui(String path, Object... args) {
+        return getArgs("text", new String[] {"gui", path}, args);
+    }
+
+    public static Text get(String title, String... paths) {
+        return Text.translatable(title + "." + SkillZMain.MOD_ID + "." + String.join(".", paths));
+    }
+
+    public static Text getArgs(String title, String[] paths, Object... args) {
+        return Text.translatable(title + "." + SkillZMain.MOD_ID + "." + String.join(".", paths), args);
+    }
 
     public static String getBaseName(String filename) {
         if (filename == null)
