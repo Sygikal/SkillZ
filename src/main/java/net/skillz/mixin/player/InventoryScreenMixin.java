@@ -5,6 +5,7 @@ import net.skillz.SkillZMain;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.init.ConfigInit;
 import net.skillz.level.LevelManager;
+import net.skillz.util.TextUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -43,7 +44,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
             context.getMatrices().scale(0.5F, 0.5F, 1F);
             context.getMatrices().translate((28 + ConfigInit.CLIENT.inventorySkillLevelPosX + this.x) / 0.5F,
                     (8 + ConfigInit.CLIENT.inventorySkillLevelPosY + this.y + textRenderer.fontHeight / 2F) / 0.5F, 70.0D);
-            context.drawText(this.textRenderer, Text.translatable("text.skillz.gui.short_level", levelManager.getOverallLevel()), 0, -textRenderer.fontHeight / 2, color, false);
+            context.drawText(this.textRenderer, TextUtil.getGui("level_short", levelManager.getOverallLevel()), 0, -textRenderer.fontHeight / 2, color, false);
             context.getMatrices().pop();
         }
     }

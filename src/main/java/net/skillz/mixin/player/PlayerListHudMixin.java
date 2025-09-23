@@ -1,5 +1,6 @@
 package net.skillz.mixin.player;
 
+import net.skillz.util.TextUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,7 +25,7 @@ public class PlayerListHudMixin {
     private void getPlayerNameMixin(PlayerListEntry entry, CallbackInfoReturnable<Text> info) {
         if (ConfigInit.CLIENT.showLevelList)
             info.setReturnValue(this.applyGameModeFormatting(entry,
-                    Team.decorateName(entry.getScoreboardTeam(), Text.translatable("text.skillz.scoreboard", ((ClientPlayerListAccess) entry).getLevel(), entry.getProfile().getName()))));
+                    Team.decorateName(entry.getScoreboardTeam(), TextUtil.getGui("scoreboard", ((ClientPlayerListAccess) entry).getLevel(), entry.getProfile().getName()))));
     }
 
     @Shadow

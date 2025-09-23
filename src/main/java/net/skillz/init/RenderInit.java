@@ -11,6 +11,7 @@ import net.skillz.screen.SkillInfoScreen;
 import net.skillz.screen.SkillRestrictionScreen;
 import net.skillz.screen.LevelScreen;
 import net.skillz.screen.widget.*;
+import net.skillz.util.TextUtil;
 import net.skillz.util.TooltipUtil;
 import dev.sygii.tabapi.TabAPI;
 import net.minecraft.client.MinecraftClient;
@@ -31,7 +32,7 @@ public class RenderInit {
         EntityRendererRegistry.register(EntityInit.LEVEL_EXPERIENCE_ORB, LevelExperienceOrbEntityRenderer::new);
 
         TabAPI.registerInventoryTab(new VanillaInventoryTab(SkillZMain.identifierOf("inventory_tab"), Text.translatable("container.crafting"), BAG_TAB_ICON, 0, InventoryScreen.class));
-        TabAPI.registerInventoryTab(new SkillTab(SkillZMain.identifierOf("skill_tab"), Text.translatable("screen.skillz.skill_screen"), SKILL_TAB_ICON, 1, LevelScreen.class, SkillInfoScreen.class, SkillRestrictionScreen.class));
+        TabAPI.registerInventoryTab(new SkillTab(SkillZMain.identifierOf("skill_tab"), TextUtil.getGui("skill_screen.title"), SKILL_TAB_ICON, 1, LevelScreen.class, SkillInfoScreen.class, SkillRestrictionScreen.class));
 
         /*TabAPI.registerSideInventoryTab(new BookTab(Text.translatable("restriction.levelz.enchantments"),
                 new RestrictionBook(LevelManager.ENCHANTMENT_RESTRICTIONS, Text.translatable("restriction.levelz.enchantments"), 3),
