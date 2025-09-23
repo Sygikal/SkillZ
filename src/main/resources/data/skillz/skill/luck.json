@@ -3,7 +3,7 @@
   "texture": "skillz:textures/gui/sprites/luck.png",
   "attributes": [
     {
-      "id": 6,
+      "index": 6,
       "type": "generic.luck",
       "base": -1,
       "set_base_value": true,

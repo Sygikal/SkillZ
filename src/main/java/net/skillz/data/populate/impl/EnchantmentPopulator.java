@@ -40,7 +40,7 @@ public class EnchantmentPopulator extends Populator {
             for (int i = 1; i <= ench.getMaxLevel(); i++) {
                 if (!getIdBlacklist().contains(Registries.ENCHANTMENT.getId(ench))) {
                     int finalI = i;
-                    Map<String, Integer> populatedRestriction = getSkillMap(skillArray, Registries.ENCHANTMENT.getId(ench), formula -> {
+                    Map<Identifier, Integer> populatedRestriction = getSkillMap(skillArray, Registries.ENCHANTMENT.getId(ench), formula -> {
                         return formula.
                                 replace("MIN_POWER", String.valueOf(EnchantAlgorithm.MIN_POWER.runner.run(ench, finalI))).
                                 replace("MAX_POWER", String.valueOf(EnchantAlgorithm.MAX_POWER.runner.run(ench, finalI))).
@@ -50,7 +50,7 @@ public class EnchantmentPopulator extends Populator {
                     int enchantmentRawId = EnchantmentRegistry.getId(Registries.ENCHANTMENT.getId(ench), i);
 
                     if (!populatedRestriction.isEmpty()) {
-                        if (LevelManager.ENCHANTMENT_RESTRICTIONS.get(enchantmentRawId) == null || ConfigInit.MAIN.PROGRESSION.populatorOverride) {
+                        if (LevelManager.ENCHANTMENT_RESTRICTIONS.get(enchantmentRawId) == null || ConfigInit.MAIN.PROGRESSION.POPULATION.populatorOverride) {
                             LevelManager.ENCHANTMENT_RESTRICTIONS.put(enchantmentRawId, new PlayerRestriction(enchantmentRawId, populatedRestriction));
                         }
                     }

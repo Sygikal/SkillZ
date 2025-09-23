@@ -2,7 +2,6 @@
   "default": true,
   "restrictions": [
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:smithing",
@@ -14,7 +13,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:smithing",
@@ -27,7 +25,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:smithing",
@@ -41,7 +38,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:smithing",
@@ -53,7 +49,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:smithing",
@@ -66,7 +61,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:smithing",
@@ -78,7 +72,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:smithing",
@@ -90,7 +83,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:smithing",

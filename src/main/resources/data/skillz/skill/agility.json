@@ -3,7 +3,7 @@
   "texture": "skillz:textures/gui/sprites/agility.png",
   "attributes": [
     {
-      "id": 3,
+      "index": 3,
       "type": "generic.movement_speed",
       "base": 0.09,
       "set_base_value": true,
@@ -18,7 +18,7 @@
       "value": 0.01
     },
     {
-      "id": 4,
+      "index": 4,
       "type": "attribute-backport:generic.oxygen_bonus",
       "operation": "ADDITION",
       "value": 0.2

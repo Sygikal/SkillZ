@@ -2,7 +2,6 @@
   "default": true,
   "restrictions": [
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:agility",
@@ -15,7 +14,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:agility",
@@ -27,7 +25,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:agility",
@@ -40,7 +37,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:agility",
@@ -55,7 +51,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:agility",

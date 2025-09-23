@@ -14,7 +14,7 @@ import net.skillz.init.ConfigInit;
 import net.skillz.init.LoaderInit;
 import net.skillz.level.LevelManager;
 import net.skillz.level.restriction.PlayerRestriction;
-import net.skillz.util.FileUtil;
+import net.skillz.util.TextUtil;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -48,11 +48,11 @@ public class ArmorMaterialPopulator extends Populator {
 
                         for (JsonElement elem : skillArray) {
                             JsonObject obj = elem.getAsJsonObject();
-                            String skillKey = obj.get("skill").getAsString();
+                            Identifier skillId = Identifier.tryParse(obj.get("skill").getAsString());
                             String formula = obj.get("formula").getAsString();
 
-                            if (LevelManager.SKILLS.containsKey(skillKey)) {
-                                LoaderInit.itemsForRePopulation.computeIfAbsent(armor.getMaterial().getName(), k -> Pair.of(new ArrayList<>(), new ArrayList<>())).getKey().add(Pair.of(formula, skillKey));
+                            if (LevelManager.SKILLS.containsKey(skillId)) {
+                                LoaderInit.itemsForRePopulation.computeIfAbsent(armor.getMaterial().getName(), k -> Pair.of(new ArrayList<>(), new ArrayList<>())).getKey().add(Pair.of(formula, skillId));
                             }
                         }
                     }
@@ -63,8 +63,8 @@ public class ArmorMaterialPopulator extends Populator {
 
     @Override
     public void postPopulate() {
-        for (Map.Entry<String, Pair<List<Pair<String, String>>, List<Item>>> stringListEntry : LoaderInit.itemsForRePopulation.entrySet()) {
-            Map<String, Integer> populatedRestriction = new HashMap<>();
+        for (Map.Entry<String, Pair<List<Pair<String, Identifier>>, List<Item>>> stringListEntry : LoaderInit.itemsForRePopulation.entrySet()) {
+            Map<Identifier, Integer> populatedRestriction = new HashMap<>();
 
             int totalProtection = 0;
             float totalToughness = 0;
@@ -79,7 +79,7 @@ public class ArmorMaterialPopulator extends Populator {
                 }
             }
 
-            for (Pair<String, String> pair : stringListEntry.getValue().getKey()) {
+            for (Pair<String, Identifier> pair : stringListEntry.getValue().getKey()) {
                 if (LevelManager.SKILLS.containsKey(pair.getRight())) {
                     String formula = pair.getLeft();
                     formula = formula.replace("SKILL_MAX", String.valueOf(LevelManager.SKILLS.get(pair.getRight()).maxLevel()));
@@ -88,7 +88,7 @@ public class ArmorMaterialPopulator extends Populator {
                     formula = formula.replace("TOTAL_KB_RES", String.valueOf(totalKnockbackRes));
                     formula = formula.replace("PIECES", String.valueOf(setPieces));
 
-                    int requirement = Math.round((float) FileUtil.evaluateFormula(formula));
+                    int requirement = Math.round((float) TextUtil.evaluateFormula(formula));
                     if (requirement > 0) {
                         populatedRestriction.put(pair.getRight(), requirement);
                     }
@@ -99,7 +99,7 @@ public class ArmorMaterialPopulator extends Populator {
             if (!populatedRestriction.isEmpty()) {
                 for (Item item : stringListEntry.getValue().getValue()) {
                     if (item instanceof ArmorItem) {
-                        if (LevelManager.ITEM_RESTRICTIONS.get(Registries.ITEM.getRawId(item)) == null || ConfigInit.MAIN.PROGRESSION.populatorOverride) {
+                        if (LevelManager.ITEM_RESTRICTIONS.get(Registries.ITEM.getRawId(item)) == null || ConfigInit.MAIN.PROGRESSION.POPULATION.populatorOverride) {
                             LevelManager.ITEM_RESTRICTIONS.put(Registries.ITEM.getRawId(item), new PlayerRestriction(Registries.ITEM.getRawId(item), populatedRestriction));
                         }
                     }

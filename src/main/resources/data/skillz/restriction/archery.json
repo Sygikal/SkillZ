@@ -2,7 +2,6 @@
   "default": true,
   "restrictions": [
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:archery",
@@ -14,7 +13,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:archery",
@@ -26,7 +24,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:archery",

@@ -54,7 +54,7 @@ public class ToolMaterialPopulator extends Populator {
                         });
 
                         if (!populatedRestriction.isEmpty()) {
-                            if (LevelManager.ITEM_RESTRICTIONS.get(Registries.ITEM.getRawId(item)) == null || ConfigInit.MAIN.PROGRESSION.populatorOverride) {
+                            if (LevelManager.ITEM_RESTRICTIONS.get(Registries.ITEM.getRawId(item)) == null || ConfigInit.MAIN.PROGRESSION.POPULATION.populatorOverride) {
                                 LevelManager.ITEM_RESTRICTIONS.put(Registries.ITEM.getRawId(item), new PlayerRestriction(Registries.ITEM.getRawId(item), populatedRestriction));
                             }
                         }

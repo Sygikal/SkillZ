@@ -10,7 +10,7 @@
       "value": 0.05
     },
     {
-      "id": 5,
+      "index": 5,
       "type": "attribute-backport:player.mining_efficiency",
       "base": 0,
       "set_base_value": true,

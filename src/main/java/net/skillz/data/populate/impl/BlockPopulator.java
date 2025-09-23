@@ -83,7 +83,7 @@ public class BlockPopulator extends Populator {
                 }
 
                 if (!skipped || (additional.contains(id))) {
-                    Map<String, Integer> populatedRestriction = getSkillMap(skillArray, id, formula -> {
+                    Map<Identifier, Integer> populatedRestriction = getSkillMap(skillArray, id, formula -> {
                         return formula.
                                 replace("RESISTANCE", String.valueOf(BlockAlgorithm.RESISTANCE.runner.run(block))).
                                 replace("HARDNESS", String.valueOf(BlockAlgorithm.HARDNESS.runner.run(block)));
@@ -117,13 +117,13 @@ public class BlockPopulator extends Populator {
                                 TagKey<Block> tag = TagKey.of(RegistryKeys.BLOCK, Identifier.tryParse(s));
 
                                 if (block.getDefaultState().isIn(tag)) {
-                                    if (restrictionMap.get(rawId) == null || ConfigInit.MAIN.PROGRESSION.populatorOverride) {
+                                    if (restrictionMap.get(rawId) == null || ConfigInit.MAIN.PROGRESSION.POPULATION.populatorOverride) {
                                         restrictionMap.put(rawId, restriction);
                                     }
                                 }
                             }
                         } else {
-                            if (restrictionMap.get(rawId) == null || ConfigInit.MAIN.PROGRESSION.populatorOverride) {
+                            if (restrictionMap.get(rawId) == null || ConfigInit.MAIN.PROGRESSION.POPULATION.populatorOverride) {
                                 restrictionMap.put(rawId, restriction);
                             }
                         }

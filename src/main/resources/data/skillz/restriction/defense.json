@@ -2,7 +2,6 @@
   "default": true,
   "restrictions": [
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:defense",
@@ -17,7 +16,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:defense",
@@ -32,7 +30,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:defense",
@@ -47,7 +44,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:defense",
@@ -63,7 +59,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:defense",
@@ -78,7 +73,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:defense",

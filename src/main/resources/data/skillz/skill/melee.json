@@ -4,7 +4,7 @@
   "index": 0,
   "attributes": [
     {
-      "id": 1,
+      "index": 1,
       "type": "generic.attack_damage",
       "operation": "ADDITION",
       "value": 0.2

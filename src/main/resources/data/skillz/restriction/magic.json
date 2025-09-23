@@ -2,7 +2,6 @@
   "default": true,
   "restrictions": [
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:magic",
@@ -14,7 +13,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:magic",
@@ -26,7 +24,6 @@
       ]
     },
     {
-      "replace": false,
       "skills": [
         {
           "skill": "skillz:magic",

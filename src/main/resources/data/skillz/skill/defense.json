@@ -4,7 +4,7 @@
   "texture": "skillz:textures/gui/sprites/defense.png",
   "attributes": [
     {
-      "id": 2,
+      "index": 2,
       "type": "generic.armor",
       "operation": "ADDITION",
       "value": 0.25

@@ -4,7 +4,7 @@
   "texture": "skillz:textures/gui/sprites/constitution.png",
   "attributes": [
     {
-      "id": 0,
+      "index": 0,
       "type": "generic.max_health",
       "base": 8,
       "set_base_value": true,
