@@ -37,7 +37,6 @@ public class ToolMaterialPopulator extends Populator {
     public void populate(JsonArray skillArray) {
         for (Item item : Registries.ITEM) {
             if (item instanceof ToolItem tool) {
-
                 if (subtype.equals(ToolSubType.ALL) ||
                         ((tool instanceof PickaxeItem && subtype.equals(ToolSubType.PICKAXE)) ||
                         (tool instanceof SwordItem && subtype.equals(ToolSubType.SWORD)) ||
@@ -45,7 +44,7 @@ public class ToolMaterialPopulator extends Populator {
                         (tool instanceof HoeItem && subtype.equals(ToolSubType.HOE)) ||
                         (tool instanceof ShovelItem && subtype.equals(ToolSubType.SHOVEL)))) {
                     if (!getIdBlacklist().contains(Registries.ITEM.getId(item))) {
-                        Map<String, Integer> populatedRestriction = getSkillMap(skillArray, Registries.ITEM.getId(item), formula -> {
+                        Map<Identifier, Integer> populatedRestriction = getSkillMap(skillArray, Registries.ITEM.getId(item), formula -> {
                             return formula.
                                     replace("MINING_LEVEL", String.valueOf(ToolAlgorithm.MINING_LEVEL.runner.run(tool.getMaterial()))).
                                     replace("ATTACK_DAMAGE", String.valueOf(ToolAlgorithm.ATTACK_DAMAGE.runner.run(tool.getMaterial()))).

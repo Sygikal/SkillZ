@@ -9,6 +9,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.*;
+import net.skillz.SkillZMain;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.init.ConfigInit;
 import net.skillz.init.EventInit;
@@ -40,8 +41,9 @@ public class TooltipUtil {
     public static Text MINEABLE = Text.translatable("restriction.skillz.mineable.tooltip");
     public static Text CRAFTABLE = Text.translatable("restriction.skillz.craftable.tooltip");
 
-    public static MutableText getRestrictionKey(String id, int value) {
-        return Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(id).id() + ".tooltip", value);
+    public static MutableText getRestrictionKey(Identifier id, int value) {
+        return TextUtil.getGui("restriction_format", LevelManager.SKILLS.get(id).getText(), value).copy();
+        //return Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(id).id() + ".tooltip", value);
     }
 
     public static void addLines(List<Text> lines, Text category, int id, LevelManager manager, boolean showLines, Map<Integer, PlayerRestriction> restrictionMap) {
@@ -49,7 +51,7 @@ public class TooltipUtil {
             if (restrictionMap.containsKey(id)) {
                 PlayerRestriction playerRestriction = restrictionMap.get(id);
                 lines.add(category);
-                for (Map.Entry<String, Integer> entry : playerRestriction.getSkillLevelRestrictions().entrySet()) {
+                for (Map.Entry<Identifier, Integer> entry : playerRestriction.getSkillLevelRestrictions().entrySet()) {
                     boolean noHasLevel = manager.getSkillLevel(entry.getKey()) < entry.getValue();
                     if (showLines || noHasLevel) {
                         lines.add(getRestrictionKey(entry.getKey(), entry.getValue()).formatted(noHasLevel ? Formatting.RED : Formatting.GREEN));
@@ -62,7 +64,7 @@ public class TooltipUtil {
     public static boolean hasRequiredLevel(LevelManager manager, int id, Map<Integer, PlayerRestriction> restrictionMap) {
         if (restrictionMap.containsKey(id)) {
             PlayerRestriction playerRestriction = restrictionMap.get(id);
-            for (Map.Entry<String, Integer> entry : playerRestriction.getSkillLevelRestrictions().entrySet()) {
+            for (Map.Entry<Identifier, Integer> entry : playerRestriction.getSkillLevelRestrictions().entrySet()) {
                 if (manager.getSkillLevel(entry.getKey()) < entry.getValue()) {
                     return false;
                 }
