@@ -6,6 +6,7 @@ import net.skillz.level.LevelManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.skillz.util.TooltipUtil;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -25,10 +26,8 @@ public enum LevelJadeProvider implements IBlockComponentProvider {
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
         LevelManager levelManager = ((LevelManagerAccess) accessor.getPlayer()).getLevelManager();
         if (!levelManager.hasRequiredMiningLevel(accessor.getBlock())) {
-            for (Map.Entry<String, Integer> entry : levelManager.getRequiredMiningLevel(accessor.getBlock()).entrySet()) {
-                Formatting formatting =
-                        levelManager.getSkillLevel(entry.getKey())< entry.getValue() ? Formatting.RED: Formatting.GREEN;
-                tooltip.add(Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(entry.getKey()).id() + ".tooltip", entry.getValue()).formatted(formatting));
+            for (Map.Entry<Identifier, Integer> entry : levelManager.getRequiredMiningLevel(accessor.getBlock()).entrySet()) {
+                tooltip.add(TooltipUtil.getRestrictionKey(entry.getKey(), entry.getValue()).formatted(levelManager.getSkillLevel(entry.getKey()) < entry.getValue() ? Formatting.RED : Formatting.GREEN));
             }
         }
     }

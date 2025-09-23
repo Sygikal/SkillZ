@@ -17,7 +17,7 @@ public class LevelHelper {
         for (SkillAttribute skillAttribute : skill.attributes()) {
             EntityAttributeInstance attr = serverPlayerEntity.getAttributeInstance(skillAttribute.getAttribute().value());
             if (attr != null) {
-                Identifier identifier = SkillZMain.identifierOf(skill.id());
+                Identifier identifier = skill.id();
                 UUID uid = UUID.nameUUIDFromBytes(identifier.toString().getBytes());
                 if (attr.getModifier(uid) != null && attr.hasModifier(attr.getModifier(uid))) {
                     attr.removeModifier(uid);

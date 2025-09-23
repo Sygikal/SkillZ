@@ -1,6 +1,7 @@
 package net.skillz.network;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.util.Identifier;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.init.ConfigInit;
 import net.skillz.init.CriteriaInit;
@@ -22,7 +23,7 @@ public class LevelServerPacket {
 
         ServerPlayNetworking.registerGlobalReceiver(StatPacket.PACKET_ID, (server, player, handler, buffer, sender)  -> {
             StatPacket payload = new StatPacket(buffer);
-            String id = payload.id();
+            Identifier id = payload.id();
             int level = payload.level();
 
             server.execute(() -> {

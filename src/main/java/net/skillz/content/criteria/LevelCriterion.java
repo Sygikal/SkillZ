@@ -9,9 +9,10 @@ import net.minecraft.predicate.entity.AdvancementEntityPredicateSerializer;
 import net.minecraft.predicate.entity.LootContextPredicate;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
+import net.skillz.SkillZMain;
 
 public class LevelCriterion extends AbstractCriterion<LevelCriterion.Conditions> {
-    private static final Identifier ID = new Identifier("skillz:level");
+    private static final Identifier ID = SkillZMain.identifierOf("level");
 
     @Override
     public Identifier getId() {

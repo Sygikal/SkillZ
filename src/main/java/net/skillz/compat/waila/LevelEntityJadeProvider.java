@@ -6,6 +6,7 @@ import net.skillz.level.LevelManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.skillz.util.TooltipUtil;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.IEntityComponentProvider;
 import snownee.jade.api.ITooltip;
@@ -25,10 +26,8 @@ public enum LevelEntityJadeProvider implements IEntityComponentProvider {
     public void appendTooltip(ITooltip tooltip, EntityAccessor entityAccessor, IPluginConfig iPluginConfig) {
         LevelManager levelManager = ((LevelManagerAccess) entityAccessor.getPlayer()).getLevelManager();
         if (!levelManager.hasRequiredEntityLevel(entityAccessor.getEntity().getType())) {
-            for (Map.Entry<String, Integer> entry : levelManager.getRequiredEntityLevel(entityAccessor.getEntity().getType()).entrySet()) {
-                Formatting formatting =
-                        levelManager.getSkillLevel(entry.getKey()) < entry.getValue() ? Formatting.RED : Formatting.GREEN;
-                tooltip.add(Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(entry.getKey()).id() + ".tooltip", entry.getValue()).formatted(formatting));
+            for (Map.Entry<Identifier, Integer> entry : levelManager.getRequiredEntityLevel(entityAccessor.getEntity().getType()).entrySet()) {
+                tooltip.add(TooltipUtil.getRestrictionKey(entry.getKey(), entry.getValue()).formatted(levelManager.getSkillLevel(entry.getKey()) < entry.getValue() ? Formatting.RED : Formatting.GREEN));
             }
         }
     }

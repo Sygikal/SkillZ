@@ -3,6 +3,7 @@ package net.skillz.network;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.skillz.SkillZMain;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.level.LevelManager;
 import net.skillz.level.PlayerSkill;
@@ -27,7 +28,8 @@ public class LevelClientPacket {
     public static void init() {
         ClientPlayNetworking.registerGlobalReceiver(SkillSyncPacket.PACKET_ID, (client, handler, buf, sender) -> {
             SkillSyncPacket payload = new SkillSyncPacket(buf);
-            List<String> skillIds = payload.skillIds();
+            List<Identifier> skillIds = payload.skillIds();
+            List<Identifier> skillTextures = payload.skillTextures();
             List<Integer> skillIndexes = payload.skillIndexes();
             List<Integer> skillMaxLevels = payload.skillMaxLevels();
             List<SkillSyncPacket.SkillAttributesRecord> skillAttributes = payload.skillAttributes();
@@ -38,7 +40,7 @@ public class LevelClientPacket {
 
                 LevelManager.SKILLS.clear();
                 for (int i = 0; i < skillIds.size(); i++) {
-                    Skill skill = new Skill(skillIds.get(i), skillIndexes.get(i), skillMaxLevels.get(i), skillAttributes.get(i).skillAttributes());
+                    Skill skill = new Skill(skillIds.get(i), skillTextures.get(i), skillIndexes.get(i), skillMaxLevels.get(i), skillAttributes.get(i).skillAttributes());
                     LevelManager.SKILLS.put(skillIds.get(i), skill);
 
                     if (!levelManager.getPlayerSkills().containsKey(skillIds.get(i))) {
@@ -55,11 +57,12 @@ public class LevelClientPacket {
         });
 
         ClientPlayNetworking.registerGlobalReceiver(PlayerSkillSyncPacket.PACKET_ID, (client, handler, buf, sender) -> {
-            List<String> playerSkillIds = buf.readList(PacketByteBuf::readString);
-            List<Integer> playerSkillLevels = buf.readList(PacketByteBuf::readInt);
+            PlayerSkillSyncPacket payload = new PlayerSkillSyncPacket(buf);
+            List<Identifier> playerSkillIds = payload.playerSkillIds();
+            List<Integer> playerSkillLevels = payload.playerSkillLevels();
 
             client.execute(() -> {
-                System.out.printf("%s %s%n", playerSkillIds, playerSkillLevels);
+                SkillZMain.LOGGER.info("Loading Skills {} {}", playerSkillIds, playerSkillLevels);
                 LevelManager levelManager = ((LevelManagerAccess) client.player).getLevelManager();
                 for (int i = 0; i < playerSkillIds.size(); i++) {
                     levelManager.setSkillLevel(playerSkillIds.get(i), playerSkillLevels.get(i));
@@ -123,7 +126,7 @@ public class LevelClientPacket {
 
         ClientPlayNetworking.registerGlobalReceiver(StatPacket.PACKET_ID, (client, handler, buf, sender) -> {
             StatPacket payload = new StatPacket(buf);
-            String id = payload.id();
+            Identifier id = payload.id();
             int level = payload.level();
             client.execute(() -> {
                 LevelManager levelManager = ((LevelManagerAccess) client.player).getLevelManager();

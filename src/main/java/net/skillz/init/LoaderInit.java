@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.util.Identifier;
 import net.skillz.SkillZMain;
 import net.skillz.data.SkillLoader;
 import net.skillz.data.RestrictionLoader;
@@ -31,7 +32,7 @@ public class LoaderInit {
 
     public static final List<Populator> POPULATORS = Lists.newArrayList();
 
-    public static final Map<String, Pair<List<Pair<String, String>>, List<Item>>> itemsForRePopulation = new HashMap<>();
+    public static final Map<String, Pair<List<Pair<String, Identifier>>, List<Item>>> itemsForRePopulation = new HashMap<>();
     public static final Map<Block, List<Pair<String, Integer>>> blockForRePopulation = new HashMap<>();
     public static final Map<Block, List<Pair<String, Integer>>> blockForRePopulation2 = new HashMap<>();
 

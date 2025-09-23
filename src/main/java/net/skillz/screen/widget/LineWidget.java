@@ -27,6 +27,8 @@ import net.minecraft.item.SpawnEggItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.skillz.util.TextUtil;
+import net.skillz.util.TooltipUtil;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.enchantment.EnchantmentHelper;
 
@@ -165,8 +167,8 @@ public class LineWidget {
                 if (!showTooltip && DrawUtil.isPointWithinBounds(x + separator, y, 16, 16, mouseX, mouseY)) {
                     List<Text> tooltip = new ArrayList<>();
                     tooltip.add(tooltipTitle);
-                    for (Map.Entry<String, Integer> restriction : entry.getValue().getSkillLevelRestrictions().entrySet()) {
-                        tooltip.add(Text.of(LevelManager.SKILLS.get(restriction.getKey()).getText().getString() + " " + Text.translatable("text.skillz.gui.short_level", restriction.getValue()).getString()));
+                    for (Map.Entry<Identifier, Integer> restriction : entry.getValue().getSkillLevelRestrictions().entrySet()) {
+                        tooltip.add(TooltipUtil.getRestrictionKey(restriction.getKey(), restriction.getValue()));
                     }
                     drawContext.drawTooltip(this.client.textRenderer, tooltip, mouseX, mouseY);
                     showTooltip = true;

@@ -2,6 +2,7 @@ package net.skillz.init;
 
 import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
+import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
@@ -9,6 +10,8 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.MutableText;
+import net.minecraft.util.Identifier;
+import net.skillz.SkillZMain;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.level.LevelManager;
 import net.skillz.level.Skill;
@@ -103,23 +106,17 @@ public class EventInit {
 
         //Called when entity right-clicked
         UseEntityCallback.EVENT.register((player, world, hand, entity, entityHitResult) -> {
-            if (!player.isCreative() && !player.isSpectator()) {
-                if (!entity.hasControllingPassenger() || !((EntityAccessor) entity).callCanAddPassenger(player)) {
-                    LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
-                    if (!levelManager.hasRequiredEntityLevel(entity.getType())) {
-                        player.sendMessage(sendRestriction(levelManager.getRequiredEntityLevel(entity.getType()), levelManager), true);
-                        return ActionResult.success(false);
-                    }
-                }
+            if (SkillZMain.shouldRestrictEntity(player, entity)) {
+                return ActionResult.success(false);
             }
             return ActionResult.PASS;
         });
     }
 
-    public static MutableText sendRestriction(Map<String, Integer> map, LevelManager levelManager, boolean showLines) {
+    public static MutableText sendRestriction(Map<Identifier, Integer> map, LevelManager levelManager, boolean showLines) {
         MutableText asd = Text.literal("");
         int count = 0;
-        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+        for (Map.Entry<Identifier, Integer> entry : map.entrySet()) {
             boolean noHasLevel = levelManager.getSkillLevel(entry.getKey()) < entry.getValue();
             if (showLines || noHasLevel) {
                 asd.append(TooltipUtil.getRestrictionKey(entry.getKey(), entry.getValue()).formatted(noHasLevel ? Formatting.RED : Formatting.GRAY));
@@ -132,7 +129,7 @@ public class EventInit {
         return asd;
     }
 
-    public static MutableText sendRestriction(Map<String, Integer> map, LevelManager levelManager) {
+    public static MutableText sendRestriction(Map<Identifier, Integer> map, LevelManager levelManager) {
         return sendRestriction(map, levelManager, !ConfigInit.CLIENT.hideReachedLevels);
     }
 
