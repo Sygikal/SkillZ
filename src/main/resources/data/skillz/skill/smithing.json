@@ -1,6 +1,6 @@
 {
   "default": true,
-  "maxlevel": 20,
+  "texture": "skillz:textures/gui/sprites/smithing.png",
   "attributes": [
     {
       "type": "attribute-backport:generic.burning_time",

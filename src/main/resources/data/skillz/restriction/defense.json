@@ -3,9 +3,12 @@
   "restrictions": [
     {
       "replace": false,
-      "skills": {
-        "defense": 1
-      },
+      "skills": [
+        {
+          "skill": "skillz:defense",
+          "level": 1
+        }
+      ],
       "items": [
         "minecraft:leather_helmet",
         "minecraft:leather_chestplate",
@@ -15,9 +18,12 @@
     },
     {
       "replace": false,
-      "skills": {
-        "defense": 5
-      },
+      "skills": [
+        {
+          "skill": "skillz:defense",
+          "level": 5
+        }
+      ],
       "items": [
         "minecraft:chainmail_helmet",
         "minecraft:chainmail_chestplate",
@@ -27,9 +33,12 @@
     },
     {
       "replace": false,
-      "skills": {
-        "defense": 7
-      },
+      "skills": [
+        {
+          "skill": "skillz:defense",
+          "level": 7
+        }
+      ],
       "items": [
         "minecraft:golden_helmet",
         "minecraft:golden_chestplate",
@@ -39,9 +48,12 @@
     },
     {
       "replace": false,
-      "skills": {
-        "defense": 8
-      },
+      "skills": [
+        {
+          "skill": "skillz:defense",
+          "level": 8
+        }
+      ],
       "items": [
         "minecraft:iron_helmet",
         "minecraft:iron_chestplate",
@@ -52,9 +64,12 @@
     },
     {
       "replace": false,
-      "skills": {
-        "defense": 15
-      },
+      "skills": [
+        {
+          "skill": "skillz:defense",
+          "level": 15
+        }
+      ],
       "items": [
         "minecraft:diamond_helmet",
         "minecraft:diamond_chestplate",
@@ -64,9 +79,12 @@
     },
     {
       "replace": false,
-      "skills": {
-        "defense": 20
-      },
+      "skills": [
+        {
+          "skill": "skillz:defense",
+          "level": 20
+        }
+      ],
       "items": [
         "minecraft:netherite_helmet",
         "minecraft:netherite_chestplate",

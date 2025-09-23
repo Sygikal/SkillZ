@@ -3,45 +3,60 @@
   "restrictions": [
     {
       "replace": false,
-      "skills": {
-        "melee": 3
-      },
+      "skills": [
+        {
+          "skill": "skillz:melee",
+          "level": 3
+        }
+      ],
       "items": [
         "minecraft:stone_sword"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "melee": 5
-      },
+      "skills": [
+        {
+          "skill": "skillz:melee",
+          "level": 5
+        }
+      ],
       "items": [
         "minecraft:golden_sword"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "melee": 8
-      },
+      "skills": [
+        {
+          "skill": "skillz:melee",
+          "level": 8
+        }
+      ],
       "items": [
         "minecraft:iron_sword"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "melee": 15
-      },
+      "skills": [
+        {
+          "skill": "skillz:melee",
+          "level": 15
+        }
+      ],
       "items": [
         "minecraft:diamond_sword"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "melee": 20
-      },
+      "skills": [
+        {
+          "skill": "skillz:melee",
+          "level": 20
+        }
+      ],
       "items": [
         "minecraft:netherite_sword"
       ]

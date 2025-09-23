@@ -3,27 +3,36 @@
   "restrictions": [
     {
       "replace": false,
-      "skills": {
-        "bartering": 5
-      },
+      "skills": [
+        {
+          "skill": "skillz:bartering",
+          "level": 5
+        }
+      ],
       "entities": [
         "minecraft:villager"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "bartering": 10
-      },
+      "skills": [
+        {
+          "skill": "skillz:bartering",
+          "level": 10
+        }
+      ],
       "entities": [
         "minecraft:wandering_trader"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "bartering": 15
-      },
+      "skills": [
+        {
+          "skill": "skillz:bartering",
+          "level": 15
+        }
+      ],
       "entities": [
         "minecraft:piglin"
       ]

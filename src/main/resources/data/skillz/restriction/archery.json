@@ -3,27 +3,36 @@
   "restrictions": [
     {
       "replace": false,
-      "skills": {
-        "archery": 5
-      },
+      "skills": [
+        {
+          "skill": "skillz:archery",
+          "level": 5
+        }
+      ],
       "items": [
         "minecraft:bow"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "archery": 10
-      },
+      "skills": [
+        {
+          "skill": "skillz:archery",
+          "level": 10
+        }
+      ],
       "items": [
         "minecraft:crossbow"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "archery": 20
-      },
+      "skills": [
+        {
+          "skill": "skillz:archery",
+          "level": 20
+        }
+      ],
       "items": [
         "minecraft:trident"
       ]

@@ -3,9 +3,12 @@
   "restrictions": [
     {
       "replace": false,
-      "skills": {
-        "farming": 3
-      },
+      "skills": [
+        {
+          "skill": "skillz:farming",
+          "level": 3
+        }
+      ],
       "blocks": [
         "minecraft:composter"
       ],
@@ -16,9 +19,12 @@
     },
     {
       "replace": false,
-      "skills": {
-        "farming": 5
-      },
+      "skills": [
+        {
+          "skill": "skillz:farming",
+          "level": 5
+        }
+      ],
       "items": [
         "minecraft:fishing_rod",
         "minecraft:shears",
@@ -28,9 +34,12 @@
     },
     {
       "replace": false,
-      "skills": {
-        "farming": 8
-      },
+      "skills": [
+        {
+          "skill": "skillz:farming",
+          "level": 8
+        }
+      ],
       "items": [
         "minecraft:iron_hoe",
         "minecraft:iron_axe",
@@ -48,9 +57,12 @@
     },
     {
       "replace": false,
-      "skills": {
-        "farming": 10
-      },
+      "skills": [
+        {
+          "skill": "skillz:farming",
+          "level": 10
+        }
+      ],
       "blocks": [
         "minecraft:bee_nest",
         "minecraft:beehive",
@@ -59,9 +71,12 @@
     },
     {
       "replace": false,
-      "skills": {
-        "farming": 15
-      },
+      "skills": [
+        {
+          "skill": "skillz:farming",
+          "level": 15
+        }
+      ],
       "items": [
         "minecraft:diamond_hoe",
         "minecraft:diamond_axe"
@@ -69,9 +84,12 @@
     },
     {
       "replace": false,
-      "skills": {
-        "farming": 20
-      },
+      "skills": [
+        {
+          "skill": "skillz:farming",
+          "level": 20
+        }
+      ],
       "items": [
         "minecraft:netherite_hoe",
         "minecraft:netherite_axe"

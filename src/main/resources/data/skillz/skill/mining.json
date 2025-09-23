@@ -1,6 +1,6 @@
 {
   "default": true,
-  "maxlevel": 20,
+  "texture": "skillz:textures/gui/sprites/mining.png",
   "attributes": [
     {
       "type": "attribute-backport:player.block_break_speed",

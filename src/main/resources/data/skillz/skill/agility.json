@@ -1,6 +1,6 @@
 {
   "default": true,
-  "maxlevel": 20,
+  "texture": "skillz:textures/gui/sprites/agility.png",
   "attributes": [
     {
       "id": 3,

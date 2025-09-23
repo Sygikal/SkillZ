@@ -1,6 +1,6 @@
 {
   "default": true,
-  "maxlevel": 20,
+  "texture": "skillz:textures/gui/sprites/archery.png",
   "attributes": [
     {
       "type": "generic.follow_range",
@@ -8,6 +8,10 @@
       "value": 1
     },
     {
+      "primary": {
+        "type": "reach-entity-attributes:reach",
+        "mod": "reach-entity-attributes"
+      },
       "type": "attribute-backport:player.block_interaction_range",
       "operation": "ADDITION",
       "value": 0.1

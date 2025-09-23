@@ -3,9 +3,12 @@
   "restrictions": [
     {
       "replace": false,
-      "skills": {
-        "agility": 2
-      },
+      "skills": [
+        {
+          "skill": "skillz:agility",
+          "level": 2
+        }
+      ],
       "entities": [
         "minecraft:boat",
         "minecraft:chest_boat"
@@ -13,18 +16,24 @@
     },
     {
       "replace": false,
-      "skills": {
-        "agility": 5
-      },
+      "skills": [
+        {
+          "skill": "skillz:agility",
+          "level": 5
+        }
+      ],
       "items": [
         "minecraft:turtle_helmet"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "agility": 8
-      },
+      "skills": [
+        {
+          "skill": "skillz:agility",
+          "level": 8
+        }
+      ],
       "entities": [
         "minecraft:minecart",
         "minecraft:chest_minecart"
@@ -32,9 +41,12 @@
     },
     {
       "replace": false,
-      "skills": {
-        "agility": 10
-      },
+      "skills": [
+        {
+          "skill": "skillz:agility",
+          "level": 10
+        }
+      ],
       "blocks": [
         "minecraft:cartography_table"
       ],
@@ -44,9 +56,12 @@
     },
     {
       "replace": false,
-      "skills": {
-        "agility": 15
-      },
+      "skills": [
+        {
+          "skill": "skillz:agility",
+          "level": 15
+        }
+      ],
       "items": [
         "minecraft:elytra"
       ]

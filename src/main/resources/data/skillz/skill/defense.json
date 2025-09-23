@@ -1,7 +1,7 @@
 {
   "default": true,
-  "maxlevel": 20,
   "index": 2,
+  "texture": "skillz:textures/gui/sprites/defense.png",
   "attributes": [
     {
       "id": 2,

@@ -3,36 +3,48 @@
   "restrictions": [
     {
       "replace": false,
-      "skills": {
-        "constitution": 8
-      },
+      "skills": [
+        {
+          "skill": "skillz:constitution",
+          "level": 8
+        }
+      ],
       "items": [
         "minecraft:brush"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "constitution": 10
-      },
+      "skills": [
+        {
+          "skill": "skillz:constitution",
+          "level": 10
+        }
+      ],
       "items": [
         "minecraft:spyglass"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "constitution": 12
-      },
+      "skills": [
+        {
+          "skill": "skillz:constitution",
+          "level": 12
+        }
+      ],
       "items": [
         "minecraft:goat_horn"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "constitution": 16
-      },
+      "skills": [
+        {
+          "skill": "skillz:constitution",
+          "level": 16
+        }
+      ],
       "blocks": [
         "minecraft:jukebox"
       ]

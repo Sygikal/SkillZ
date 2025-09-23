@@ -3,9 +3,12 @@
   "restrictions": [
     {
       "replace": false,
-      "skills": {
-        "luck": 15
-      },
+      "skills": [
+        {
+          "skill": "skillz:luck",
+          "level": 15
+        }
+      ],
       "blocks": [
         "minecraft:beacon"
       ]

@@ -3,27 +3,36 @@
   "restrictions": [
     {
       "replace": false,
-      "skills": {
-        "cooking": 4
-      },
+      "skills": [
+        {
+          "skill": "skillz:cooking",
+          "level": 4
+        }
+      ],
       "items": [
         "minecraft:milk_bucket"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "cooking": 8
-      },
+      "skills": [
+        {
+          "skill": "skillz:cooking",
+          "level": 8
+        }
+      ],
       "blocks": [
         "minecraft:smoker"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "cooking": 10
-      },
+      "skills": [
+        {
+          "skill": "skillz:cooking",
+          "level": 10
+        }
+      ],
       "blocks": [
         "minecraft:cauldron"
       ]

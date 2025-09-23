@@ -3,18 +3,24 @@
   "restrictions": [
     {
       "replace": false,
-      "skills": {
-        "smithing": 1
-      },
+      "skills": [
+        {
+          "skill": "skillz:smithing",
+          "level": 1
+        }
+      ],
       "blocks": [
         "minecraft:furnace"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "smithing": 3
-      },
+      "skills": [
+        {
+          "skill": "skillz:smithing",
+          "level": 3
+        }
+      ],
       "blocks": [
         "minecraft:dispenser",
         "minecraft:dropper"
@@ -22,9 +28,12 @@
     },
     {
       "replace": false,
-      "skills": {
-        "smithing": 5
-      },
+      "skills": [
+        {
+          "skill": "skillz:smithing",
+          "level": 5
+        }
+      ],
       "blocks": [
         "minecraft:anvil",
         "minecraft:chipped_anvil",
@@ -33,18 +42,24 @@
     },
     {
       "replace": false,
-      "skills": {
-        "smithing": 7
-      },
+      "skills": [
+        {
+          "skill": "skillz:smithing",
+          "level": 7
+        }
+      ],
       "blocks": [
         "minecraft:hopper"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "smithing": 8
-      },
+      "skills": [
+        {
+          "skill": "skillz:smithing",
+          "level": 8
+        }
+      ],
       "blocks": [
         "minecraft:grindstone",
         "minecraft:stonecutter"
@@ -52,27 +67,36 @@
     },
     {
       "replace": false,
-      "skills": {
-        "smithing": 10
-      },
+      "skills": [
+        {
+          "skill": "skillz:smithing",
+          "level": 10
+        }
+      ],
       "blocks": [
         "minecraft:blast_furnace"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "smithing": 15
-      },
+      "skills": [
+        {
+          "skill": "skillz:smithing",
+          "level": 15
+        }
+      ],
       "blocks": [
         "minecraft:smithing_table"
       ]
     },
     {
       "replace": false,
-      "skills": {
-        "smithing": 20
-      },
+      "skills": [
+        {
+          "skill": "skillz:smithing",
+          "level": 20
+        }
+      ],
       "blocks": [],
       "crafting": [
         "minecraft:netherite_shovel",
