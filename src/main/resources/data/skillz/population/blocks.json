@@ -15,7 +15,7 @@
   },
   "skills": [
     {
-      "skill": "mining",
+      "skill": "skillz:mining",
       "variables": [
         {
           "type": "pattern_match",
@@ -47,7 +47,7 @@
           ]
         }
       ],
-      "formula": "min(0 + (ORE + NETHER + DEEPSLATE + DIAMOND) + ((HARDNESS / 8) + (HARDNESS / max(RESISTANCE, 1))), SKILL_MAX)"
+      "formula": "min(0 + (ORE + NETHER + DEEPSLATE + DIAMOND) + ((HARDNESS / 4) + (HARDNESS / max(RESISTANCE, 1))), SKILL_MAX)"
     }
   ]
 }

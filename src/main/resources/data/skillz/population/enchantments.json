@@ -5,7 +5,7 @@
   },
   "skills": [
     {
-      "skill": "magic",
+      "skill": "skillz:magic",
       "formula": "min(1 + MIN_POWER / 3, SKILL_MAX)"
     }
   ]

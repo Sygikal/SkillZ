@@ -6,7 +6,7 @@
   },
   "skills": [
     {
-      "skill": "mining",
+      "skill": "skillz:mining",
       "formula": "min(0 + (MINING_LEVEL * (1 + (ATTACK_DAMAGE / 2))), SKILL_MAX)"
     }
   ]
