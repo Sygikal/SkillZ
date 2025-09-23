@@ -87,7 +87,7 @@ public class SkillSyncPacket implements FabricPacket {
             buf.writeInt(skillAttributes().size());
             for (int i = 0; i < skillAttributes().size(); i++) {
                 SkillAttribute skillAttribute = skillAttributes().get(i);
-                buf.writeInt(skillAttribute.getId());
+                buf.writeInt(skillAttribute.getIndex());
                 buf.writeString(SkillZMain.getEntityAttributeIdAsString(skillAttribute.getAttribute()));
                 buf.writeFloat(skillAttribute.getBaseValue());
                 buf.writeBoolean(skillAttribute.useBaseValue());
@@ -102,14 +102,14 @@ public class SkillSyncPacket implements FabricPacket {
             List<SkillAttribute> skillAttributes = new ArrayList<>();
             int size = buf.readInt();
             for (int i = 0; i < size; i++) {
-                int id = buf.readInt();
+                int index = buf.readInt();
 
                 RegistryEntry<EntityAttribute> attribute = Registries.ATTRIBUTE.getEntry(Registries.ATTRIBUTE.get(Identifier.splitOn(buf.readString(), ':')));
                 float baseValue = buf.readFloat();
                 boolean useBaseValue = buf.readBoolean();
                 float levelValue = buf.readFloat();
                 EntityAttributeModifier.Operation operation = EntityAttributeModifier.Operation.valueOf(buf.readString().toUpperCase());
-                skillAttributes.add(new SkillAttribute(id, attribute, baseValue, useBaseValue, levelValue, operation));
+                skillAttributes.add(new SkillAttribute(index, attribute, baseValue, useBaseValue, levelValue, operation));
             }
             return new SkillAttributesRecord(skillAttributes);
         }

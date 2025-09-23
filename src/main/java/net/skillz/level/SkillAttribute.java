@@ -6,15 +6,15 @@ import net.minecraft.registry.entry.RegistryEntry;
 
 public class SkillAttribute {
 
-    private final int id;
+    private final int index;
     private final RegistryEntry<EntityAttribute> attribute;
     private final float baseValue;
     private final float levelValue;
     private final EntityAttributeModifier.Operation operation;
     private final boolean useBaseValue;
 
-    public SkillAttribute(int id, RegistryEntry<EntityAttribute> attribute, float baseValue, boolean useBaseValue, float levelValue, EntityAttributeModifier.Operation operation) {
-        this.id = id;
+    public SkillAttribute(int index, RegistryEntry<EntityAttribute> attribute, float baseValue, boolean useBaseValue, float levelValue, EntityAttributeModifier.Operation operation) {
+        this.index = index;
         this.attribute = attribute;
         this.baseValue = baseValue;
         this.levelValue = levelValue;
@@ -22,8 +22,8 @@ public class SkillAttribute {
         this.useBaseValue = useBaseValue;
     }
 
-    public int getId() {
-        return id;
+    public int getIndex() {
+        return index;
     }
 
     public RegistryEntry<EntityAttribute> getAttribute() {
