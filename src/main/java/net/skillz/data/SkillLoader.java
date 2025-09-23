@@ -1,5 +1,6 @@
 package net.skillz.data;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.sygii.ultralib.data.loader.SimpleDataLoader;
@@ -18,7 +19,6 @@ import net.skillz.level.LevelManager;
 import net.skillz.level.Skill;
 import net.skillz.level.SkillAttribute;
 import net.skillz.level.SkillBonus;
-import net.skillz.util.FileUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +28,6 @@ import java.util.Optional;
 public class SkillLoader extends SimpleDataLoader {
     public static final Identifier ID = SkillZMain.identifierOf("skill_loader");
 
-    List<Integer> attributeIds = new ArrayList<>();
-
     public SkillLoader() {
         super(ID, "skill");
     }
@@ -38,86 +36,63 @@ public class SkillLoader extends SimpleDataLoader {
     public void preReload() {
         LevelManager.SKILLS.clear();
         LevelManager.BONUSES.clear();
-        attributeIds = new ArrayList<>();
     }
 
     @Override
     public void reloadResource(JsonObject data, Identifier id, String fileName) {
-        if (OptionalObject.get(data, "default", false).getAsBoolean() && !ConfigInit.MAIN.PROGRESSION.defaultSkills) {
+        if ((OptionalObject.get(data, "default", false).getAsBoolean() && !ConfigInit.MAIN.PROGRESSION.SKILLS.defaultSkills) || ConfigInit.MAIN.PROGRESSION.SKILLS.disabledSkills.contains(id.toString())) {
             return;
         }
 
-        String skillId = FileUtil.getBaseName(id.getPath());
-
-        int maxLevel = data.get("maxlevel").getAsInt();
-        int index = 999;
-        if (data.has("index")) {
-            index = data.get("index").getAsInt();
-        }
+        int maxLevel = OptionalObject.get(data, "max_level", ConfigInit.MAIN.PROGRESSION.SKILLS.defaultMaxLevel).getAsInt();
+        int index = OptionalObject.get(data, "index", 999).getAsInt();
+        Identifier texture = Identifier.tryParse(data.get("texture").getAsString());
         List<SkillAttribute> attributes = new ArrayList<>();
 
-        for (JsonElement attributeElement : data.getAsJsonArray("attributes")) {
-            JsonObject attributeJsonObject = attributeElement.getAsJsonObject();
+        for (JsonElement attrElem : OptionalObject.get(data, "attributes", new JsonArray()).getAsJsonArray()) {
+            JsonObject attrObj = attrElem.getAsJsonObject();
 
             //TODO EntityAttribute registry keys
-            Identifier iden;
-            if (attributeJsonObject.get("type").getAsString().contains("attribute-backport:player.block_interaction_range") && FabricLoader.getInstance().isModLoaded("reach-entity-attributes")) {
-                iden = Identifier.splitOn("reach-entity-attributes:reach", ':');
-            }else {
-                iden = Identifier.splitOn(attributeJsonObject.get("type").getAsString(), ':');
+            String type = attrObj.get("type").getAsString();
+            Identifier iden = Identifier.tryParse(type);
+
+            if (attrObj.has("primary")) {
+                if (FabricLoader.getInstance().isModLoaded(attrObj.get("primary").getAsJsonObject().get("mod").getAsString())) {
+                    SkillZMain.LOGGER.info("Switch attribute {} to primary {}", type, attrObj.get("primary").getAsJsonObject().get("type").getAsString());
+                    iden = Identifier.tryParse(attrObj.get("primary").getAsJsonObject().get("type").getAsString());
+                }
             }
             RegistryKey<EntityAttribute> asd = RegistryKey.of(RegistryKeys.ATTRIBUTE, iden);
             Optional<RegistryEntry.Reference<EntityAttribute>> entityAttribute = Registries.ATTRIBUTE.getEntry(asd);
 
             if (entityAttribute.isPresent()) {
-                int attributeId = -1;
-                if (attributeJsonObject.has("id")) {
-                    attributeId = attributeJsonObject.get("id").getAsInt();
-                }
-                RegistryEntry<EntityAttribute> attibute = entityAttribute.get();
-                float baseValue = -10000.0f;
-                if (attributeJsonObject.has("base")) {
-                    baseValue = attributeJsonObject.get("base").getAsFloat();
-                }
-                boolean useBaseValue = false;
-                if (attributeJsonObject.has("set_base_value")) {
-                    useBaseValue = attributeJsonObject.get("set_base_value").getAsBoolean();
-                }
-                float levelValue = attributeJsonObject.get("value").getAsFloat();
-                EntityAttributeModifier.Operation operation = EntityAttributeModifier.Operation.valueOf(attributeJsonObject.get("operation").getAsString().toUpperCase());
-                attributes.add(new SkillAttribute(attributeId, attibute, baseValue, useBaseValue, levelValue, operation));
-                if (attributeId != -1) {
-                    attributeIds.add(attributeId);
-                }
+                int attributeIndex = OptionalObject.get(attrObj, "index", 999).getAsInt();
+
+                RegistryEntry<EntityAttribute> attribute = entityAttribute.get();
+                float baseValue = OptionalObject.get(attrObj, "base", -10000.0f).getAsFloat();
+                boolean useBaseValue = OptionalObject.get(attrObj, "set_base_value", false).getAsBoolean();
+
+                float levelValue = attrObj.get("value").getAsFloat();
+                EntityAttributeModifier.Operation operation = EntityAttributeModifier.Operation.valueOf(attrObj.get("operation").getAsString().toUpperCase());
+                attributes.add(new SkillAttribute(attributeIndex, attribute, baseValue, useBaseValue, levelValue, operation));
             } else {
-                SkillZMain.LOGGER.warn("Attribute {} is not a usable attribute in skill {}.", attributeJsonObject.get("type").getAsString(), data.get("id").getAsString());
+                SkillZMain.LOGGER.warn("Attribute {} is not a usable attribute in skill {}.", iden, id);
                 continue;
             }
         }
 
-        if (data.has("bonus")) {
-            for (JsonElement attributeElement : data.getAsJsonArray("bonus")) {
-                JsonObject bonusJsonObject = attributeElement.getAsJsonObject();
-                String bonusKey = bonusJsonObject.get("key").getAsString();
-                int bonusLevel = bonusJsonObject.get("level").getAsInt();
+        for (JsonElement attributeElement : OptionalObject.get(data, "bonus", new JsonArray()).getAsJsonArray()) {
+            JsonObject bonusObj = attributeElement.getAsJsonObject();
+            String bonusKey = bonusObj.get("key").getAsString();
+            int bonusLevel = bonusObj.get("level").getAsInt();
 
-                if (!SkillBonus.BONUS_KEYS.contains(bonusKey)) {
-                    SkillZMain.LOGGER.warn("Bonus type {} is not a valid bonus type.", bonusKey);
-                    continue;
-                }
-
-                LevelManager.BONUSES.put(bonusKey, new SkillBonus(bonusKey, skillId, bonusLevel));
+            if (!SkillBonus.BONUS_KEYS.contains(bonusKey)) {
+                SkillZMain.LOGGER.warn("Bonus type {} is not a valid bonus type.", bonusKey);
+                continue;
             }
-        }
-        LevelManager.SKILLS.put(skillId, new Skill(skillId, index, maxLevel, attributes));
-    }
 
-    @Override
-    public void postReload() {
-        for (int i = 0; i < attributeIds.size(); i++) {
-            if (!attributeIds.contains(i)) {
-                throw new MissingResourceException("Missing attribute with id " + i + "! Please add an attribute with this id.", this.getClass().getName(), SkillZMain.MOD_ID);
-            }
+            LevelManager.BONUSES.put(bonusKey, new SkillBonus(bonusKey, id, bonusLevel));
         }
+        LevelManager.SKILLS.put(id, new Skill(id, texture, index, maxLevel, attributes));
     }
 }
