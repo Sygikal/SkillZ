@@ -24,11 +24,6 @@ public class RestrictionLoader extends SimpleDataLoader {
 
     public final List<RestrictionLoaderEntry> entries = Lists.newArrayList();
 
-    private static final List<Integer> blockList = new ArrayList<>();
-    private static final List<Integer> craftingList = new ArrayList<>();
-    private static final List<Integer> entityList = new ArrayList<>();
-    private static final List<Integer> itemList = new ArrayList<>();
-    private static final List<Integer> miningList = new ArrayList<>();
     private static final List<Integer> enchantmentList = new ArrayList<>();
 
     public RestrictionLoader() {
@@ -38,8 +33,6 @@ public class RestrictionLoader extends SimpleDataLoader {
         entries.add(new RestrictionLoaderEntry("entities", Registries.ENTITY_TYPE, LevelManager.ENTITY_RESTRICTIONS, new ArrayList<>()));
         entries.add(new RestrictionLoaderEntry("items", Registries.ITEM, LevelManager.ITEM_RESTRICTIONS, new ArrayList<>()));
         entries.add(new RestrictionLoaderEntry("mining", Registries.BLOCK, LevelManager.MINING_RESTRICTIONS, new ArrayList<>()));
-
-
     }
 
     @Override
@@ -50,11 +43,6 @@ public class RestrictionLoader extends SimpleDataLoader {
     @Override
     public void preReload() {
         entries.forEach(entry -> entry.restrictionMap.clear());
-        /*LevelManager.BLOCK_RESTRICTIONS.clear();
-        LevelManager.CRAFTING_RESTRICTIONS.clear();
-        LevelManager.ENTITY_RESTRICTIONS.clear();
-        LevelManager.ITEM_RESTRICTIONS.clear();
-        LevelManager.MINING_RESTRICTIONS.clear();*/
         LevelManager.ENCHANTMENT_RESTRICTIONS.clear();
 
         EnchantmentRegistry.updateEnchantments();
@@ -74,139 +62,54 @@ public class RestrictionLoader extends SimpleDataLoader {
         }
 
         for (JsonElement element : data.get("restrictions").getAsJsonArray()) {
-            JsonObject restrictionJsonObject = element.getAsJsonObject();
-            Map<String, Integer> skillLevelRestrictions = new HashMap<>();
-            boolean replace = OptionalObject.get(restrictionJsonObject, "replace", false).getAsBoolean();
+            JsonObject restrictionObj = element.getAsJsonObject();
+            Map<Identifier, Integer> skillLevelRestrictions = new HashMap<>();
+            boolean override = OptionalObject.get(restrictionObj, "override", false).getAsBoolean();
 
-            JsonObject skillRestrictions = restrictionJsonObject.getAsJsonObject("skills");
-            for (String skillKey : skillRestrictions.keySet()) {
-                if (LevelManager.SKILLS.containsKey(skillKey)) {
-                    skillLevelRestrictions.put(skillKey, skillRestrictions.get(skillKey).getAsInt());
+            for (JsonElement elem : restrictionObj.getAsJsonArray("skills")) {
+                JsonObject skillObj = elem.getAsJsonObject();
+                Identifier skillId = Identifier.tryParse(skillObj.get("skill").getAsString());
+                int level = skillObj.get("level").getAsInt();
+                if (LevelManager.SKILLS.containsKey(skillId)) {
+                    skillLevelRestrictions.put(skillId, level);
                 } else {
-                    LOGGER.warn("Restriction {} contains an unrecognized skill called {}.", fileName, skillKey);
+                    LOGGER.warn("Restriction {} contains an unrecognized skill called {}.", fileName, skillId);
                 }
             }
 
             if (!skillLevelRestrictions.isEmpty()) {
                 for (RestrictionLoaderEntry entry : entries) {
-                    for (JsonElement elem : OptionalObject.get(restrictionJsonObject, entry.name(), new JsonArray()).getAsJsonArray()) {
+                    for (JsonElement elem : OptionalObject.get(restrictionObj, entry.name(), new JsonArray()).getAsJsonArray()) {
                         Identifier elemId = Identifier.tryParse(elem.getAsString());
                         if (entry.registry().containsId(elemId)) {
                             int rawId = entry.registry().getRawId(entry.registry().get(elemId));
 
-                            if (entry.idList().contains(rawId)) {
-                                continue;
+                            if (entry.restrictionMap.get(rawId) == null || override) {
+                                entry.restrictionMap.put(rawId, new PlayerRestriction(rawId, skillLevelRestrictions));
+                            }else {
+                                LOGGER.warn("Object {} is already restricted", elemId);
                             }
-                            if (replace) {
-                                entry.idList().add(rawId);
-                            }
-                            entry.restrictionMap.put(rawId, new PlayerRestriction(rawId, skillLevelRestrictions));
                         } else {
                             LOGGER.warn("Restriction {} contains an unrecognized id {}.", fileName, elemId);
                         }
                     }
                 }
-                // blocks
-                /*for (JsonElement elem : OptionalObject.get(restrictionJsonObject, "blocks", new JsonArray()).getAsJsonArray()) {
-                    Identifier elemId = Identifier.tryParse(elem.getAsString());
-                    if (Registries.BLOCK.containsId(elemId)) {
-                        int blockRawId = Registries.BLOCK.getRawId(Registries.BLOCK.get(elemId));
-
-                        if (blockList.contains(blockRawId)) {
-                            continue;
-                        }
-                        if (replace) {
-                            blockList.add(blockRawId);
-                        }
-                        LevelManager.BLOCK_RESTRICTIONS.put(blockRawId, new PlayerRestriction(blockRawId, skillLevelRestrictions));
-                    } else {
-                        LOGGER.warn("Restriction {} contains an unrecognized block id called {}.", fileName, elemId);
-                    }
-                }*/
-                // crafting
-                /*for (JsonElement elem : OptionalObject.get(restrictionJsonObject, "crafting", new JsonArray()).getAsJsonArray()) {
-                    Identifier elemId = Identifier.tryParse(elem.getAsString());
-                    if (Registries.ITEM.containsId(elemId)) {
-                        int craftingRawId = Registries.ITEM.getRawId(Registries.ITEM.get(elemId));
-
-                        if (craftingList.contains(craftingRawId)) {
-                            continue;
-                        }
-                        if (replace) {
-                            craftingList.add(craftingRawId);
-                        }
-                        LevelManager.CRAFTING_RESTRICTIONS.put(craftingRawId, new PlayerRestriction(craftingRawId, skillLevelRestrictions));
-                    } else {
-                        LOGGER.warn("Restriction {} contains an unrecognized crafting id called {}.", fileName, elemId);
-                    }
-                }*/
-                // entities
-                /*for (JsonElement elem : OptionalObject.get(restrictionJsonObject, "entities", new JsonArray()).getAsJsonArray()) {
-                    Identifier elemId = Identifier.tryParse(elem.getAsString());
-                    if (Registries.ENTITY_TYPE.containsId(elemId)) {
-                        int entityRawId = Registries.ENTITY_TYPE.getRawId(Registries.ENTITY_TYPE.get(elemId));
-
-                        if (entityList.contains(entityRawId)) {
-                            continue;
-                        }
-                        if (replace) {
-                            entityList.add(entityRawId);
-                        }
-                        LevelManager.ENTITY_RESTRICTIONS.put(entityRawId, new PlayerRestriction(entityRawId, skillLevelRestrictions));
-                    } else {
-                        LOGGER.warn("Restriction {} contains an unrecognized entity id called {}.", fileName, elemId);
-                    }
-                }*/
-                // items
-                /*for (JsonElement elem : OptionalObject.get(restrictionJsonObject, "items", new JsonArray()).getAsJsonArray()) {
-                    Identifier elemId = Identifier.tryParse(elem.getAsString());
-                    if (Registries.ITEM.containsId(elemId)) {
-                        int itemRawId = Registries.ITEM.getRawId(Registries.ITEM.get(elemId));
-
-                        if (itemList.contains(itemRawId)) {
-                            continue;
-                        }
-                        if (replace) {
-                            itemList.add(itemRawId);
-                        }
-                        LevelManager.ITEM_RESTRICTIONS.put(itemRawId, new PlayerRestriction(itemRawId, skillLevelRestrictions));
-                    } else {
-                        LOGGER.warn("Restriction {} contains an unrecognized item id called {}.", fileName, elemId);
-                    }
-                }*/
-                // mining
-                /*for (JsonElement elem : OptionalObject.get(restrictionJsonObject, "mining", new JsonArray()).getAsJsonArray()) {
-                    Identifier elemId = Identifier.tryParse(elem.getAsString());
-                    if (Registries.BLOCK.containsId(elemId)) {
-                        int miningRawId = Registries.BLOCK.getRawId(Registries.BLOCK.get(elemId));
-
-                        if (miningList.contains(miningRawId)) {
-                            continue;
-                        }
-                        if (replace) {
-                            miningList.add(miningRawId);
-                        }
-                        LevelManager.MINING_RESTRICTIONS.put(miningRawId, new PlayerRestriction(miningRawId, skillLevelRestrictions));
-                    } else {
-                        LOGGER.warn("Restriction {} contains an unrecognized mining id called {}.", fileName, elemId);
-                    }
-                }*/
                 // enchantments
-                JsonObject enchantmentObject = OptionalObject.get(restrictionJsonObject, "enchantments", new JsonObject()).getAsJsonObject();
-                for (String enchantment : enchantmentObject.keySet()) {
-                    Identifier enchantmentIdentifier = Identifier.splitOn(enchantment, ':');
-                    int level = enchantmentObject.get(enchantment).getAsInt();
-                    if (EnchantmentRegistry.containsId(enchantmentIdentifier, level)) {
-                        int enchantmentRawId = EnchantmentRegistry.getId(enchantmentIdentifier, level);
-                        if (enchantmentList.contains(enchantmentRawId)) {
-                            continue;
+                for (JsonElement elem : OptionalObject.get(restrictionObj, "enchantments", new JsonArray()).getAsJsonArray()) {
+                    JsonObject enchantObj = elem.getAsJsonObject();
+                    Identifier enchantId = Identifier.tryParse(enchantObj.get("name").getAsString());
+                    int enchantLevel = enchantObj.get("level").getAsInt();
+
+                    if (enchantId != null && EnchantmentRegistry.containsId(enchantId, enchantLevel)) {
+                        int enchantmentRawId = EnchantmentRegistry.getId(enchantId, enchantLevel);
+
+                        if (LevelManager.ENCHANTMENT_RESTRICTIONS.get(enchantmentRawId) == null || override) {
+                            LevelManager.ENCHANTMENT_RESTRICTIONS.put(enchantmentRawId, new PlayerRestriction(enchantmentRawId, skillLevelRestrictions));
+                        }else {
+                            LOGGER.warn("Enchantment {} is already restricted", enchantId);
                         }
-                        if (replace) {
-                            enchantmentList.add(enchantmentRawId);
-                        }
-                        LevelManager.ENCHANTMENT_RESTRICTIONS.put(enchantmentRawId, new PlayerRestriction(enchantmentRawId, skillLevelRestrictions));
                     } else {
-                        LOGGER.warn("Restriction {} contains an unrecognized enchantment id called {}.", fileName, enchantmentIdentifier);
+                        LOGGER.warn("Restriction {} contains an unrecognized enchantment id called {}.", fileName, enchantId);
                     }
                 }
             } else {
