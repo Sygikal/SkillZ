@@ -34,7 +34,7 @@ public class PopulateLoader extends SimpleDataLoader {
 
     @Override
     public void reloadResource(JsonObject data, Identifier id, String fileName) {
-        if (OptionalObject.get(data, "default", false).getAsBoolean() && !ConfigInit.MAIN.PROGRESSION.defaultPopulations) {
+        if ((OptionalObject.get(data, "default", false).getAsBoolean() && !ConfigInit.MAIN.PROGRESSION.POPULATION.defaultPopulations) || ConfigInit.MAIN.PROGRESSION.POPULATION.disabledPopulators.contains(id.toString())) {
             return;
         }
 
