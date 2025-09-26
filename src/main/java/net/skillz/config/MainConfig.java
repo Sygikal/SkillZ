@@ -26,18 +26,17 @@ public class MainConfig extends Config {
         @RequiresAction(action = Action.RESTART)
         public int startPoints = 5;
         public int pointsPerLevel = 3;
-        @Comment("If true will reset stats on death")
+        @Comment("Reset all levels on death")
         public boolean hardMode = false;
         public boolean disableMobFarms = true;
         @Comment("Amount of allowed mob kills in a chunk")
         public int mobKillCount = 6;
-        @Comment("Strange potion resets all stats instead of one")
+        @Comment("Strange potion resets all levels instead of one")
         public boolean opStrangePotion = false;
         @Comment("Restrict hand usage when item not unlocked")
         public boolean lockedHandUsage = true;
         @Comment("Restrict block breaking without required mining level")
         public boolean lockedBlockBreaking = true;
-        @Comment("Only for Devs")
         public boolean devMode = false;
     }
 
@@ -92,11 +91,9 @@ public class MainConfig extends Config {
 
     public ExperienceSection EXPERIENCE = new ExperienceSection();
     public static class ExperienceSection extends ConfigSection {
-        @Comment("XP equation: lvl^exponent * multiplicator + base")
-        public float xpCostMultiplicator = 0.1F;
-        public int xpExponent = 2;
-        public int xpBaseCost = 50;
-        @Comment("0 = no experience cap")
+        public String xpFormula = "(LVL * LVL) * 0.1 + 50";
+
+        @Comment("0 to disable")
         public int xpMaxCost = 0;
         public boolean resetCurrentXp = true;
         public boolean dropXPbasedOnLvl = false;
@@ -115,90 +112,44 @@ public class MainConfig extends Config {
 
     public BonusSection BONUSES = new BonusSection();
     public static class BonusSection extends ConfigSection {
-        @Comment("Bonus id: bowDamage")
-        public float bowDamageBonus = 0.5F;
+        public float bonusBowDamage = 0.1F;
+        public float bowDoubleDamageChance = 0.1F;
+        public float bonusCrossbowDamage = 0.1F;
+        public float crossbowDoubleDamageChance = 0.1F;
 
-        @Comment("Bonus id: bowDoubleDamageChance")
-        public float bowDoubleDamageChanceBonus = 0.1F;
+        public float keepDurabilityChance = 0.01F;
 
-        @Comment("Bonus id: crossbowDamage")
-        public float crossbowDamageBonus = 0.5F;
+        public float extraPotionEffectChance = 0.2F;
 
-        @Comment("Bonus id: crossbowDoubleDamageChance")
-        public float crossbowDoubleDamageChanceBonus = 0.1F;
+        public float breedTwinChance = 0.2F;
 
-        @Comment("Bonus id: itemDamageChance")
-        public float itemDamageChanceBonus = 0.01F;
+        public float bonusTNTStrength = 1F;
 
-        @Comment("Bonus id: potionEffectChance")
-        public float potionEffectChanceBonus = 0.2F;
+        public float priceDiscountPercent = 0.01F;
+        public float bonusTradeXPPercent = 0.02F;
 
-        @Comment("Bonus id: twinBreedChance")
-        public float twinBreedChanceBonus = 0.2F;
+        public float doubleOreDropChance = 0.01F;
+        public float doubleCropDropChance = 0.01F;
 
-        @Comment("Bonus id: fallDamageReduction")
-        public float fallDamageReductionBonus = 0.2F;
+        public int anvilXPCap = 30;
+        public float anvilXPDiscountPercent = 0.01F;
+        public float recoverAnvilXPChance = 0.01F;
 
-        @Comment("Bonus id: deathGraceChance")
-        public float deathGraceChanceBonus = 0.2F;
-
-        @Comment("Bonus id: tntStrength")
-        public float tntStrengthBonus = 1F;
-
-        @Comment("Bonus id: priceDiscount")
-        public float priceDiscountBonus = 0.01F;
-
-        @Comment("Bonus id: tradeXp")
-        public float tradeXpBonus = 0.02F;
-
-        @Comment("Bonus id: miningDropChance")
-        public float miningDropChanceBonus = 0.01F;
-
-        @Comment("Bonus id: plantDropChance")
-        public float plantDropChanceBonus = 0.01F;
-
-        @Comment("Bonus id: anvilXpCap")
-        public int anvilXpCap = 30;
-        @Comment("Bonus id: anvilXpDiscount")
-        public float anvilXpDiscountBonus = 0.01F;
-
-        @Comment("Bonus id: anvilXpChance")
-        public float anvilXpChanceBonus = 0.01F;
-
-        @Comment("Bonus id: healthRegen")
         public float healthRegenBonus = 0.025F;
-
-        @Comment("Bonus id: healthAbsorption")
         public float healthAbsorptionBonus = 4F;
+        public float exhaustionReductionPercent = 0.02F;
+        public float bonusFoodNutrition = 0.02F;
+        //public float damageReflectionBonus = 0.02F;
+        public float damageReflectionChance = 0.005F;
+        public float evadeDamageChance = 0.1F;
+        public float fallDamageReductionPercent = 0.2F;
+        public float deathGraceChance = 0.2F;
 
-        @Comment("Bonus id: exhaustionReduction")
-        public float exhaustionReductionBonus = 0.02F;
-
-        @Comment("Bonus id: knockbackAttackChance")
-        public float meleeKnockbackAttackChanceBonus = 0.01F;
-
-        @Comment("Bonus id: meleeCriticalAttackChance")
-        public float meleeCriticalAttackChanceBonus = 0.01F;
-
-        @Comment("Bonus id: nonMeleeSweepingAttackChance")
-        public float nonMeleeSweepingAttackChance = 0.01F;
-
-        @Comment("Bonus id: meleeCriticalAttackDamage")
-        public float meleeCriticalAttackDamageBonus = 0.3F;
-
-        @Comment("Bonus id: meleeDoubleAttackDamageChance")
-        public float meleeDoubleAttackDamageChanceBonus = 0.2F;
-
-        @Comment("Bonus id: foodIncreasion")
-        public float foodIncreasionBonus = 0.02F;
-
-        @Comment("Bonus id: damageReflection")
-        public float damageReflectionBonus = 0.02F;
-        @Comment("Bonus id: damageReflectionChance")
-        public float damageReflectionChanceBonus = 0.005F;
-
-        @Comment("Bonus id: evadingDamageChance")
-        public float evadingDamageChanceBonus = 0.1F;
+        public float knockbackAttackChance = 0.01F;
+        public float criticalAttackChance = 0.01F;
+        //public float nonMeleeSweepingAttackChance = 0.01F;
+        public float bonusCriticalAttackDamage = 0.3F;
+        public float doubleAttackDamageChance = 0.2F;
     }
 
 }

@@ -18,6 +18,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.skillz.util.TextUtil;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -26,14 +27,13 @@ import java.util.Map;
 public class LevelManager {
 
     public static final Map<Identifier, Skill> SKILLS = new LinkedHashMap<>();
-    public static final Map<String, EntityAttribute> SKILLATTRIBUTES = new HashMap<>();
+
     public static final Map<Integer, PlayerRestriction> BLOCK_RESTRICTIONS = new HashMap<>();
     public static final Map<Integer, PlayerRestriction> CRAFTING_RESTRICTIONS = new HashMap<>();
     public static final Map<Integer, PlayerRestriction> ENTITY_RESTRICTIONS = new HashMap<>();
     public static final Map<Integer, PlayerRestriction> ITEM_RESTRICTIONS = new HashMap<>();
     public static final Map<Integer, PlayerRestriction> MINING_RESTRICTIONS = new HashMap<>();
     public static final Map<Integer, PlayerRestriction> ENCHANTMENT_RESTRICTIONS = new HashMap<>();
-    public static final Map<String, SkillBonus> BONUSES = new HashMap<>();
 
     private final PlayerEntity playerEntity;
     private Map<Identifier, PlayerSkill> playerSkills = new HashMap<>();
@@ -165,16 +165,17 @@ public class LevelManager {
         return this.skillPoints > 0;
     }
 
-    // Recommend to use https://www.geogebra.org/graphing
     public int getNextLevelExperience() {
         if (isMaxLevel()) {
             return 0;
         }
-        int experienceCost = (int) (ConfigInit.MAIN.EXPERIENCE.xpBaseCost + ConfigInit.MAIN.EXPERIENCE.xpCostMultiplicator * Math.pow(this.overallLevel, ConfigInit.MAIN.EXPERIENCE.xpExponent));
+
+        int cost = Math.round((float) TextUtil.evaluateFormula(ConfigInit.MAIN.EXPERIENCE.xpFormula.replace("LVL", String.valueOf(this.overallLevel))));
+
         if (ConfigInit.MAIN.EXPERIENCE.xpMaxCost != 0) {
-            return experienceCost >= ConfigInit.MAIN.EXPERIENCE.xpMaxCost ? ConfigInit.MAIN.EXPERIENCE.xpMaxCost : experienceCost;
+            return cost >= ConfigInit.MAIN.EXPERIENCE.xpMaxCost ? ConfigInit.MAIN.EXPERIENCE.xpMaxCost : cost;
         } else {
-            return experienceCost;
+            return cost;
         }
     }
 
@@ -198,7 +199,6 @@ public class LevelManager {
             PlayerRestriction playerRestriction = BLOCK_RESTRICTIONS.get(itemId);
             return playerRestriction.getSkillLevelRestrictions();
         }
-        //return Map.of(0, 0);
         return null;
     }
 
