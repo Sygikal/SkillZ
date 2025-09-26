@@ -21,7 +21,7 @@
   "bonus": [
     {
       "level": 10,
-      "key": "miningDropChance"
+      "key": "bonusapi:double_ore_drop"
     }
   ]
 }

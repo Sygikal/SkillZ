@@ -37,15 +37,15 @@
   "bonus": [
     {
       "level": 1,
-      "key": "exhaustionReduction"
+      "key": "bonusapi:exhaustion_reduction"
     },
     {
       "level": 10,
-      "key": "evadingDamageChance"
+      "key": "bonusapi:evade_damage"
     },
     {
       "level": 1,
-      "key": "fallDamageReduction"
+      "key": "bonusapi:fall_damage_reduction"
     }
   ]
 }

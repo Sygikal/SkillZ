@@ -25,11 +25,11 @@
   "bonus": [
     {
       "level": 1,
-      "key": "meleeCriticalAttackDamage"
+      "key": "bonusapi:critical_attack_damage"
     },
     {
       "level": 15,
-      "key": "meleeDoubleAttackDamageChance"
+      "key": "bonusapi:double_attack_damage"
     }
   ]
 }

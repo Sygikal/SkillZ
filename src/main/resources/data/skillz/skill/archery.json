@@ -20,19 +20,19 @@
   "bonus": [
     {
       "level": 1,
-      "key": "bowDamage"
+      "key": "bonusapi:bow_damage"
     },
     {
       "level": 15,
-      "key": "bowDoubleDamageChance"
+      "key": "bonusapi:bow_double_damage"
     },
     {
       "level": 5,
-      "key": "crossbowDamage"
+      "key": "bonusapi:crossbow_damage"
     },
     {
       "level": 20,
-      "key": "crossbowDoubleDamageChance"
+      "key": "bonusapi:crossbow_double_damage"
     }
   ]
 }

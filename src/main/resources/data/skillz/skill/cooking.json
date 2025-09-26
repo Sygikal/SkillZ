@@ -5,7 +5,7 @@
   "bonus": [
     {
       "level": 1,
-      "key": "foodIncreasion"
+      "key": "bonusapi:increased_nutrition"
     }
   ]
 }

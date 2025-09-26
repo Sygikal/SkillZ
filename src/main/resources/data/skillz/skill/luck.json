@@ -14,19 +14,15 @@
   "bonus": [
     {
       "level": 20,
-      "key": "anvilXpChance"
+      "key": "bonusapi:anvil_xp_recovery"
     },
     {
       "level": 1,
-      "key": "meleeKnockbackAttackChance"
+      "key": "bonusapi:attack_knockback"
     },
     {
       "level": 1,
-      "key": "meleeCriticalAttackChance"
-    },
-    {
-      "level": 1,
-      "key": "damageReflectionChance"
+      "key": "bonusapi:critical_attack"
     }
   ]
 }

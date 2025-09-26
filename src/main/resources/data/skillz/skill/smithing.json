@@ -16,19 +16,19 @@
   "bonus": [
     {
       "level": 1,
-      "key": "itemDamageChance"
+      "key": "bonusapi:keep_durability"
     },
     {
       "level": 15,
-      "key": "tntStrength"
+      "key": "bonusapi:tnt_strength"
     },
     {
       "level": 20,
-      "key": "anvilXpCap"
+      "key": "bonusapi:anvil_xp_cap"
     },
     {
       "level": 10,
-      "key": "anvilXpDiscount"
+      "key": "bonusapi:anvil_xp_discount"
     }
   ]
 }

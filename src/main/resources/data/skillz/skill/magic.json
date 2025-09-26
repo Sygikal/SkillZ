@@ -5,15 +5,15 @@
   "bonus": [
     {
       "level": 20,
-      "key": "potionEffectChance"
+      "key": "bonusapi:extra_potion_effect"
     },
     {
       "level": 10,
-      "key": "healthAbsorption"
+      "key": "bonusapi:health_absorption"
     },
     {
       "level": 1,
-      "key": "damageReflection"
+      "key": "bonusapi:damage_reflection"
     }
   ]
 }

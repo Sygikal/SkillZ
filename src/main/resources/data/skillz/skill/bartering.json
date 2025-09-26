@@ -5,15 +5,15 @@
   "bonus": [
     {
       "level": 1,
-      "key": "priceDiscount"
+      "key": "bonusapi:trade_price_discount"
     },
     {
       "level": 8,
-      "key": "tradeXp"
+      "key": "bonusapi:trade_xp"
     },
     {
       "level": 20,
-      "key": "merchantImmune"
+      "key": "bonusapi:merchant_immunity"
     }
   ]
 }

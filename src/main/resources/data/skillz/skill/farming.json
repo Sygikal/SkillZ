@@ -5,11 +5,11 @@
   "bonus": [
     {
       "level": 20,
-      "key": "breedTwinChance"
+      "key": "bonusapi:breed_twin"
     },
     {
       "level": 10,
-      "key": "plantDropChance"
+      "key": "bonusapi:double_crop_drop"
     }
   ]
 }

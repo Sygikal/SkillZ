@@ -15,7 +15,7 @@
   "bonus": [
     {
       "level": 10,
-      "key": "healthRegen"
+      "key": "bonusapi:health_regen"
     }
   ]
 }
