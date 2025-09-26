@@ -2,8 +2,9 @@ package net.skillz.mixin.entity;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import net.skillz.bonus.BonusManager;
+import net.skillz.bonus.impl.TNTStrengthBonus;
 import net.skillz.init.ConfigInit;
-import net.skillz.util.BonusHelper;
 import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,21 +30,10 @@ public abstract class TntEntityMixin extends Entity {
         super(type, world);
     }
 
-    /*@Inject(method = "explode", at = @At(value = "HEAD"), cancellable = true)
-    private void explodeMixin(CallbackInfo info) {
-        if (causingEntity != null && causingEntity instanceof PlayerEntity player) {
-            if (((PlayerStatsManagerAccess) player).getPlayerStatsManager().getSkillLevel(Skill.MINING) >= ConfigInit.CONFIG.maxLevel) {
-                this.getWorld().createExplosion(this, this.getX(), this.getBodyY(0.0625D), this.getZ(), 4.0F * (1F + ConfigInit.CONFIG.miningTntBonus), ExplosionSourceType.TNT);
-                info.cancel();
-            }
-        }
-    }*/
-
-    //TODO tntStrengthBonus
     @WrapOperation(method = "explode", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;createExplosion(Lnet/minecraft/entity/Entity;DDDFLnet/minecraft/world/World$ExplosionSourceType;)Lnet/minecraft/world/explosion/Explosion;"))
     private Explosion explosionMixin(World instance, Entity entity, double x, double y, double z, float power, ExplosionSourceType explosionSourceType, Operation<Explosion> original) {
         if (causingEntity != null && causingEntity instanceof PlayerEntity playerEntity) {
-            power += BonusHelper.doLinearFloatBonus("tntStrength", playerEntity, 0.0F, ConfigInit.MAIN.BONUSES.tntStrengthBonus);
+            power += BonusManager.doLinearFloatBonus(TNTStrengthBonus.ID, playerEntity, 0.0F, ConfigInit.MAIN.BONUSES.bonusTNTStrength);
         }
         return original.call(instance, entity, x, y, z, power, explosionSourceType);
     }

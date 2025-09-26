@@ -1,7 +1,8 @@
 package net.skillz.mixin.entity;
 
 import net.skillz.access.LevelManagerAccess;
-import net.skillz.util.BonusHelper;
+import net.skillz.bonus.BonusManager;
+import net.skillz.bonus.impl.BreedTwinBonus;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -27,39 +28,16 @@ public abstract class AnimalEntityMixin extends PassiveEntity {
         super(entityType, world);
     }
 
-    /*@Inject(method = "interactMob", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/passive/AnimalEntity;eat(Lnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/util/Hand;Lnet/minecraft/item/ItemStack;)V"), cancellable = true)
-    private void interactMobMixin(PlayerEntity player, Hand hand, CallbackInfoReturnable<ActionResult> info) {
-        ArrayList<Object> levelList = LevelLists.breedingList;
-        if (!PlayerStatsManager.playerLevelisHighEnough(player, levelList, null, true)) {
-            player.sendMessage(Text.translatable("item.levelz." + levelList.get(0) + ".tooltip", levelList.get(1)).formatted(Formatting.RED), true);
-            info.setReturnValue(ActionResult.FAIL);
-        }
-    }*/
-
     @Inject(method = "Lnet/minecraft/entity/passive/AnimalEntity;breed(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/passive/AnimalEntity;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/world/ServerWorld;spawnEntityAndPassengers(Lnet/minecraft/entity/Entity;)V"), locals = LocalCapture.CAPTURE_FAILSOFT)
     private void breedMixin(ServerWorld world, AnimalEntity other, CallbackInfo info, PassiveEntity passiveEntity) {
-        /*if (getLovingPlayer() != null || other.getLovingPlayer() != null) {
+        if (getLovingPlayer() != null || other.getLovingPlayer() != null) {
             PlayerEntity playerEntity = getLovingPlayer() != null ? getLovingPlayer() : other.getLovingPlayer();
-            if (((PlayerStatsManagerAccess) playerEntity).getPlayerStatsManager().getSkillLevel(Skill.FARMING) >= ConfigInit.CONFIG.maxLevel
-                    && world.random.nextFloat() < ConfigInit.CONFIG.farmingTwinChance) {
-                PassiveEntity extraPassiveEntity = this.createChild(world, other);
+            if (BonusManager.doLinearBooleanBonus(BreedTwinBonus.ID, playerEntity, ConfigInit.MAIN.BONUSES.breedTwinChance)) {
+                PassiveEntity extraPassiveEntity = passiveEntity.createChild(world, other);
                 extraPassiveEntity.setBaby(true);
-                extraPassiveEntity.refreshPositionAndAngles(this.getX(), this.getY(), this.getZ(), 0.0F, 0.0F);
+                extraPassiveEntity.refreshPositionAndAngles(passiveEntity.getX(), passiveEntity.getY(), passiveEntity.getZ(), playerEntity.getRandom().nextFloat() * 360F, 0.0F);
                 world.spawnEntityAndPassengers(extraPassiveEntity);
             }
-        }*/
-        //TODO breedTwinChanceBonus
-        if (getLovingPlayer() != null || other.getLovingPlayer() != null) {
-            //BonusHelper.breedTwinChanceBonus(world, getLovingPlayer() != null ? getLovingPlayer() : other.getLovingPlayer(), passiveEntity, other);
-            PlayerEntity playerEntity = getLovingPlayer() != null ? getLovingPlayer() : other.getLovingPlayer();
-            BonusHelper.doRunnableBonus("breedTwinChance", playerEntity, (level) -> {
-                if (playerEntity.getRandom().nextFloat() <= ConfigInit.MAIN.BONUSES.twinBreedChanceBonus) {
-                    PassiveEntity extraPassiveEntity = passiveEntity.createChild(world, other);
-                    extraPassiveEntity.setBaby(true);
-                    extraPassiveEntity.refreshPositionAndAngles(passiveEntity.getX(), passiveEntity.getY(), passiveEntity.getZ(), playerEntity.getRandom().nextFloat() * 360F, 0.0F);
-                    world.spawnEntityAndPassengers(extraPassiveEntity);
-                }
-            });
         }
     }
 

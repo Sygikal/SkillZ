@@ -1,14 +1,17 @@
 package net.skillz.mixin.entity;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.skillz.SkillZMain;
 import net.skillz.access.LevelManagerAccess;
-import net.skillz.level.LevelManager;
-import net.skillz.util.BonusHelper;
-import net.minecraft.enchantment.EnchantmentHelper;
+import net.skillz.bonus.BonusManager;
+import net.skillz.bonus.impl.player.DeathGraceBonus;
+import net.skillz.bonus.impl.player.FallDamageReductionBonus;
 import net.minecraft.entity.damage.DamageTypes;
-import net.minecraft.item.Items;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
@@ -50,65 +53,31 @@ public abstract class LivingEntityMixin extends Entity {
         super(type, world);
     }
 
-    @ModifyVariable(method = "modifyAppliedDamage", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getProtectionAmount(Ljava/lang/Iterable;Lnet/minecraft/entity/damage/DamageSource;)I"), ordinal = 0)
-    private int modifyAppliedDamageMixin(int original, DamageSource source, float amount) {
-        return 1;
-    }
-
-    @ModifyArg(method = "modifyAppliedDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/DamageUtil;getInflictedDamage(FF)F"), index = 1)
-    private float modifyAppliedDamageMixin2(float damageDealt, @Local DamageSource source) {
-        /*if (source == this.getDamageSources().fall() && (Object) this instanceof PlayerEntity player) {
-            return (int) (original + ((PlayerStatsManagerAccess) player).getPlayerStatsManager().getSkillLevel(Skill.AGILITY) * ConfigInit.CONFIG.movementFallBonus);
-        } else {
-            return original;
-        }*/
-        //TODO fallDamageReductionBonus
+    @ModifyReturnValue(method = "modifyAppliedDamage", at = @At("RETURN"))
+    private float fallDamageReduction(float original, @Local(argsOnly = true) DamageSource source) {
         if (source.isOf(DamageTypes.FALL) && entity instanceof PlayerEntity playerEntity) {
-            return EnchantmentHelper.getProtectionAmount(this.getArmorItems(), source) + /*BonusHelper.fallDamageReductionBonus(playerEntity)*/
-                    BonusHelper.doScalingFloatBonus("fallDamageReduction", playerEntity, 0.0F, ConfigInit.MAIN.BONUSES.fallDamageReductionBonus);
-        } else {
-            return EnchantmentHelper.getProtectionAmount(this.getArmorItems(), source);
+            return Math.max(original - BonusManager.doScalingFloatBonus(FallDamageReductionBonus.ID, playerEntity, 0.0F, ConfigInit.MAIN.BONUSES.fallDamageReductionPercent), 0);
         }
+        return original;
     }
 
     @ModifyVariable(method = "tryUseTotem", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/entity/LivingEntity;getStackInHand(Lnet/minecraft/util/Hand;)Lnet/minecraft/item/ItemStack;", ordinal = 0))
     private ItemStack tryUseTotemMixin(ItemStack original) {
-        /*if ((Object) this instanceof PlayerEntity player) {
-            ArrayList<Object> levelList = LevelLists.totemList;
-            if (!PlayerStatsManager.playerLevelisHighEnough(player, levelList, null, true)) {
-                return ItemStack.EMPTY;
-            }
-        }
-        return original;*/
-        //TODO totem 1
-        if (entity instanceof PlayerEntity playerEntity && !playerEntity.isCreative() && original.isOf(Items.TOTEM_OF_UNDYING)) {
-            LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
-            if (!levelManager.hasRequiredItemLevel(original.getItem())) {
-                return ItemStack.EMPTY;
-            }
+        if (entity instanceof PlayerEntity playerEntity && SkillZMain.shouldRestrictItem(playerEntity, original.getItem())) {
+            return ItemStack.EMPTY;
         }
         return original;
     }
 
     @Inject(method = "tryUseTotem", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/util/Hand;values()[Lnet/minecraft/util/Hand;"), cancellable = true)
     private void tryUseTotemMixin(DamageSource source, CallbackInfoReturnable<Boolean> info) {
-        /*if ((Object) this instanceof PlayerEntity player) {
-            if (((PlayerStatsManagerAccess) player).getPlayerStatsManager().getSkillLevel(Skill.LUCK) >= ConfigInit.CONFIG.maxLevel
-                    && player.getWorld().getRandom().nextFloat() < ConfigInit.CONFIG.luckSurviveChance) {
-                player.setHealth(1.0F);
-                player.clearStatusEffects();
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 100, 1));
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 600, 0));
-                info.setReturnValue(true);
-            }
-        }*/
-        //TODO totem 2
-        if (entity instanceof PlayerEntity playerEntity && /*BonusHelper.deathGraceChanceBonus(playerEntity)*/
-                BonusHelper.doLinearBooleanBonus("deathGraceChance", playerEntity, ConfigInit.MAIN.BONUSES.deathGraceChanceBonus)) {
+        if (entity instanceof PlayerEntity playerEntity && BonusManager.doLinearBooleanBonus(DeathGraceBonus.ID, playerEntity, ConfigInit.MAIN.BONUSES.deathGraceChance)) {
+            playerEntity.getWorld().playSound(null, playerEntity.getBlockPos(), SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, SoundCategory.PLAYERS, 0.8F, 1F);
+
             playerEntity.setHealth(1.0F);
             playerEntity.clearStatusEffects();
             playerEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 100, 1));
-            playerEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 600, 0));
+            playerEntity.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 600, 0));
             info.setReturnValue(true);
         }
     }

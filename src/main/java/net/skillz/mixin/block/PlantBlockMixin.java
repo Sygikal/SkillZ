@@ -1,6 +1,13 @@
 package net.skillz.mixin.block;
 
-import net.skillz.util.BonusHelper;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
+import net.skillz.bonus.BonusManager;
+import net.skillz.bonus.impl.DoubleCropDropBonus;
+import net.skillz.init.ConfigInit;
+import net.skillz.init.TagInit;
 import org.spongepowered.asm.mixin.Mixin;
 
 import net.minecraft.block.Block;
@@ -10,6 +17,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 @Mixin(PlantBlock.class)
 public abstract class PlantBlockMixin extends Block {
 
@@ -17,29 +26,21 @@ public abstract class PlantBlockMixin extends Block {
         super(settings);
     }
 
-    /*@Override
-    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        super.onBreak(world, pos, state, player);
-        if (!world.isClient && player != null && !player.isCreative()) {
-            int farmingLevel = ((PlayerStatsManagerAccess) player).getPlayerStatsManager().getSkillLevel(Skill.FARMING);
-            if (farmingLevel >= ConfigInit.CONFIG.farmingBase && (float) farmingLevel * ConfigInit.CONFIG.farmingChanceBonus > world.random.nextFloat()) {
-                List<ItemStack> list = Block.getDroppedStacks(state, (ServerWorld) world, pos, null);
-                for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).isIn(TagInit.FARM_ITEMS)) {
-                        Block.dropStack(world, pos, list.get(i));
-                        break;
-                    }
-                }
-            }
-        }
-
-    }*/
-
     //TODO onBreak
     @Override
     public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (!world.isClient() && player != null && !player.isCreative()) {
-            BonusHelper.plantDropChanceBonus(player, state, pos);
+            if (EnchantmentHelper.getEquipmentLevel(Enchantments.SILK_TOUCH, player) <= 0) {
+                if (BonusManager.doBooleanBonus(DoubleCropDropBonus.ID, player, ConfigInit.MAIN.BONUSES.doubleCropDropChance)) {
+                    List<ItemStack> list = Block.getDroppedStacks(state, (ServerWorld) player.getWorld(), pos, null);
+                    for (ItemStack itemStack : list) {
+                        if (itemStack.isIn(TagInit.FARM_ITEMS)) {
+                            Block.dropStack(player.getWorld(), pos, itemStack);
+                            break;
+                        }
+                    }
+                }
+            }
         }
         super.onBreak(world, pos, state, player);
     }

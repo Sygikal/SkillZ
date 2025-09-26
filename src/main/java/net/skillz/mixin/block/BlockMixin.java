@@ -6,8 +6,9 @@ import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.skillz.access.LevelManagerAccess;
+import net.skillz.bonus.BonusManager;
+import net.skillz.bonus.impl.DoubleOreDropBonus;
 import net.skillz.level.LevelManager;
-import net.skillz.util.BonusHelper;
 import net.minecraft.world.explosion.Explosion;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -40,44 +41,6 @@ public abstract class BlockMixin {
     @Nullable
     private ServerPlayerEntity serverPlayerEntity = null;
 
-    /*@Inject(method = "Lnet/minecraft/block/Block;dropStacks(Lnet/minecraft/block/BlockState;Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/entity/BlockEntity;Lnet/minecraft/entity/Entity;Lnet/minecraft/item/ItemStack;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getDroppedStacks(Lnet/minecraft/block/BlockState;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/entity/BlockEntity;Lnet/minecraft/entity/Entity;Lnet/minecraft/item/ItemStack;)Ljava/util/List;"), cancellable = true)
-    private static void dropStacksMixin(BlockState state, World world, BlockPos pos, @Nullable BlockEntity blockEntity, Entity entity, ItemStack stack, CallbackInfo info) {
-        if (entity instanceof PlayerEntity) {
-            if (EntityInit.isRedstoneBitsLoaded && entity.getClass().getName().contains("RedstoneBitsFakePlayer")) {
-                // Redstone bits block breaker compat
-            } else {
-                if (PlayerStatsManager.listContainsItemOrBlock((PlayerEntity) entity, Registries.BLOCK.getRawId(state.getBlock()), 1)) {
-                    info.cancel();
-                } else if (stack.getItem() instanceof MiningToolItem) {
-                    Item item = stack.getItem();
-                    ArrayList<Object> levelList = LevelLists.customItemList;
-                    try {
-                        if (!levelList.isEmpty() && levelList.contains(Registries.ITEM.getId(item).toString())) {
-                            if (!PlayerStatsManager.playerLevelisHighEnough((PlayerEntity) entity, levelList, Registries.ITEM.getId(item).toString(), true)) {
-                                info.cancel();
-                            }
-                        }
-                    } catch (AbstractMethodError ignore) {
-                    }
-                    levelList = null;
-                    if (item instanceof AxeItem) {
-                        levelList = LevelLists.axeList;
-                    } else if (item instanceof HoeItem) {
-                        levelList = LevelLists.hoeList;
-                    } else if (item instanceof PickaxeItem || item instanceof ShovelItem) {
-                        levelList = LevelLists.toolList;
-                    }
-                    if (levelList != null
-                            && !PlayerStatsManager.playerLevelisHighEnough((PlayerEntity) entity, levelList, ((MiningToolItem) stack.getItem()).getMaterial().toString().toLowerCase(), true)) {
-                        info.cancel();
-                    }
-                } else if (stack.getItem() instanceof ShearsItem && !PlayerStatsManager.playerLevelisHighEnough((PlayerEntity) entity, LevelLists.shearsList, null, true)) {
-                    info.cancel();
-                }
-            }
-        }
-    }*/
-
     //TODO explosions
     @Shadow
     protected abstract Block asBlock();
@@ -108,22 +71,11 @@ public abstract class BlockMixin {
         }
     }
 
-    /*@Inject(method = "Lnet/minecraft/block/Block;getDroppedStacks(Lnet/minecraft/block/BlockState;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/entity/BlockEntity;Lnet/minecraft/entity/Entity;Lnet/minecraft/item/ItemStack;)Ljava/util/List;", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;getDroppedStacks(Lnet/minecraft/loot/context/LootContextParameterSet$Builder;)Ljava/util/List;"), locals = LocalCapture.CAPTURE_FAILSOFT)
-    private static void getDroppedStacksMixin(BlockState state, ServerWorld world, BlockPos pos, @Nullable BlockEntity blockEntity, @Nullable Entity entity, ItemStack stack,
-            CallbackInfoReturnable<List<ItemStack>> info, LootContextParameterSet.Builder builder) {
-        if (entity != null && state.getBlock() instanceof ExperienceDroppingBlock && entity instanceof PlayerEntity playerEntity) {
-            if ((float) ((PlayerStatsManagerAccess) playerEntity).getPlayerStatsManager().getSkillLevel(Skill.MINING) * ConfigInit.CONFIG.miningOreChance > world.random.nextFloat()
-                    && EnchantmentHelper.getLevel(Enchantments.SILK_TOUCH, stack) == 0 && state.getDroppedStacks(builder).size() > 0) {
-                Block.dropStack(world, pos, state.getDroppedStacks(builder).get(0).split(1));
-            }
-        }
-    }*/
-
     @Inject(method = "getDroppedStacks(Lnet/minecraft/block/BlockState;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/entity/BlockEntity;Lnet/minecraft/entity/Entity;Lnet/minecraft/item/ItemStack;)Ljava/util/List;", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;getDroppedStacks(Lnet/minecraft/loot/context/LootContextParameterSet$Builder;)Ljava/util/List;"), locals = LocalCapture.CAPTURE_FAILSOFT)
     private static void getDroppedStacksMixin(BlockState state, ServerWorld world, BlockPos pos, @Nullable BlockEntity blockEntity, @Nullable Entity entity, ItemStack stack, CallbackInfoReturnable<List<ItemStack>> info, LootContextParameterSet.Builder builder) {
         if (entity instanceof PlayerEntity playerEntity) {
             if (state.isIn(ConventionalBlockTags.ORES) && EnchantmentHelper.getEquipmentLevel(Enchantments.SILK_TOUCH, playerEntity) <= 0) {
-                if (BonusHelper.doBooleanBonus("miningDropChance", playerEntity, ConfigInit.MAIN.BONUSES.miningDropChanceBonus)) {
+                if (BonusManager.doBooleanBonus(DoubleOreDropBonus.ID, playerEntity, ConfigInit.MAIN.BONUSES.doubleOreDropChance)) {
                     List<ItemStack> list = state.getDroppedStacks(builder);
                     if (!list.isEmpty()) {
                         Block.dropStack(playerEntity.getWorld(), pos, state.getDroppedStacks(builder).get(0).split(1));
@@ -132,16 +84,6 @@ public abstract class BlockMixin {
             }
         }
     }
-
-    /*@Inject(method = "dropExperience", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ExperienceOrbEntity;spawn(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;I)V"))
-    protected void dropExperienceMixin(ServerWorld world, BlockPos pos, int size, CallbackInfo info) {
-        if (ConfigInit.CONFIG.oreXPMultiplier > 0.0F)
-            LevelExperienceOrbEntity.spawn(world, Vec3d.ofCenter(pos),
-                    (int) (size * ConfigInit.CONFIG.oreXPMultiplier
-                            * (ConfigInit.CONFIG.dropXPbasedOnLvl && serverPlayerEntity != null
-                                    ? 1.0F + ConfigInit.CONFIG.basedOnMultiplier * ((PlayerStatsManagerAccess) serverPlayerEntity).getPlayerStatsManager().getOverallLevel()
-                                    : 1.0F)));
-    }*/
 
     //TODO: level manager
     @Inject(method = "dropExperience", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ExperienceOrbEntity;spawn(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;I)V"))
