@@ -26,9 +26,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-// Improvements inspiried by Clumps made by jaredlll08 which is licensed under MIT and can be found here:
-// https://github.com/jaredlll08/Clumps/blob/1.19/Common/src/main/java/com/blamejared/clumps/mixin/MixinExperienceOrb.java
-
 public class LevelExperienceOrbEntity extends Entity {
 
     private int orbAge;
