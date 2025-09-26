@@ -49,6 +49,9 @@ public class CommandInit {
             .then(CommandManager.literal("points").then(CommandManager.argument("targets", EntityArgumentType.players()).then(CommandManager.argument("operation", OperationArgument.operation()).then(CommandManager.argument("amount", IntegerArgumentType.integer()).executes(context -> {
                 return executePoints(OperationArgument.getOperation(context, "operation"), (lm, s, l) -> {return lm.getSkillPoints();}, context.getSource(), EntityArgumentType.getPlayers(context, "targets"), IntegerArgumentType.getInteger(context, "amount"));
             })))))
+            .then(CommandManager.literal("experience").then(CommandManager.argument("targets", EntityArgumentType.players()).then(CommandManager.argument("operation", OperationArgument.operation()).then(CommandManager.argument("amount", IntegerArgumentType.integer()).executes(context -> {
+                return executeExperience(OperationArgument.getOperation(context, "operation"),  context.getSource(), EntityArgumentType.getPlayers(context, "targets"), IntegerArgumentType.getInteger(context, "amount"));
+            })))))
             );
         });
     }
@@ -124,6 +127,36 @@ public class CommandInit {
             LevelManager levelManager = ((LevelManagerAccess) serverPlayerEntity).getLevelManager();
 
             levelManager.setSkillPoints(operation.run(runner.run(levelManager, null, amount), amount));
+
+            PacketHelper.updateLevels(serverPlayerEntity);
+            PacketHelper.updatePlayerSkills(serverPlayerEntity, null);
+
+            source.sendFeedback(() -> Text.translatable("commands.level.changed", serverPlayerEntity.getDisplayName()), true);
+        }
+        return targets.size();
+    }
+
+    private static int executeExperience(Operation operation, ServerCommandSource source, Collection<ServerPlayerEntity> targets, int amount) {
+        for (ServerPlayerEntity serverPlayerEntity : targets) {
+            LevelManager levelManager = ((LevelManagerAccess) serverPlayerEntity).getLevelManager();
+
+            float oldProgress = levelManager.getLevelProgress();
+            switch (operation) {
+                case ADD:
+                    ((ServerPlayerSyncAccess) serverPlayerEntity).addLevelExperience(amount);
+                    break;
+                case REMOVE:
+                    int currentXP = (int) (levelManager.getLevelProgress() * levelManager.getNextLevelExperience());
+                    levelManager.setLevelProgress(currentXP - amount > 0 ? (float) (currentXP - 1) / (float) levelManager.getNextLevelExperience() : 0.0F);
+                    levelManager.setTotalLevelExperience(currentXP - amount > 0 ? levelManager.getTotalLevelExperience() - amount
+                            : levelManager.getTotalLevelExperience() - (int) (oldProgress * levelManager.getNextLevelExperience()));
+                    break;
+                case SET:
+                    levelManager.setLevelProgress(amount >= levelManager.getNextLevelExperience() ? 1.0F : (float) amount / levelManager.getNextLevelExperience());
+                    levelManager.setTotalLevelExperience((int) (levelManager.getTotalLevelExperience() - oldProgress * levelManager.getNextLevelExperience()
+                            + levelManager.getLevelProgress() * levelManager.getNextLevelExperience()));
+                    break;
+            }
 
             PacketHelper.updateLevels(serverPlayerEntity);
             PacketHelper.updatePlayerSkills(serverPlayerEntity, null);
