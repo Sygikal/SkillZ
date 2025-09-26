@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.MutableText;
@@ -75,21 +76,13 @@ public class EventInit {
             }
         });
 
-        //Called when item right-clicked
-
         UseItemCallback.EVENT.register((player, world, hand) -> {
-            if (!player.isCreative() && !player.isSpectator()) {
-                LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
-                if (!levelManager.hasRequiredItemLevel(player.getStackInHand(hand).getItem())) {
-                    //System.out.println(levelManager.getRequiredItemLevel(player.getStackInHand(hand).getItem()));
-                    player.sendMessage(sendRestriction(levelManager.getRequiredItemLevel(player.getStackInHand(hand).getItem()), levelManager), true);
-                    return TypedActionResult.fail(player.getStackInHand(hand));
-                }
+            if (SkillZMain.shouldRestrictItem(player, player.getStackInHand(hand).getItem())) {
+                return TypedActionResult.fail(player.getStackInHand(hand));
             }
             return TypedActionResult.pass(ItemStack.EMPTY);
         });
 
-        //Called when block right-clicked
         UseBlockCallback.EVENT.register((player, world, hand, result) -> {
             if (!player.isCreative() && !player.isSpectator()) {
                 BlockPos blockPos = result.getBlockPos();
@@ -104,9 +97,11 @@ public class EventInit {
             return ActionResult.PASS;
         });
 
-        //Called when entity right-clicked
         UseEntityCallback.EVENT.register((player, world, hand, entity, entityHitResult) -> {
             if (SkillZMain.shouldRestrictEntity(player, entity)) {
+                if (entity instanceof VillagerEntity villager) {
+                    villager.sayNo();
+                }
                 return ActionResult.success(false);
             }
             return ActionResult.PASS;

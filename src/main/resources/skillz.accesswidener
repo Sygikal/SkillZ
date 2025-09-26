@@ -8,3 +8,4 @@ accessible class net/minecraft/network/NetworkState$PacketHandler
 accessible method net/minecraft/network/NetworkState$PacketHandler register (Ljava/lang/Class;Ljava/util/function/Function;)Lnet/minecraft/network/NetworkState$PacketHandler;
 
 accessible field net/minecraft/block/AbstractBlock settings Lnet/minecraft/block/AbstractBlock$Settings;
+accessible method net/minecraft/entity/passive/VillagerEntity sayNo ()V
