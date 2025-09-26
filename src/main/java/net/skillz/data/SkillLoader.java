@@ -14,6 +14,10 @@ import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.skillz.SkillZMain;
+import net.skillz.access.LevelManagerAccess;
+import net.skillz.bonus.BonusCondition;
+import net.skillz.bonus.BonusManager;
+import net.skillz.bonus.BonusProvider;
 import net.skillz.init.ConfigInit;
 import net.skillz.level.LevelManager;
 import net.skillz.level.Skill;
@@ -35,7 +39,7 @@ public class SkillLoader extends SimpleDataLoader {
     @Override
     public void preReload() {
         LevelManager.SKILLS.clear();
-        LevelManager.BONUSES.clear();
+        BonusManager.clear();
     }
 
     @Override
@@ -48,6 +52,7 @@ public class SkillLoader extends SimpleDataLoader {
         int index = OptionalObject.get(data, "index", 999).getAsInt();
         Identifier texture = Identifier.tryParse(data.get("texture").getAsString());
         List<SkillAttribute> attributes = new ArrayList<>();
+
 
         for (JsonElement attrElem : OptionalObject.get(data, "attributes", new JsonArray()).getAsJsonArray()) {
             JsonObject attrObj = attrElem.getAsJsonObject();
@@ -83,15 +88,24 @@ public class SkillLoader extends SimpleDataLoader {
 
         for (JsonElement attributeElement : OptionalObject.get(data, "bonus", new JsonArray()).getAsJsonArray()) {
             JsonObject bonusObj = attributeElement.getAsJsonObject();
-            String bonusKey = bonusObj.get("key").getAsString();
+            Identifier bonusKey = Identifier.tryParse(bonusObj.get("key").getAsString());
             int bonusLevel = bonusObj.get("level").getAsInt();
 
-            if (!SkillBonus.BONUS_KEYS.contains(bonusKey)) {
-                SkillZMain.LOGGER.warn("Bonus type {} is not a valid bonus type.", bonusKey);
+            if (!BonusManager.VALID_BONUSES.contains(bonusKey)) {
+                SkillZMain.LOGGER.warn("Bonus type {} is not a valid bonus type.", bonusObj.get("key").getAsString());
                 continue;
             }
 
-            LevelManager.BONUSES.put(bonusKey, new SkillBonus(bonusKey, id, bonusLevel));
+            BonusManager.SKILL_BONUSES.put(bonusKey, new SkillBonus(bonusKey, id, bonusLevel));
+            BonusManager.BONUSES.get(bonusKey).registerProvisions(id, new BonusCondition(id, (player)-> {
+                LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
+                int level = levelManager.getPlayerSkills().get(id).getLevel();
+                return level >= bonusLevel;
+            }),
+                    new BonusProvider(id, (player)-> {
+                        LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
+                        return levelManager.getPlayerSkills().get(id).getLevel();
+                    }), true);
         }
         LevelManager.SKILLS.put(id, new Skill(id, texture, index, maxLevel, attributes));
     }

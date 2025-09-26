@@ -4,6 +4,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.util.Identifier;
 import net.skillz.SkillZMain;
 import net.skillz.access.LevelManagerAccess;
+import net.skillz.bonus.BonusManager;
 import net.skillz.level.*;
 import net.skillz.network.packet.*;
 import net.skillz.content.registry.EnchantmentRegistry;
@@ -33,7 +34,7 @@ public class PacketHelper {
         List<Integer> skillIndexes = new ArrayList<>();
         List<Integer> skillMaxLevels = new ArrayList<>();
         List<SkillSyncPacket.SkillAttributesRecord> skillAttributes = new ArrayList<>();
-        List<SkillBonus> skillBonuses = new ArrayList<>(LevelManager.BONUSES.values());
+        List<SkillBonus> skillBonuses = new ArrayList<>(BonusManager.SKILL_BONUSES.values());
 
         for (Skill skill : LevelManager.SKILLS.values()) {
             skillIds.add(skill.id());

@@ -13,6 +13,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.skillz.access.LevelManagerAccess;
+import net.skillz.bonus.BonusManager;
 import net.skillz.init.*;
 import net.skillz.level.LevelManager;
 import net.skillz.mixin.entity.EntityAccessor;
@@ -47,6 +48,7 @@ public class SkillZMain implements ModInitializer {
         LevelServerPacket.init();
         TagInit.init();
         ItemInit.init();
+        BonusManager.init();
         //register("ground_search", GroundSearchArgumentType.class, GroundSearchArgumentType::groundSearch);
         ArgumentTypeRegistry.registerArgumentType(identifierOf("operation"), CommandInit.OperationArgument.class,
                 ConstantArgumentSerializer.of(CommandInit.OperationArgument::operation));

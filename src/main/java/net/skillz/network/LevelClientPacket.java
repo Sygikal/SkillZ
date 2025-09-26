@@ -5,11 +5,15 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.skillz.SkillZMain;
 import net.skillz.access.LevelManagerAccess;
+import net.skillz.bonus.BonusCondition;
+import net.skillz.bonus.BonusManager;
+import net.skillz.bonus.BonusProvider;
 import net.skillz.level.LevelManager;
 import net.skillz.level.PlayerSkill;
 import net.skillz.level.Skill;
 import net.skillz.content.registry.EnchantmentRegistry;
 import net.skillz.content.registry.EnchantmentZ;
+import net.skillz.level.SkillBonus;
 import net.skillz.screen.LevelScreen;
 import net.skillz.network.packet.*;
 import net.minecraft.enchantment.Enchantment;
@@ -48,10 +52,24 @@ public class LevelClientPacket {
                         levelManager.getPlayerSkills().put(skillIds.get(i), playerSkill);
                     }
                 }
-                LevelManager.BONUSES.clear();
+                //LevelManager.BONUSES.clear();
+                BonusManager.clear();
                 for (int i = 0; i < skillBonuses.skillBonuses().size(); i++) {
-                    String bonusKey = skillBonuses.skillBonuses().get(i).getKey();
-                    LevelManager.BONUSES.put(bonusKey, skillBonuses.skillBonuses().get(i));
+                    SkillBonus sb = skillBonuses.skillBonuses().get(i);
+                    /*String bonusKey = skillBonuses.skillBonuses().get(i).getKey();
+                    LevelManager.BONUSES.put(bonusKey, skillBonuses.skillBonuses().get(i));*/
+
+                    BonusManager.SKILL_BONUSES.put(sb.getBonusId(), sb);
+                    BonusManager.BONUSES.get(sb.getBonusId()).registerProvisions(sb.getSkillId(),
+                        new BonusCondition(sb.getSkillId(), (player)-> {
+                            LevelManager levelManager2 = ((LevelManagerAccess) player).getLevelManager();
+                            int level = levelManager2.getPlayerSkills().get(sb.getSkillId()).getLevel();
+                            return level >= sb.getLevel();
+                        }),
+                        new BonusProvider(sb.getSkillId(), (player)-> {
+                            LevelManager levelManager2 = ((LevelManagerAccess) player).getLevelManager();
+                            return levelManager2.getPlayerSkills().get(sb.getSkillId()).getLevel();
+                        }), true);
                 }
             });
         });

@@ -4,6 +4,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.resource.language.I18n;
 import net.skillz.SkillZMain;
+import net.skillz.bonus.BonusManager;
 import net.skillz.init.ConfigInit;
 import net.skillz.init.KeyInit;
 import net.skillz.level.LevelManager;
@@ -67,22 +68,19 @@ public class SkillInfoScreen extends Screen implements Tab {
             this.lines.add(0, new LineWidget(this.client, TextUtil.getGui("skill.info"), null, 0));
         }
         int skillInfoLines = this.lines.size();
-        for (String bonusKey : SkillBonus.BONUS_KEYS) {
-            if (LevelManager.BONUSES.containsKey(bonusKey)) {
-                SkillBonus bonus = LevelManager.BONUSES.get(bonusKey);
-                if (bonus.getId().equals(this.skill.id())) {
-                    for (int i = 0; i < 50; i++) {
-                        Text bonusLevelText = TextUtil.getGui("level_short", bonus.getLevel());
-                        Text bonusInfoText = TextUtil.getArgs("bonus", new String[]{bonus.getKey(), "lore", String.valueOf(i)}, bonusLevelText);
+        for (SkillBonus sb : BonusManager.SKILL_BONUSES.values()) {
+            if (sb.getSkillId().equals(this.skill.id())) {
+                for (int i = 0; i < 50; i++) {
+                    Text bonusLevelText = TextUtil.getGui("level_short", sb.getLevel());
+                    Text bonusInfoText = TextUtil.getArgs("bonus", new String[]{sb.getBonusId().toString(), "lore", String.valueOf(i)}, bonusLevelText);
 
-                        if (bonusInfoText.getString().contains(bonus.getKey()) && bonusInfoText.getString().contains(String.valueOf(i))) {
-                            break;
-                        }
-                        if (bonusInfoText.getString().startsWith("---")) {
-                            break;
-                        }
-                        this.lines.add(new LineWidget(this.client, bonusInfoText, null, 0));
+                    if (bonusInfoText.getString().contains(sb.getBonusId().toString()) && bonusInfoText.getString().contains(String.valueOf(i))) {
+                        break;
                     }
+                    if (bonusInfoText.getString().startsWith("---")) {
+                        break;
+                    }
+                    this.lines.add(new LineWidget(this.client, bonusInfoText, null, 0));
                 }
             }
         }
