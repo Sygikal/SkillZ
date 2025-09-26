@@ -27,6 +27,17 @@
       "skills": [
         {
           "skill": "skillz:magic",
+          "level": 8
+        }
+      ],
+      "items": [
+        "minecraft:totem_of_undying"
+      ]
+    },
+    {
+      "skills": [
+        {
+          "skill": "skillz:magic",
           "level": 20
         }
       ],
