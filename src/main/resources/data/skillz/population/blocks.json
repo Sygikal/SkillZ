@@ -1,9 +1,6 @@
 {
   "default": true,
   "populator": {
-    "hidden": [
-      "#skillz:hidden_restriction_item"
-    ],
     "type": "skillz:mining_populator",
     "min": 0.5,
     "max": 100,
