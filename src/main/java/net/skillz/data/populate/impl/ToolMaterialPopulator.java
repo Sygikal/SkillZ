@@ -11,6 +11,7 @@ import net.skillz.SkillZMain;
 import net.skillz.data.populate.Populator;
 import net.skillz.init.ConfigInit;
 import net.skillz.init.LoaderInit;
+import net.skillz.init.TagInit;
 import net.skillz.level.LevelManager;
 import net.skillz.level.restriction.PlayerRestriction;
 import org.apache.commons.compress.utils.Lists;
@@ -54,8 +55,13 @@ public class ToolMaterialPopulator extends Populator {
                         });
 
                         if (!populatedRestriction.isEmpty()) {
-                            if (LevelManager.ITEM_RESTRICTIONS.get(Registries.ITEM.getRawId(item)) == null || ConfigInit.MAIN.PROGRESSION.POPULATION.populatorOverride) {
-                                LevelManager.ITEM_RESTRICTIONS.put(Registries.ITEM.getRawId(item), new PlayerRestriction(Registries.ITEM.getRawId(item), populatedRestriction));
+                            int rawId = Registries.ITEM.getRawId(item);
+                            boolean hidden = item.getDefaultStack().isIn(TagInit.HIDDEN_RESTRICTION_ITEMS);
+
+                            PlayerRestriction restriction = new PlayerRestriction(rawId, populatedRestriction);
+                            restriction.setHidden(hidden);
+                            if (LevelManager.ITEM_RESTRICTIONS.get(rawId) == null || ConfigInit.MAIN.PROGRESSION.POPULATION.populatorOverride) {
+                                LevelManager.ITEM_RESTRICTIONS.put(rawId, restriction);
                             }
                         }
                     }

@@ -35,6 +35,7 @@ import net.minecraft.util.hit.HitResult;
 import net.skillz.screen.SkillRestrictionScreen;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4f;
+import snownee.jade.api.ITooltip;
 
 public class TooltipUtil {
     public static Text USABLE = Text.translatable("restriction.skillz.usable.tooltip");
@@ -44,6 +45,21 @@ public class TooltipUtil {
     public static MutableText getRestrictionKey(Identifier id, int value) {
         return TextUtil.getGui("restriction_format", LevelManager.SKILLS.get(id).getText(), value).copy();
         //return Text.translatable("restriction.skillz." + LevelManager.SKILLS.get(id).id() + ".tooltip", value);
+    }
+
+    public static void addJadeLines(ITooltip lines, Text category, int id, LevelManager manager, boolean showLines, Map<Integer, PlayerRestriction> restrictionMap) {
+        if (showLines || !hasRequiredLevel(manager, id, restrictionMap)) {
+            if (restrictionMap.containsKey(id)) {
+                PlayerRestriction playerRestriction = restrictionMap.get(id);
+                lines.add(category);
+                for (Map.Entry<Identifier, Integer> entry : playerRestriction.getSkillLevelRestrictions().entrySet()) {
+                    boolean noHasLevel = manager.getSkillLevel(entry.getKey()) < entry.getValue();
+                    if (showLines || noHasLevel) {
+                        lines.add(getRestrictionKey(entry.getKey(), entry.getValue()).formatted(noHasLevel ? Formatting.RED : Formatting.GREEN));
+                    }
+                }
+            }
+        }
     }
 
     public static void addLines(List<Text> lines, Text category, int id, LevelManager manager, boolean showLines, Map<Integer, PlayerRestriction> restrictionMap) {

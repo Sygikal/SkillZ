@@ -14,6 +14,7 @@ import net.skillz.SkillZMain;
 import net.skillz.data.populate.Populator;
 import net.skillz.init.ConfigInit;
 import net.skillz.init.LoaderInit;
+import net.skillz.init.TagInit;
 import net.skillz.level.LevelManager;
 import net.skillz.level.restriction.PlayerRestriction;
 import org.apache.commons.compress.utils.Lists;
@@ -93,7 +94,7 @@ public class BlockPopulator extends Populator {
                         list.computeIfAbsent(block, k -> new ArrayList<>()).add(Pair.of(entry.getKey(), entry.getValue()));
                     }*/
 
-                    boolean hidden = block.asItem().equals(Items.AIR);
+                    boolean hidden = block.asItem().equals(Items.AIR) || block.asItem().getDefaultStack().isIn(TagInit.HIDDEN_RESTRICTION_ITEMS);
                     for (String s : hiddenItems) {
                         if (s.contains("#")) {
                             s = s.replace("#", "");

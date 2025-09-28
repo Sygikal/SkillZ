@@ -6,12 +6,14 @@ import com.google.gson.JsonObject;
 import dev.sygii.ultralib.data.util.OptionalObject;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.skillz.SkillZMain;
 import net.skillz.data.populate.Populator;
 import net.skillz.init.ConfigInit;
 import net.skillz.init.LoaderInit;
+import net.skillz.init.TagInit;
 import net.skillz.level.LevelManager;
 import net.skillz.level.restriction.PlayerRestriction;
 import net.skillz.util.TextUtil;
@@ -99,8 +101,13 @@ public class ArmorMaterialPopulator extends Populator {
             if (!populatedRestriction.isEmpty()) {
                 for (Item item : stringListEntry.getValue().getValue()) {
                     if (item instanceof ArmorItem) {
-                        if (LevelManager.ITEM_RESTRICTIONS.get(Registries.ITEM.getRawId(item)) == null || ConfigInit.MAIN.PROGRESSION.POPULATION.populatorOverride) {
-                            LevelManager.ITEM_RESTRICTIONS.put(Registries.ITEM.getRawId(item), new PlayerRestriction(Registries.ITEM.getRawId(item), populatedRestriction));
+                        int rawId = Registries.ITEM.getRawId(item);
+                        boolean hidden = item.getDefaultStack().isIn(TagInit.HIDDEN_RESTRICTION_ITEMS);
+
+                        PlayerRestriction restriction = new PlayerRestriction(rawId, populatedRestriction);
+                        restriction.setHidden(hidden);
+                        if (LevelManager.ITEM_RESTRICTIONS.get(rawId) == null || ConfigInit.MAIN.PROGRESSION.POPULATION.populatorOverride) {
+                            LevelManager.ITEM_RESTRICTIONS.put(rawId, restriction);
                         }
                     }
                 }
