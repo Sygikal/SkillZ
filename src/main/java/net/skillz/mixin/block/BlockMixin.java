@@ -3,6 +3,7 @@ package net.skillz.mixin.block;
 import java.util.List;
 
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.minecraft.block.PlantBlock;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.skillz.access.LevelManagerAccess;
@@ -85,10 +86,15 @@ public abstract class BlockMixin {
         }
     }
 
-    //TODO: level manager
     @Inject(method = "dropExperience", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/ExperienceOrbEntity;spawn(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/Vec3d;I)V"))
     protected void dropExperienceMixin(ServerWorld world, BlockPos pos, int size, CallbackInfo info) {
-        if (ConfigInit.MAIN.EXPERIENCE.oreXPMultiplier > 0.0F) {
+        if (asBlock() instanceof PlantBlock && ConfigInit.MAIN.EXPERIENCE.cropXPMultiplier > 0.0F) {
+            LevelExperienceOrbEntity.spawn(world, Vec3d.ofCenter(pos),
+                    (int) (size * ConfigInit.MAIN.EXPERIENCE.cropXPMultiplier
+                            * (ConfigInit.MAIN.EXPERIENCE.dropXPbasedOnLvl && this.serverPlayerEntity != null
+                            ? 1.0F + ConfigInit.MAIN.EXPERIENCE.basedOnMultiplier * ((LevelManagerAccess) this.serverPlayerEntity).getLevelManager().getOverallLevel()
+                            : 1.0F)));
+        }else if (ConfigInit.MAIN.EXPERIENCE.oreXPMultiplier > 0.0F) {
             LevelExperienceOrbEntity.spawn(world, Vec3d.ofCenter(pos),
                     (int) (size * ConfigInit.MAIN.EXPERIENCE.oreXPMultiplier
                             * (ConfigInit.MAIN.EXPERIENCE.dropXPbasedOnLvl && this.serverPlayerEntity != null

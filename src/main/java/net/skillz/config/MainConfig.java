@@ -105,6 +105,8 @@ public class MainConfig extends Config {
         public float fishingXPMultiplier = 0.8F;
         public float furnaceXPMultiplier = 0.1F;
         public float oreXPMultiplier = 1.0F;
+        @Comment("Note that this does not let crops drop xp, but rather balance it for mods that do")
+        public float cropXPMultiplier = 0.3F;
         public float tradingXPMultiplier = 0.3F;
         public float mobXPMultiplier = 1.0F;
         public boolean spawnerMobXP = false;
