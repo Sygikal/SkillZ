@@ -26,6 +26,8 @@ public class RenderInit {
     public static final Identifier BAG_TAB_ICON = SkillZMain.identifierOf("textures/gui/sprites/bag_tab_icon.png");
 
     public static final Identifier MINEABLE_INFO = SkillZMain.identifierOf("mineable_info");
+    public static final Identifier USABLE_INFO = SkillZMain.identifierOf("usable_info");
+
     public static final Identifier MINEABLE_LEVEL_INFO = SkillZMain.identifierOf("mineable_level_info");
 
     public static void init() {

@@ -97,15 +97,17 @@ public class SkillLoader extends SimpleDataLoader {
             }
 
             BonusManager.SKILL_BONUSES.put(bonusKey, new SkillBonus(bonusKey, id, bonusLevel));
-            BonusManager.BONUSES.get(bonusKey).registerProvisions(id, new BonusCondition(id, (player)-> {
-                LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
-                int level = levelManager.getPlayerSkills().get(id).getLevel();
-                return level >= bonusLevel;
-            }),
-                    new BonusProvider(id, (player)-> {
-                        LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
-                        return levelManager.getPlayerSkills().get(id).getLevel();
-                    }), true);
+            BonusManager.BONUSES.get(bonusKey).registerProvisions(id,
+                new BonusCondition(id, (player)-> {
+                    LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
+                    int level = levelManager.getPlayerSkills().get(id).getLevel();
+                    return level >= bonusLevel;
+                }),
+                new BonusProvider(id, (player)-> {
+                    LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
+                    return levelManager.getPlayerSkills().get(id).getLevel();
+                }),
+            true);
         }
         LevelManager.SKILLS.put(id, new Skill(id, texture, index, maxLevel, attributes));
     }

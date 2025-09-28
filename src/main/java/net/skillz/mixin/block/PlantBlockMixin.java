@@ -26,7 +26,6 @@ public abstract class PlantBlockMixin extends Block {
         super(settings);
     }
 
-    //TODO onBreak
     @Override
     public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         if (!world.isClient() && player != null && !player.isCreative()) {
