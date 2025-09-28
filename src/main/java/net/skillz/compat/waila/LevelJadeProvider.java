@@ -1,11 +1,15 @@
 package net.skillz.compat.waila;
 
+import net.minecraft.registry.Registries;
 import net.skillz.access.LevelManagerAccess;
+import net.skillz.init.ConfigInit;
 import net.skillz.init.RenderInit;
 import net.skillz.level.LevelManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.skillz.level.restriction.PlayerRestriction;
+import net.skillz.screen.SkillRestrictionScreen;
 import net.skillz.util.TooltipUtil;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
@@ -25,11 +29,12 @@ public enum LevelJadeProvider implements IBlockComponentProvider {
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
         LevelManager levelManager = ((LevelManagerAccess) accessor.getPlayer()).getLevelManager();
-        if (!levelManager.hasRequiredMiningLevel(accessor.getBlock())) {
-            for (Map.Entry<Identifier, Integer> entry : levelManager.getRequiredMiningLevel(accessor.getBlock()).entrySet()) {
-                tooltip.add(TooltipUtil.getRestrictionKey(entry.getKey(), entry.getValue()).formatted(levelManager.getSkillLevel(entry.getKey()) < entry.getValue() ? Formatting.RED : Formatting.GREEN));
-            }
-        }
+
+        int blockId = Registries.BLOCK.getRawId(accessor.getBlock());
+        boolean showLines = accessor.getPlayer().isCreative() || !ConfigInit.CLIENT.hideReachedLevels;
+
+        TooltipUtil.addJadeLines(tooltip, TooltipUtil.USABLE, blockId, levelManager, showLines, LevelManager.BLOCK_RESTRICTIONS);
+        TooltipUtil.addJadeLines(tooltip, TooltipUtil.MINEABLE, blockId, levelManager, showLines, LevelManager.MINING_RESTRICTIONS);
     }
 
 }
