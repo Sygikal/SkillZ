@@ -1,5 +1,6 @@
 package net.skillz.mixin.item;
 
+import net.skillz.SkillZMain;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.level.LevelManager;
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,45 +19,11 @@ import net.minecraft.world.World;
 @Mixin(SwordItem.class)
 public class SwordItemMixin {
 
-    /*@Inject(method = "postHit", at = @At("HEAD"), cancellable = true)
-    private void postHitMixin(ItemStack stack, LivingEntity target, LivingEntity attacker, CallbackInfoReturnable<Boolean> info) {
-        if (attacker instanceof PlayerEntity playerEntity) {
-            ArrayList<Object> levelList = LevelLists.customItemList;
-            if (!levelList.isEmpty() && levelList.contains(Registries.ITEM.getId(stack.getItem()).toString())) {
-                if (!PlayerStatsManager.playerLevelisHighEnough(playerEntity, levelList, Registries.ITEM.getId(stack.getItem()).toString(), true))
-                    info.setReturnValue(false);
-            } else {
-                levelList = LevelLists.swordList;
-                if (!PlayerStatsManager.playerLevelisHighEnough(playerEntity, levelList, ((SwordItem) stack.getItem()).getMaterial().toString().toLowerCase(), true))
-                    info.setReturnValue(false);
-            }
-        }
-
-    }
-
-    @Inject(method = "postMine", at = @At("HEAD"), cancellable = true)
-    private void postMineMixin(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner, CallbackInfoReturnable<Boolean> info) {
-        if (miner instanceof PlayerEntity playerEntity) {
-            ArrayList<Object> levelList = LevelLists.customItemList;
-            if (!levelList.isEmpty() && levelList.contains(Registries.ITEM.getId(stack.getItem()).toString())) {
-                if (!PlayerStatsManager.playerLevelisHighEnough(playerEntity, levelList, Registries.ITEM.getId(stack.getItem()).toString(), true))
-                    info.setReturnValue(false);
-            } else {
-                levelList = LevelLists.swordList;
-                if (!PlayerStatsManager.playerLevelisHighEnough(playerEntity, levelList, ((SwordItem) stack.getItem()).getMaterial().toString().toLowerCase(), true))
-                    info.setReturnValue(false);
-            }
-        }
-    }*/
-
     @Inject(method = "postHit", at = @At("HEAD"), cancellable = true)
     private void postHitMixin(ItemStack stack, LivingEntity target, LivingEntity attacker, CallbackInfoReturnable<Boolean> info) {
         if (attacker instanceof PlayerEntity playerEntity) {
-            if (playerEntity.isCreative()) {
-                return;
-            }
-            LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
-            if (!levelManager.hasRequiredItemLevel(stack.getItem())) {
+            if (SkillZMain.shouldRestrictItem(playerEntity, stack.getItem())) {
+                System.out.print("SwordItemMixin called?");
                 info.setReturnValue(false);
             }
         }
@@ -66,11 +33,8 @@ public class SwordItemMixin {
     @Inject(method = "postMine", at = @At("HEAD"), cancellable = true)
     private void postMineMixin(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity attacker, CallbackInfoReturnable<Boolean> info) {
         if (attacker instanceof PlayerEntity playerEntity) {
-            if (playerEntity.isCreative()) {
-                return;
-            }
-            LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
-            if (!levelManager.hasRequiredItemLevel(stack.getItem())) {
+            if (SkillZMain.shouldRestrictItem(playerEntity, stack.getItem())) {
+                System.out.print("SwordItemMixin2 called?");
                 info.setReturnValue(false);
             }
         }
