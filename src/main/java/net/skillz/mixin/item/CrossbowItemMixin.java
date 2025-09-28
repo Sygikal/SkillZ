@@ -29,7 +29,7 @@ public class CrossbowItemMixin {
                 persistentProjectileEntity.setDamage(damage);
             }
 
-            if (BonusManager.doLinearBooleanBonus(CrossbowDoubleDamageBonus.ID, playerEntity, ConfigInit.MAIN.BONUSES.crossbowDoubleDamageChance)) {
+            if (BonusManager.doBonus(BonusManager.BonusTypes.LINEAR_BOOLEAN, CrossbowDoubleDamageBonus.ID, playerEntity, false, ConfigInit.MAIN.BONUSES.crossbowDoubleDamageChance)) {
                 persistentProjectileEntity.setDamage(persistentProjectileEntity.getDamage() * 2D);
             }
         }

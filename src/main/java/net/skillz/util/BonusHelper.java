@@ -30,7 +30,8 @@ public class BonusHelper {
             return ConfigInit.MAIN.BONUSES.anvilXPCap;
         }
 
-        return (int) BonusManager.doInversePercentageFloatBonus(AnvilXPDiscountBonus.ID, playerEntity, levelCost, ConfigInit.MAIN.BONUSES.anvilXPDiscountPercent);
+        return BonusManager.doBonus(BonusManager.BonusTypes.INVERSE_PERCENTAGE_INT, AnvilXPDiscountBonus.ID, playerEntity, levelCost, ConfigInit.MAIN.BONUSES.anvilXPDiscountPercent);
+        //return (int) BonusManager.doInversePercentageFloatBonus(AnvilXPDiscountBonus.ID, playerEntity, levelCost, ConfigInit.MAIN.BONUSES.anvilXPDiscountPercent);
     }
 
     /*public static boolean nonMeleeSweepingAttackChanceBonus(PlayerEntity playerEntity) {

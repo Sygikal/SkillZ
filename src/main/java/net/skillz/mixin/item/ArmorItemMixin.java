@@ -2,6 +2,7 @@ package net.skillz.mixin.item;
 
 import java.util.List;
 
+import net.skillz.SkillZMain;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.level.LevelManager;
 import org.spongepowered.asm.mixin.Mixin;
@@ -37,11 +38,7 @@ public class ArmorItemMixin {
             }
         }*/
         if (livingEntity instanceof PlayerEntity playerEntity) {
-            if (playerEntity.isCreative()) {
-                return;
-            }
-            LevelManager levelManager = ((LevelManagerAccess) playerEntity).getLevelManager();
-            if (!levelManager.hasRequiredItemLevel(armor.getItem())) {
+            if (SkillZMain.shouldRestrictItem(playerEntity, armor.getItem())) {
                 info.setReturnValue(false);
             }
         }

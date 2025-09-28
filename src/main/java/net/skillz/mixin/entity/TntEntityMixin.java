@@ -33,7 +33,7 @@ public abstract class TntEntityMixin extends Entity {
     @WrapOperation(method = "explode", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;createExplosion(Lnet/minecraft/entity/Entity;DDDFLnet/minecraft/world/World$ExplosionSourceType;)Lnet/minecraft/world/explosion/Explosion;"))
     private Explosion explosionMixin(World instance, Entity entity, double x, double y, double z, float power, ExplosionSourceType explosionSourceType, Operation<Explosion> original) {
         if (causingEntity != null && causingEntity instanceof PlayerEntity playerEntity) {
-            power += BonusManager.doLinearFloatBonus(TNTStrengthBonus.ID, playerEntity, 0.0F, ConfigInit.MAIN.BONUSES.bonusTNTStrength);
+            power += BonusManager.doBonus(BonusManager.BonusTypes.LINEAR_FLOAT, TNTStrengthBonus.ID, playerEntity, 0.0F, ConfigInit.MAIN.BONUSES.bonusTNTStrength);
         }
         return original.call(instance, entity, x, y, z, power, explosionSourceType);
     }

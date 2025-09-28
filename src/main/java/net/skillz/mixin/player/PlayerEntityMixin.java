@@ -107,7 +107,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements LevelMan
 
     @ModifyVariable(method = "attack", at = @At(value = "STORE", ordinal = 2), ordinal = 0)
     private float attackCriticalDamageMixin(float original) {
-        original += BonusManager.doScalingFloatBonus(CriticalAttackDamageBonus.ID, this.playerEntity, 0, ConfigInit.MAIN.BONUSES.bonusCriticalAttackDamage);
+        original += BonusManager.doBonus(BonusManager.BonusTypes.SCALING_FLOAT, CriticalAttackDamageBonus.ID, this.playerEntity, (float) 0, ConfigInit.MAIN.BONUSES.bonusCriticalAttackDamage);
         return original;
     }
 
@@ -126,7 +126,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements LevelMan
                 source.getAttacker().damage(source, amount/* * level * ConfigInit.MAIN.BONUSES.damageReflectionBonus*/);
             }
         }
-        if (!source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY) && BonusManager.doLinearBooleanBonus(EvadeDamageBonus.ID, this.playerEntity, ConfigInit.MAIN.BONUSES.evadeDamageChance)) {
+        if (!source.isIn(DamageTypeTags.BYPASSES_INVULNERABILITY) && BonusManager.doBonus(BonusManager.BonusTypes.LINEAR_BOOLEAN, EvadeDamageBonus.ID, this.playerEntity, false, ConfigInit.MAIN.BONUSES.evadeDamageChance)) {
             playerEntity.getWorld().playSound(null, playerEntity.getBlockPos(), SoundEvents.ENTITY_ENDER_DRAGON_FLAP, SoundCategory.PLAYERS, 1F, 1.5F);
             info.setReturnValue(false);
         }

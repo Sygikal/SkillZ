@@ -101,7 +101,7 @@ public class BonusManager {
     }
 
     public static boolean hasBonus(Identifier bonusId, PlayerEntity playerEntity) {
-        if (VALID_BONUSES.contains(bonusId)) {
+        if (playerEntity != null && VALID_BONUSES.contains(bonusId)) {
             Bonus bonus = BONUSES.get(bonusId);
             return bonus.checkConditions(playerEntity);
         }
@@ -109,7 +109,7 @@ public class BonusManager {
     }
 
     public static void runBonus(Identifier bonusId, PlayerEntity playerEntity) {
-        if (VALID_BONUSES.contains(bonusId)) {
+        if (playerEntity != null && VALID_BONUSES.contains(bonusId)) {
             Bonus bonus = BONUSES.get(bonusId);
 
             for (Pair<BonusCondition, BonusProvider> p : bonus.pairMap.values()) {
@@ -127,7 +127,7 @@ public class BonusManager {
     }
 
     public static float returnBonusValue(Identifier bonusId, PlayerEntity playerEntity, float original) {
-        if (VALID_BONUSES.contains(bonusId)) {
+        if (playerEntity != null && VALID_BONUSES.contains(bonusId)) {
             Bonus bonus = BONUSES.get(bonusId);
 
             for (Pair<BonusCondition, BonusProvider> p : bonus.pairMap.values()) {
@@ -140,7 +140,8 @@ public class BonusManager {
     }
 
     public static float doInversePercentageFloatBonus(Identifier bonusId, PlayerEntity playerEntity, float original, float probability) {
-        if (VALID_BONUSES.contains(bonusId)) {
+        return BonusManager.doBonus(BonusTypes.INVERSE_PERCENTAGE, bonusId, playerEntity, original, probability);
+        /*if (VALID_BONUSES.contains(bonusId)) {
             Bonus bonus = BONUSES.get(bonusId);
 
             for (Pair<BonusCondition, BonusProvider> p : bonus.pairMap.values()) {
@@ -149,11 +150,12 @@ public class BonusManager {
                 }
             }
         }
-        return original;
+        return original;*/
     }
 
     public static boolean doBooleanBonus(Identifier bonusId, PlayerEntity playerEntity, float bonusChance) {
-        if (VALID_BONUSES.contains(bonusId)) {
+        return BonusManager.doBonus(BonusManager.BonusTypes.LINEAR_BOOLEAN, bonusId, playerEntity, false, bonusChance);
+        /*if (VALID_BONUSES.contains(bonusId)) {
             Bonus bonus = BONUSES.get(bonusId);
 
             for (Pair<BonusCondition, BonusProvider> p : bonus.pairMap.values()) {
@@ -162,10 +164,10 @@ public class BonusManager {
                 }
             }
         }
-        return false;
+        return false;*/
     }
 
-    public static boolean doLinearBooleanBonus(Identifier bonusId, PlayerEntity playerEntity, float bonusChance) {
+    /*public static boolean doLinearBooleanBonus(Identifier bonusId, PlayerEntity playerEntity, float bonusChance) {
         if (VALID_BONUSES.contains(bonusId)) {
             Bonus bonus = BONUSES.get(bonusId);
 
@@ -215,6 +217,58 @@ public class BonusManager {
             }
         }
         return original;
+    }*/
+
+    public static <T> T doBonus(BonusType<T> type, Identifier bonusId, PlayerEntity playerEntity, T original, Object... args) {
+        if (playerEntity != null && VALID_BONUSES.contains(bonusId)) {
+            Bonus bonus = BONUSES.get(bonusId);
+
+            for (Pair<BonusCondition, BonusProvider> p : bonus.pairMap.values()) {
+                if (p.getLeft().runner.run(playerEntity)) {
+                    return (T) type.runner.run(playerEntity, p.getRight(), original, args);
+                }
+            }
+        }
+        return original;
+    }
+
+    public static class BonusTypes {
+        public static BonusType<Boolean> BOOLEAN = new BonusType<Boolean>((playerEntity, provider, original, args) -> {
+            return playerEntity.getRandom().nextFloat() <= provider.runner.run(playerEntity) * (float)args[0];
+        });
+
+        public static BonusType<Boolean> LINEAR_BOOLEAN = new BonusType<Boolean>((playerEntity, provider, original, args) -> {
+            return playerEntity.getRandom().nextFloat() <= (float)args[0];
+        });
+
+        public static BonusType<Float> LINEAR_FLOAT = new BonusType<Float>((playerEntity, provider, original,args) -> {
+            return (float)args[0];
+        });
+
+        public static BonusType<Float> SCALING_FLOAT = new BonusType<Float>((playerEntity, provider, original,args) -> {
+            return provider.runner.run(playerEntity) * (float)args[0];
+        });
+
+        public static BonusType<Float> INVERSE_PERCENTAGE = new BonusType<Float>((playerEntity, provider, original, args) -> {
+            return original * (1.0f - provider.runner.run(playerEntity) * (float)args[0]);
+        });
+
+        public static BonusType<Integer> INVERSE_PERCENTAGE_INT = new BonusManager.BonusType<Integer>((playerEntity, provider, original, args) -> {
+            return (int) (original * (1.0f - provider.runner.run(playerEntity) * (float)args[0]));
+        });
+
+    }
+
+    public static class BonusType<T> {
+        public final BonusTypeRunner<T> runner;
+
+        public BonusType(BonusTypeRunner<T> runner) {
+            this.runner = runner;
+        }
+    }
+
+    public interface BonusTypeRunner<T> {
+        T run(PlayerEntity player, BonusProvider provider, T original, Object... args);
     }
 
     public interface RunningFloat {

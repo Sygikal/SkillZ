@@ -28,7 +28,7 @@ public class BowItemMixin {
             persistentProjectileEntity.setDamage(damage);
         }
 
-        if (BonusManager.doLinearBooleanBonus(BowDoubleDamageBonus.ID, playerEntity, ConfigInit.MAIN.BONUSES.bowDoubleDamageChance)) {
+        if (BonusManager.doBonus(BonusManager.BonusTypes.LINEAR_BOOLEAN, BowDoubleDamageBonus.ID, playerEntity, false, ConfigInit.MAIN.BONUSES.bowDoubleDamageChance)) {
             persistentProjectileEntity.setDamage(persistentProjectileEntity.getDamage() * 2D);
         }
     }

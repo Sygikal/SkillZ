@@ -24,7 +24,7 @@ public class PotionItemMixin {
     @ModifyVariable(method = "finishUsing", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/potion/PotionUtil;getPotionEffects(Lnet/minecraft/item/ItemStack;)Ljava/util/List;"), ordinal = 0)
     private List<StatusEffectInstance> finishUsingMixin(List<StatusEffectInstance> original, ItemStack stack, World world, LivingEntity user) {
         if (user instanceof PlayerEntity playerEntity) {
-            if (BonusManager.doLinearBooleanBonus(ExtraPotionEffectBonus.ID, playerEntity, ConfigInit.MAIN.BONUSES.extraPotionEffectChance)) {
+            if (BonusManager.doBonus(BonusManager.BonusTypes.LINEAR_BOOLEAN, ExtraPotionEffectBonus.ID, playerEntity, false, ConfigInit.MAIN.BONUSES.extraPotionEffectChance)) {
                 List<StatusEffectInstance> newEffectList = new ArrayList<>();
                 original.forEach(effect -> {
                     newEffectList.add(new StatusEffectInstance(effect.getEffectType(), effect.getDuration(), effect.getAmplifier() + 1, effect.isAmbient(), effect.shouldShowParticles(), effect.shouldShowIcon()));

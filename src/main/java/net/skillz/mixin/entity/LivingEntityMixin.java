@@ -56,7 +56,7 @@ public abstract class LivingEntityMixin extends Entity {
     @ModifyReturnValue(method = "modifyAppliedDamage", at = @At("RETURN"))
     private float fallDamageReduction(float original, @Local(argsOnly = true) DamageSource source) {
         if (source.isOf(DamageTypes.FALL) && entity instanceof PlayerEntity playerEntity) {
-            return Math.max(original - BonusManager.doScalingFloatBonus(FallDamageReductionBonus.ID, playerEntity, 0.0F, ConfigInit.MAIN.BONUSES.fallDamageReductionPercent), 0);
+            return Math.max(original - BonusManager.doBonus(BonusManager.BonusTypes.SCALING_FLOAT, FallDamageReductionBonus.ID, playerEntity, 0.0F, ConfigInit.MAIN.BONUSES.fallDamageReductionPercent), 0);
         }
         return original;
     }
@@ -71,7 +71,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Inject(method = "tryUseTotem", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/util/Hand;values()[Lnet/minecraft/util/Hand;"), cancellable = true)
     private void tryUseTotemMixin(DamageSource source, CallbackInfoReturnable<Boolean> info) {
-        if (entity instanceof PlayerEntity playerEntity && BonusManager.doLinearBooleanBonus(DeathGraceBonus.ID, playerEntity, ConfigInit.MAIN.BONUSES.deathGraceChance)) {
+        if (entity instanceof PlayerEntity playerEntity && BonusManager.doBonus(BonusManager.BonusTypes.LINEAR_BOOLEAN, DeathGraceBonus.ID, playerEntity, false, ConfigInit.MAIN.BONUSES.deathGraceChance)) {
             playerEntity.getWorld().playSound(null, playerEntity.getBlockPos(), SoundEvents.ENTITY_ELDER_GUARDIAN_CURSE, SoundCategory.PLAYERS, 0.8F, 1F);
 
             playerEntity.setHealth(1.0F);

@@ -32,7 +32,7 @@ public abstract class AnimalEntityMixin extends PassiveEntity {
     private void breedMixin(ServerWorld world, AnimalEntity other, CallbackInfo info, PassiveEntity passiveEntity) {
         if (getLovingPlayer() != null || other.getLovingPlayer() != null) {
             PlayerEntity playerEntity = getLovingPlayer() != null ? getLovingPlayer() : other.getLovingPlayer();
-            if (BonusManager.doLinearBooleanBonus(BreedTwinBonus.ID, playerEntity, ConfigInit.MAIN.BONUSES.breedTwinChance)) {
+            if (BonusManager.doBonus(BonusManager.BonusTypes.LINEAR_BOOLEAN, BreedTwinBonus.ID, playerEntity, false, ConfigInit.MAIN.BONUSES.breedTwinChance)) {
                 PassiveEntity extraPassiveEntity = passiveEntity.createChild(world, other);
                 extraPassiveEntity.setBaby(true);
                 extraPassiveEntity.refreshPositionAndAngles(passiveEntity.getX(), passiveEntity.getY(), passiveEntity.getZ(), playerEntity.getRandom().nextFloat() * 360F, 0.0F);
