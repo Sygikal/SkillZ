@@ -54,15 +54,14 @@ public class LevelScreen extends Screen implements Tab {
 
     private LevelManager levelManager;
 
-    private List<SkillAttribute> attributes = new ArrayList<>();
+    private final List<SkillAttribute> attributes = new ArrayList<>();
     private static boolean showAttributes = false;
     private int attributeRow = 0;
 
-    private final WidgetButtonPage[] levelButtons = new WidgetButtonPage[12];
-    private ArrayList<WidgetButtonPage> newLeveButtons = new ArrayList<>();
+    private final ArrayList<WidgetButtonPage> levelButtons = new ArrayList<>();
     private int skillRow = 0;
 
-    private List<BookWidget> bookWidgets = new ArrayList<>();
+    private final List<BookWidget> bookWidgets = new ArrayList<>();
 
     public LevelScreen() {
         super(TextUtil.getGui("skill_screen.title"));
@@ -73,28 +72,12 @@ public class LevelScreen extends Screen implements Tab {
         super.init();
         ClientPlayNetworking.send(new AttributeSyncPacket());
         this.attributes.clear();
+        this.levelButtons.clear();
 
         this.x = (this.width - this.backgroundWidth) / 2;
         this.y = (this.height - this.backgroundHeight) / 2;
 
         this.levelManager = ((LevelManagerAccess) this.client.player).getLevelManager();
-
-        Map<Integer, SkillAttribute> skillAttributes = new HashMap<>();
-        /*int attributeCount = 0;
-        for (Skill skill : LevelManager.SKILLS.values()) {
-            for (SkillAttribute skillAttribute : skill.attributes()) {
-                if (skillAttribute.getId() < 0) {
-                    continue;
-                }
-                skillAttributes.put(skillAttribute.getId(), skillAttribute);
-                attributeCount++;
-
-            }
-        }
-
-        for (int i = 0; i < attributeCount; i++) {
-            this.attributes.add(skillAttributes.get(i));
-        }*/
 
         ArrayList<SkillAttribute> attrs = Lists.newArrayList();
         for (Skill skill : LevelManager.SKILLS.values()) {
@@ -116,7 +99,7 @@ public class LevelScreen extends Screen implements Tab {
 
         int i = 0;
         for (Skill skill : asd.values()) {
-            this.newLeveButtons.add(new WidgetButtonPage(skill,this.x + (i % 2 == 0 ? 80 : 169), this.y + 91 + i / 2 * 20, 13, 13, 33, 42, true, true, null, button -> {ClientPlayNetworking.send(new StatPacket(skill.id(), 1));}));
+            this.levelButtons.add(new WidgetButtonPage(skill,this.x + (i % 2 == 0 ? 80 : 169), this.y + 91 + i / 2 * 20, 13, 13, 33, 42, true, true, null, button -> {ClientPlayNetworking.send(new StatPacket(skill.id(), 1));}));
 
             i++;
         }
@@ -124,7 +107,7 @@ public class LevelScreen extends Screen implements Tab {
 
         this.bookWidgets.clear();
         bookWidgets.add(new BookWidget(TextUtil.getGui( "attributes"), this.x + 178, this.y + 5,
-                () -> this.showAttributes = !this.showAttributes,
+                () -> showAttributes = !showAttributes,
                 new Color(255, 206, 127), !this.attributes.isEmpty()));
         bookWidgets.add(new BookWidget(Text.translatable("restriction.skillz.crafting"), this.x + 160, this.y + 68,
                 () -> client.setScreen(new SkillRestrictionScreen(this.levelManager, LevelManager.CRAFTING_RESTRICTIONS, Text.translatable("restriction.skillz.crafting"), 0)),
@@ -155,30 +138,6 @@ public class LevelScreen extends Screen implements Tab {
         this.renderBackground(context);
         context.drawTexture(BACKGROUND_TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
 
-        /*{
-            int i = 0;
-            for (Skill skill : LevelManager.SKILLS.values()) {
-                //if (i < 12) {
-                    int skillId = i + this.skillRow * 2;
-                    if (LevelManager.SKILLS.size() <= skillId) {
-                        break;
-                    }
-                    if (this.levelManager.getPlayerSkills().size() <= skillId) {
-                        break;
-                    }
-                    context.drawTexture(BACKGROUND_TEXTURE, this.x + (i % 2 == 0 ? 8 : 96), this.y + 87 + i / 2 * 20, 0, 215, 88, 20);
-                    context.drawTexture(SkillZMain.identifierOf("textures/gui/sprites/" + skill.id() + ".png"), this.x + (i % 2 == 0 ? 11 : 99), this.y + 89 + i / 2 * 20, 0, 0, 16, 16, 16, 16);
-
-                    Text skillLevel = Text.translatable("text.skillz.gui.current_level", this.levelManager.getSkillLevel(skill.id()), LevelManager.SKILLS.get(skill.id()).maxLevel());
-                    context.drawText(this.textRenderer, skillLevel, this.x + (i % 2 == 0 ? 53 : 141) - this.textRenderer.getWidth(skillLevel) / 2, this.y + 94 + i / 2 * 20, 0x3F3F3F, false);
-
-                    if (DrawUtil.isPointWithinBounds(this.x + (i % 2 == 0 ? 11 : 99), this.y + 89 + i / 2 * 20, 16, 16, mouseX, mouseY)) {
-                        context.drawTooltip(this.textRenderer, skill.getText(), mouseX, mouseY);
-                    }
-                    i++;
-                //}
-            }
-        }*/
         if (this.levelManager.getPlayerSkills().size() > 12) {
             int scrollLevels = (this.levelManager.getPlayerSkills().size() - 12) / 2;
             if (this.levelManager.getPlayerSkills().size() % 2 != 0) {
@@ -193,7 +152,7 @@ public class LevelScreen extends Screen implements Tab {
 
         {
             int i = 0;
-            for (WidgetButtonPage page : newLeveButtons) {
+            for (WidgetButtonPage page : levelButtons) {
                 if (page.visible && (i < 12)) {
 
                     page.hovered = mouseX >= (this.x + (i % 2 == 0 ? 80 : 169)) && mouseY >= (this.y + 91 + i / 2 * 20) && mouseX < (this.x + (i % 2 == 0 ? 80 : 169)) + page.getWidth() && mouseY < (this.y + 91 + i / 2 * 20) + page.getHeight();
@@ -233,7 +192,7 @@ public class LevelScreen extends Screen implements Tab {
             context.drawText(this.textRenderer, title, this.x + 118 - this.textRenderer.getWidth(title) / 2, this.y + 7, 0x3F3F3F, false);
 
             if (!this.attributes.isEmpty()) {
-                if (this.showAttributes) {
+                if (showAttributes) {
                     context.drawTexture(ICON_TEXTURE, this.x + 178, this.y + 5, 30, 114, 15, 13);
                     context.drawTexture(ATTRIBUTE_BACKGROUND_TEXTURE, this.x + 202, this.y, 0, 0, 82, 215);
                     int maxAttributes = Math.min(this.attributes.size(), 15);
@@ -351,7 +310,7 @@ public class LevelScreen extends Screen implements Tab {
 
         {
             int i = 0;
-            for (WidgetButtonPage page : newLeveButtons) {
+            for (WidgetButtonPage page : levelButtons) {
                 if (page.visible && (i < 12)) {
                     if (DrawUtil.isPointWithinBounds(this.x + (i % 2 == 0 ? 11 : 99), this.y + 89 + i / 2 * 20, 16, 16, mouseX, mouseY)) {
                         this.client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
@@ -374,7 +333,7 @@ public class LevelScreen extends Screen implements Tab {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double verticalAmount) {
-        if (this.showAttributes && this.attributes.size() > 15 && DrawUtil.isPointWithinBounds(this.x + 209, this.y + 7, 68, 201, mouseX, mouseY)) {
+        if (showAttributes && this.attributes.size() > 15 && DrawUtil.isPointWithinBounds(this.x + 209, this.y + 7, 68, 201, mouseX, mouseY)) {
             int maxAttributeRow = this.attributes.size() - 15;
             int newAttributeRow = this.attributeRow;
             newAttributeRow = newAttributeRow - (int) (verticalAmount);
@@ -386,8 +345,8 @@ public class LevelScreen extends Screen implements Tab {
         }
         if (DrawUtil.isPointWithinBounds(this.x + 7, this.y + 86, 186, 122, mouseX, mouseY) /*&& this.newLeveButtons.size() > 12*/) {
             int visibleCount = 0;
-            for (WidgetButtonPage page : newLeveButtons) {
-                if (this.newLeveButtons.size() > 12) {
+            for (WidgetButtonPage page : levelButtons) {
+                if (this.levelButtons.size() > 12) {
                     if (verticalAmount > 0) {
                         //Scrolling down
                         if (page.visible) {
@@ -400,9 +359,9 @@ public class LevelScreen extends Screen implements Tab {
 
             int i = 0;
             int x = 0;
-            for (WidgetButtonPage page : this.newLeveButtons) {
-                if (this.newLeveButtons.size() > 12) {
-                    int extra = this.newLeveButtons.size() - 12;
+            for (WidgetButtonPage page : this.levelButtons) {
+                if (this.levelButtons.size() > 12) {
+                    int extra = this.levelButtons.size() - 12;
                     if (verticalAmount < 0) {
                         //Scrolling down
                         if (!page.visible) {
@@ -410,7 +369,7 @@ public class LevelScreen extends Screen implements Tab {
                         }
                         if (page.visible && x < extra) {
                             if (i < 2 + x) {
-                                this.newLeveButtons.get(i).visible = false;
+                                this.levelButtons.get(i).visible = false;
                             }
                         }
                         i++;
@@ -418,7 +377,7 @@ public class LevelScreen extends Screen implements Tab {
                         //Scrolling up
                         if (!page.visible) {
                             if (i >= visibleCount - 2) {
-                                this.newLeveButtons.get(i).visible = true;
+                                this.levelButtons.get(i).visible = true;
                             }
                         }
                         i++;
@@ -452,7 +411,7 @@ public class LevelScreen extends Screen implements Tab {
 
     public void updateLevelButtons() {
         int i = 0;
-        for (WidgetButtonPage page : newLeveButtons) {
+        for (WidgetButtonPage page : levelButtons) {
             Identifier skrillix = page.skill.id();
             if (ConfigInit.MAIN.LEVEL.overallMaxLevel > 0 && this.levelManager.getOverallLevel() >= ConfigInit.MAIN.LEVEL.overallMaxLevel) {
                 page.active = false;
