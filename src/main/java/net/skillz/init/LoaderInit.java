@@ -19,7 +19,7 @@ import net.skillz.level.LevelManager;
 import net.skillz.util.PacketHelper;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.server.network.ServerPlayerEntity;
-import org.apache.commons.compress.utils.Lists;
+import net.skillz.util.Lists;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;

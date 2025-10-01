@@ -31,7 +31,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.skillz.util.TextUtil;
-import org.apache.commons.compress.utils.Lists;
+import net.skillz.util.Lists;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;

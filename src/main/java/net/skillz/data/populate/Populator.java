@@ -7,7 +7,7 @@ import dev.sygii.ultralib.data.util.OptionalObject;
 import net.minecraft.util.Identifier;
 import net.skillz.level.LevelManager;
 import net.skillz.util.TextUtil;
-import org.apache.commons.compress.utils.Lists;
+import net.skillz.util.Lists;
 
 import java.util.HashMap;
 import java.util.List;

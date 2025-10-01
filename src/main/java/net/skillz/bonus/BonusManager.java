@@ -11,7 +11,7 @@ import net.skillz.bonus.impl.combat.tool.CrossbowDamageBonus;
 import net.skillz.bonus.impl.combat.tool.CrossbowDoubleDamageBonus;
 import net.skillz.bonus.impl.player.*;
 import net.skillz.level.SkillBonus;
-import org.apache.commons.compress.utils.Lists;
+import net.skillz.util.Lists;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;

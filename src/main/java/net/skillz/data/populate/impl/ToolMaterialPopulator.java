@@ -14,7 +14,6 @@ import net.skillz.init.LoaderInit;
 import net.skillz.init.TagInit;
 import net.skillz.level.LevelManager;
 import net.skillz.level.restriction.PlayerRestriction;
-import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;

@@ -6,8 +6,8 @@ import me.fzzyhmstrs.fzzy_config.annotations.RequiresAction;
 import me.fzzyhmstrs.fzzy_config.config.Config;
 import me.fzzyhmstrs.fzzy_config.config.ConfigSection;
 import net.skillz.SkillZMain;
-import org.apache.commons.compress.utils.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainConfig extends Config {
@@ -55,7 +55,7 @@ public class MainConfig extends Config {
 
             @RequiresAction(action = Action.RELOAD_DATA)
             @Comment("List of populator ids to disable")
-            public List<String> disabledPopulators = Lists.newArrayList();
+            public List<String> disabledPopulators = new ArrayList<>();
         }
 
         public SkillSection SKILLS = new SkillSection();
@@ -70,7 +70,7 @@ public class MainConfig extends Config {
 
             @RequiresAction(action = Action.RELOAD_DATA)
             @Comment("List of skill ids to disable")
-            public List<String> disabledSkills = Lists.newArrayList();
+            public List<String> disabledSkills = new ArrayList<>();
         }
 
         public RestrictionSection RESTRICTIONS = new RestrictionSection();
@@ -84,7 +84,7 @@ public class MainConfig extends Config {
 
             @RequiresAction(action = Action.RELOAD_DATA)
             @Comment("List of restriction ids to disable")
-            public List<String> disabledRestrictions = Lists.newArrayList();
+            public List<String> disabledRestrictions = new ArrayList<>();
         }
 
     }

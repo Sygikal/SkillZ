@@ -10,7 +10,6 @@ import net.skillz.init.ConfigInit;
 import net.skillz.level.LevelManager;
 import net.skillz.level.restriction.PlayerRestriction;
 import net.skillz.content.registry.EnchantmentRegistry;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.List;
 import java.util.Map;
