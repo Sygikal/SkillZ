@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.skillz.access.ClientPlayerAccess;
 import net.skillz.access.ClientPlayerListAccess;
 import net.minecraft.entity.Entity;
+import net.skillz.util.TextUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -47,7 +48,7 @@ public class PlayerEntityRendererMixin {
         }
         if (ConfigInit.CLIENT.showLevel) {
             original.call(instance, abstractClientPlayerEntity, Team.decorateName(abstractClientPlayerEntity.getScoreboardTeam(),
-                    Text.translatable("text.skillz.scoreboard", ((ClientPlayerListAccess) abstractClientPlayerEntity).getLevel(), abstractClientPlayerEntity.getName())), matrixStack, vertexConsumerProvider, i);
+                    TextUtil.getGui("scoreboard", ((ClientPlayerListAccess) abstractClientPlayerEntity).getLevel(), abstractClientPlayerEntity.getName())), matrixStack, vertexConsumerProvider, i);
         } else {
             original.call(instance, abstractClientPlayerEntity, text, matrixStack, vertexConsumerProvider, i);
         }
