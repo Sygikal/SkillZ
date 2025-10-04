@@ -61,6 +61,39 @@ public class RestrictionLoader extends SimpleDataLoader {
             return;
         }
 
+        if (!data.has("restrictions")) {
+            LOGGER.error("{} is an old restriction, trying to port", id);
+            for (String key : data.keySet()) {
+                Map<Identifier, Integer> skillLevelRestrictions = new HashMap<>();
+
+                JsonObject oldRes = data.get(key).getAsJsonObject();
+                JsonObject skills = oldRes.get("skills").getAsJsonObject();
+
+                for (String skillKey : skills.keySet()) {
+                    Identifier newId = Identifier.of(SkillZMain.MOD_ID, skillKey);
+                    skillLevelRestrictions.put(newId, skills.get(skillKey).getAsInt());
+                }
+
+                for (RestrictionLoaderEntry entry : entries) {
+                    for (JsonElement elem : OptionalObject.get(oldRes, entry.name(), new JsonArray()).getAsJsonArray()) {
+                        Identifier elemId = Identifier.tryParse(elem.getAsString());
+                        if (entry.registry().containsId(elemId)) {
+                            int rawId = entry.registry().getRawId(entry.registry().get(elemId));
+
+                            if (entry.restrictionMap.get(rawId) == null) {
+                                entry.restrictionMap.put(rawId, new PlayerRestriction(rawId, skillLevelRestrictions));
+                            }else {
+                                LOGGER.warn("Object {} is already restricted", elemId);
+                            }
+                        } else {
+                            LOGGER.warn("Restriction {} contains an unrecognized id {}.", fileName, elemId);
+                        }
+                    }
+                }
+            }
+            return;
+        }
+
         for (JsonElement element : data.get("restrictions").getAsJsonArray()) {
             JsonObject restrictionObj = element.getAsJsonObject();
             Map<Identifier, Integer> skillLevelRestrictions = new HashMap<>();
