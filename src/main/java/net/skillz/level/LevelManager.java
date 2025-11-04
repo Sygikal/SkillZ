@@ -122,6 +122,10 @@ public class LevelManager {
         return skillPoints;
     }
 
+    public int getSkillPointColor() {
+        return hasSkillPoints() ? ConfigInit.CLIENT.skillPointColor.toInt() : 0xFFFFFF;
+    }
+
     public void setLevelProgress(float levelProgress) {
         this.levelProgress = levelProgress;
     }
@@ -161,7 +165,7 @@ public class LevelManager {
         }
     }
 
-    public boolean hasAvailableLevel() {
+    public boolean hasSkillPoints() {
         return this.skillPoints > 0;
     }
 

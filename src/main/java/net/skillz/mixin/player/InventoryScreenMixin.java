@@ -32,19 +32,16 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
     protected void drawBackgroundMixin(DrawContext context, float delta, int mouseX, int mouseY, CallbackInfo info) {
         assert this.client != null;
         assert this.client.player != null;
-        if (ConfigInit.CLIENT.inventorySkillLevel) {
+        if (ConfigInit.CLIENT.showInventoryLevel) {
             LevelManager levelManager = (((LevelManagerAccess) this.client.player).getLevelManager());
-            // 0xAARRGGBB Format
-            int color = 0xFFFFFF;
-            if (levelManager.getSkillPoints() > 0) {
-                color = 1507303;
-            }
 
+            Text text = TextUtil.getGui("level_short", levelManager.getOverallLevel());
+            float scale = ConfigInit.CLIENT.inventoryLevelScale;
             context.getMatrices().push();
-            context.getMatrices().scale(0.5F, 0.5F, 1F);
-            context.getMatrices().translate((28 + ConfigInit.CLIENT.inventorySkillLevelPosX + this.x) / 0.5F,
-                    (8 + ConfigInit.CLIENT.inventorySkillLevelPosY + this.y + textRenderer.fontHeight / 2F) / 0.5F, 70.0D);
-            context.drawText(this.textRenderer, TextUtil.getGui("level_short", levelManager.getOverallLevel()), 0, -textRenderer.fontHeight / 2, color, false);
+            context.getMatrices().scale(scale, scale, 1F);
+            context.getMatrices().translate((ConfigInit.CLIENT.inventoryLevelPosition.x.run(scale, this.textRenderer.fontHeight, this.textRenderer.getWidth(text)) + ConfigInit.CLIENT.inventoryLevelXOffset + this.x) / scale,
+                    (ConfigInit.CLIENT.inventoryLevelPosition.y.run(scale, this.textRenderer.fontHeight, this.textRenderer.getWidth(text)) + ConfigInit.CLIENT.inventoryLevelYOffset + this.y) / scale, 70.0D);
+            context.drawText(this.textRenderer, text, 0, 0, levelManager.getSkillPointColor(), false);
             context.getMatrices().pop();
         }
     }

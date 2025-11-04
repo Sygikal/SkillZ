@@ -1,6 +1,7 @@
 package net.skillz.mixin.player;
 
 import net.skillz.access.LevelManagerAccess;
+import net.skillz.init.ConfigInit;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -24,8 +25,8 @@ public class InGameHudMixin {
 
     @ModifyConstant(method = "renderExperienceBar", constant = @Constant(intValue = 8453920), require = 0)
     private int modifyExperienceNumberColor(int original) {
-        if (((LevelManagerAccess) client.player).getLevelManager().hasAvailableLevel()) {
-            return 1507303;
+        if (((LevelManagerAccess) client.player).getLevelManager().hasSkillPoints()) {
+            return ((LevelManagerAccess) client.player).getLevelManager().getSkillPointColor();
         } else {
             return original;
         }
