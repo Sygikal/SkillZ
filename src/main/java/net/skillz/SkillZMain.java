@@ -4,14 +4,8 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
 import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.attribute.ClampedEntityAttribute;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.text.Text;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.bonus.BonusManager;
 import net.skillz.init.*;
@@ -24,9 +18,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class SkillZMain implements ModInitializer {
     public static final String MOD_ID = "skillz";
