@@ -2,6 +2,7 @@ package net.skillz.screen;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.item.*;
 import net.skillz.SkillZMain;
 import net.skillz.init.ConfigInit;
 import net.skillz.init.KeyInit;
@@ -19,8 +20,6 @@ import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
-import net.minecraft.item.EnchantedBookItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -48,6 +47,8 @@ public class SkillRestrictionScreen extends Screen implements Tab {
 
     private int lineIndex = 0;
     private boolean sortAlphabetical = false;
+    private Sorting sorting = Sorting.ALL;
+
 
     public SkillRestrictionScreen(LevelManager levelManager, Map<Integer, PlayerRestriction> restrictions, Text title, int code) {
         super(title);
@@ -67,10 +68,10 @@ public class SkillRestrictionScreen extends Screen implements Tab {
         sortRestrictions();
     }
 
-    @Override
+    /*@Override
     public boolean shouldPause() {
         return false;
-    }
+    }*/
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -85,9 +86,24 @@ public class SkillRestrictionScreen extends Screen implements Tab {
         } else {
             context.drawTexture(BACKGROUND_TEXTURE, this.x + 186, this.y + 20, 206, 0, 6, 31);
         }
-        int sortU = DrawUtil.isPointWithinBounds(this.x + 179, this.y + 4, 14, 14, mouseX, mouseY) ? 14 : 0;
+
+        boolean hoveringAbc = DrawUtil.isPointWithinBounds(this.x + 180, this.y + 5, 12, 12, mouseX, mouseY);
+        if (hoveringAbc) {
+            context.drawTooltip(this.textRenderer, Text.literal("Sort by: " + (this.sortAlphabetical ? "Name" : "Level")), mouseX, mouseY);
+        }
+        int sortU = hoveringAbc ? 14 : 0;
         int sortV = this.sortAlphabetical ? 180 : 166;
         context.drawTexture(LevelScreen.ICON_TEXTURE, this.x + 179, this.y + 4, sortU, sortV, 14, 14);
+
+        if (this.code == 0) {
+            boolean hoveringType = DrawUtil.isPointWithinBounds(this.x + 165, this.y + 5, 12, 12, mouseX, mouseY);
+            if (hoveringType) {
+                context.drawTooltip(this.textRenderer, Text.literal("Filter: " + this.sorting.toString().charAt(0) + this.sorting.toString().substring(1).toLowerCase()), mouseX, mouseY);
+            }
+
+            int typeU = hoveringType ? 14 : 0;
+            context.drawTexture(LevelScreen.ICON_TEXTURE, this.x + 164, this.y + 4, typeU, this.sorting.pos, 14, 14);
+        }
 
         DrawTabHelper.drawTab(client, context, this, this.x, this.y, mouseX, mouseY);
 
@@ -123,8 +139,14 @@ public class SkillRestrictionScreen extends Screen implements Tab {
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         DrawTabHelper.onTabButtonClick(client, this, this.x, this.y, mouseX, mouseY, false);
-        if (DrawUtil.isPointWithinBounds(this.x + 179, this.y + 4, 14, 14, mouseX, mouseY)) {
+        if (DrawUtil.isPointWithinBounds(this.x + 180, this.y + 5, 12, 12, mouseX, mouseY)) {
             this.sortAlphabetical = !this.sortAlphabetical;
+            sortRestrictions();
+            this.client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            return true;
+        }
+        if (this.code == 0 && DrawUtil.isPointWithinBounds(this.x + 165, this.y + 5, 12, 12, mouseX, mouseY)) {
+            this.sorting = this.sorting.next();
             sortRestrictions();
             this.client.getSoundManager().play(PositionedSoundInstance.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
             return true;
@@ -199,6 +221,21 @@ public class SkillRestrictionScreen extends Screen implements Tab {
         int count = 0;
         Map<Integer, PlayerRestriction> newMap = new LinkedHashMap<>();
         for (Map.Entry<Integer, PlayerRestriction> entry : this.restrictions.entrySet()) {
+            if (this.code == 0) {
+                Item item = Registries.ITEM.get(entry.getKey());
+                switch (this.sorting) {
+                    case TOOLS:
+                        if (!(item instanceof ToolItem)) {
+                            continue;
+                        }
+                        break;
+                    case ARMOR:
+                        if (!(item instanceof ArmorItem)) {
+                            continue;
+                        }
+                        break;
+                }
+            }
             if (!entry.getValue().isHidden()) {
                 if (count > 8) {
                     this.lines.add(new LineWidget(this.client, null, new LinkedHashMap<>(newMap), code));
@@ -218,6 +255,25 @@ public class SkillRestrictionScreen extends Screen implements Tab {
         Map.Entry<Enchantment, Integer> asd = EnchantmentHelper.get(stack).entrySet().iterator().next();
         Enchantment ench = asd.getKey();
         return ench.getName(asd.getValue()).toString();
+    }
+
+    public enum Sorting {
+        TOOLS(194),
+        ARMOR(208),
+        ALL(222);
+
+        private static final Sorting[] vals = values();
+
+
+        public final int pos;
+
+        Sorting(int pos) {
+            this.pos = pos;
+        }
+
+        public Sorting next() {
+            return vals[(this.ordinal() + 1) % vals.length];
+        }
     }
 
     public Map<Integer, PlayerRestriction> getRestriction() {
