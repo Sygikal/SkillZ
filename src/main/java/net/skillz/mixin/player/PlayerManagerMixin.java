@@ -1,7 +1,13 @@
 package net.skillz.mixin.player;
 
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.skillz.access.LevelManagerAccess;
 import net.skillz.init.ConfigInit;
+import net.skillz.init.ItemInit;
 import net.skillz.level.LevelManager;
 import net.skillz.util.PacketHelper;
 import net.minecraft.nbt.NbtCompound;
@@ -83,11 +89,12 @@ public class PlayerManagerMixin {
     @Inject(method = "onPlayerConnect", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/MinecraftServer;getBossBarManager()Lnet/minecraft/entity/boss/BossBarManager;", shift = At.Shift.AFTER), locals = LocalCapture.CAPTURE_FAILSOFT)
     private void onPlayerConnectMixin(ClientConnection connection, ServerPlayerEntity player, CallbackInfo info, GameProfile gameProfile, UserCache userCache, String string, NbtCompound optional, RegistryKey<World> registryKey, ServerWorld serverWorld, ServerWorld serverWorld2) {
        if (optional == null || optional.isEmpty()) {
-            if (ConfigInit.MAIN.LEVEL.startPoints > 0) {
+            /*if (ConfigInit.MAIN.LEVEL.startPoints > 0) {
                 LevelManager levelManager = ((LevelManagerAccess) player).getLevelManager();
-                levelManager.setSkillPoints(ConfigInit.MAIN.LEVEL.startPoints);
-                PacketHelper.updateLevels(player);
-            }
+                levelManager.setSkillPoints(ConfigInit.MAIN.LEVEL.startPoints);*/
+           player.getInventory().insertStack(ItemInit.BOOK_OF_KNOWLEDGE.getDefaultStack());
+           PacketHelper.updateLevels(player);
+            //}
        }
     }
 

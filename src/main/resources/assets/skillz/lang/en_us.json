@@ -10,6 +10,8 @@
 
   "item.skillz.strange_potion": "Strange Potion",
   "item.skillz.rare_candy": "Rare Candy",
+  "item.skillz.book_of_knowledge": "Book Of Knowledge",
+
   "entity.skillz.level_experience_orb": "Experience Orb",
   "advancements.adventure.level_100.title": "Level 100",
   "advancements.adventure.level_100.description": "Reach the unreachable level",

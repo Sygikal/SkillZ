@@ -23,14 +23,14 @@ public class MainConfig extends Config {
         public int overallMaxLevel = 0;
         @Comment("In combination with overallMaxLevel, only when all skills maxed")
         public boolean allowHigherSkillLevel = false;
-        @RequiresAction(action = Action.RESTART)
-        public int startPoints = 5;
         public int pointsPerLevel = 3;
         @Comment("Reset all levels on death")
         public boolean hardMode = false;
         public boolean disableMobFarms = true;
         @Comment("Amount of allowed mob kills in a chunk")
         public int mobKillCount = 6;
+        @Comment("Points given by book of knowledge by default")
+        public int bookOfKnowledgeStartingPoints = 5;
         @Comment("Strange potion resets all levels instead of one")
         public boolean opStrangePotion = false;
         @Comment("Restrict hand usage when item not unlocked")
