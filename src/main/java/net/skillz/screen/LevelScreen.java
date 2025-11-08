@@ -135,6 +135,8 @@ public class LevelScreen extends Screen implements Tab {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+    /*@Override
+    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {*/
         this.renderBackground(context);
         context.drawTexture(BACKGROUND_TEXTURE, this.x, this.y, 0, 0, this.backgroundWidth, this.backgroundHeight);
 
@@ -163,8 +165,6 @@ public class LevelScreen extends Screen implements Tab {
                     Text skillLevel = TextUtil.getGui("current_level", this.levelManager.getSkillLevel(page.skill.id()), LevelManager.SKILLS.get(page.skill.id()).maxLevel());
                     context.drawText(this.textRenderer, skillLevel, this.x + (i % 2 == 0 ? 53 : 141) - this.textRenderer.getWidth(skillLevel) / 2, this.y + 94 + i / 2 * 20, 0x3F3F3F, false);
 
-                    //page.renderButton(context, mouseX, mouseX, delta);
-                    MinecraftClient minecraftClient = MinecraftClient.getInstance();
                     context.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                     RenderSystem.enableBlend();
                     RenderSystem.enableDepthTest();
@@ -172,7 +172,7 @@ public class LevelScreen extends Screen implements Tab {
                     context.drawTexture(ICON_TEXTURE, this.x + (i % 2 == 0 ? 80 : 169), this.y + 91 + i / 2 * 20, page.textureX + xx * page.getWidth(), page.textureY, page.getWidth(), page.getHeight());
                     context.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
                     if (page.isHovered()) {
-                        context.drawTooltip(minecraftClient.textRenderer, page.tooltip, mouseX, mouseY);
+                        context.drawTooltip(this.textRenderer, page.tooltip, mouseX, mouseY);
                     }
 
                     if (DrawUtil.isPointWithinBounds(this.x + (i % 2 == 0 ? 11 : 99), this.y + 89 + i / 2 * 20, 16, 16, mouseX, mouseY)) {
@@ -261,22 +261,6 @@ public class LevelScreen extends Screen implements Tab {
         if (this.client != null && this.client.player != null) {
             InventoryScreen.drawEntity(context, this.x + 33, this.y + 72, 30, (float)(this.x + 33) - mouseX, (float)(this.y + 72 - 50) - mouseY, this.client.player);
         }
-    }
-
-    @Override
-    public void tick() {
-        super.tick();
-        /*if (this.clientPlayerEntity != null && this.turnClientPlayer) {
-            double mouseX = this.client.mouse.getX() * (double) this.client.getWindow().getScaledWidth() / (double) this.client.getWindow().getWidth();
-            double mouseY = this.client.mouse.getY() * (double) this.client.getWindow().getScaledHeight() / (double) this.client.getWindow().getHeight();
-            if (isPointWithinBounds(this.x + 9, this.y + 67, 15, 10, mouseX, mouseY)) {
-                this.quaternionf.rotateLocalY(0.087f);
-            } else if (isPointWithinBounds(this.x + 41, this.y + 67, 15, 10, mouseX, mouseY)) {
-                this.quaternionf.rotateLocalY(-0.087f);
-            } else {
-                this.turnClientPlayer = false;
-            }
-        }*/
     }
 
     @Override
